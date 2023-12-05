@@ -4,8 +4,9 @@ import { StatusBar } from "expo-status-bar";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { Audio, ResizeMode, Video } from "expo-av";
 import { useNavigation } from "@react-navigation/core";
+import { getAnimeUrl } from "../api/getAnimeUrl";
 
-export default function Player() {
+export default function Player({ route }: any) {
   const video = useRef<any>(null);
   const [status, setStatus] = useState<any>({});
   const navigation = useNavigation<any>();
@@ -20,11 +21,19 @@ export default function Player() {
   };
 
   useEffect(() => {
+    getAnimeUrl(Object.values<any>(route.params.creature.seasons)[0].link)
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     if (status.isPlaying) triggerAudio(video);
   }, [video, status.isPlaying]);
 
   return (
     <View style={styles.container}>
+      <Text>{route.params.creature.title}</Text>
       <Video
         ref={video}
         style={styles.video}

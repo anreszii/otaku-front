@@ -10,22 +10,29 @@ const Stack = createStackNavigator();
 
 export const TabNavigator = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator initialRouteName="main">
       <Tab.Screen name="Home" component={Home}></Tab.Screen>
-      <Tab.Screen name="Player" component={Player}></Tab.Screen>
     </Tab.Navigator>
   );
 };
 
-export const StackNavigator = () => {
+export const StackNavigator = ({ route }: any) => {
   return (
-    <Stack.Navigator screenOptions={{ headerBackTitle: "" }}>
+    <Stack.Navigator
+      initialRouteName="main"
+      screenOptions={{ headerBackTitle: "" }}
+    >
       <Stack.Screen
-        name="Home"
+        name="Main"
         options={{ headerShown: false }}
         component={TabNavigator}
       ></Stack.Screen>
       <Stack.Screen name="Profile" component={Profile}></Stack.Screen>
+      <Stack.Screen
+        name="Player"
+        initialParams={route}
+        component={Player}
+      ></Stack.Screen>
     </Stack.Navigator>
   );
 };
