@@ -22,18 +22,18 @@ export const getAnimeUrl = async (link: any) => {
     return `${YYYY}${MM}${DD}${HH}`;
   };
 
+  const PRIVATE_KEY: any = process.env.EXPO_PUBLIC_KODIK_PRIVATE_KEY;
+  const PUBLIC_KEY: any = process.env.EXPO_PUBLIC_KODIK_PUBLIC_KEY;
+
   const timeAlive = String(getDataFormate());
-  const reqSign = sha256.hmac(
-    "7e58b622e5abefa805e1958f9f375039",
-    `${link}:1.1.1.1:${timeAlive}`
-  );
+  const reqSign = sha256.hmac(PRIVATE_KEY, `${link}:1.1.1.1:${timeAlive}`);
 
   console.log(timeAlive, link, reqSign);
 
   return axios.get("http://kodik.biz/api/video-links", {
     params: {
       link: link,
-      p: "af1f9932e98b5d0615e90afe015ee23e",
+      p: PUBLIC_KEY,
       ip: "1.1.1.1",
       d: timeAlive,
       s: reqSign,

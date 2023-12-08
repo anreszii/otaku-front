@@ -9,6 +9,7 @@ import { getAnimeUrl } from "../api/getAnimeUrl";
 export default function Player({ route }: any) {
   const video = useRef<any>(null);
   const [status, setStatus] = useState<any>({});
+  const [urlVideo, setUrlVideo] = useState("");
   const navigation = useNavigation<any>();
 
   const triggerAudio = async (ref: any) => {
@@ -21,9 +22,13 @@ export default function Player({ route }: any) {
   };
 
   useEffect(() => {
-    getAnimeUrl(Object.values<any>(route.params.creature.seasons)[0].link)
+    getAnimeUrl(
+      Object.values<any>(
+        Object.values<any>(route.params.creature.seasons)[0].episodes
+      )[0]
+    )
       .then((data) => {
-        console.log(data);
+        setUrlVideo(data.data.links["720"].Src);
       })
       .catch((err) => {
         console.log(err);
@@ -38,7 +43,7 @@ export default function Player({ route }: any) {
         ref={video}
         style={styles.video}
         source={{
-          uri: "https://scu1.sovetromantica.com/anime/1422_gyokou-no-nikuko-chan/episodes/dubbed/episode_1/episode_1.m3u8",
+          uri: `https:${urlVideo}`,
         }}
         resizeMode={ResizeMode.CONTAIN}
         useNativeControls={true}
