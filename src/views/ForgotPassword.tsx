@@ -16,6 +16,14 @@ import { useNavigation } from "@react-navigation/native";
 import CompleteModal from "../components/Modals/CompleteModal";
 import HeaderBack from "../components/Layouts/HeaderBack";
 import HeaderBackStage from "../components/Layouts/HeaderBackStage";
+import Container from "../components/Layouts/Container";
+import CodeInput from "../components/ui/CodeInput";
+import {
+  useBlurOnFulfill,
+  useClearByFocusCell,
+} from "react-native-confirmation-code-field";
+import authService from "../api/auth/authService";
+import TypographyError from "../components/ui/TypographyError";
 
 export default function SignUp() {
   const navigation = useNavigation<any>();
@@ -23,7 +31,20 @@ export default function SignUp() {
   const [seconds, setSeconds] = useState(59);
   const [showPassword, setShowPassword] = useState<any>(false);
   const [visible, setVisible] = useState(false);
-
+  const [email, setEmail] = useState<any>("");
+  const [value, setValue] = useState<any>("");
+  const [newPassword, setNewPassword] = useState({
+    onePass: "",
+    twoPass: "",
+  });
+  const [props, getCellOnLayoutHandler] = useClearByFocusCell({
+    value,
+    setValue,
+  });
+  const [error, setError] = useState<any>(null);
+  const CELL_COUNT = 4;
+  const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
+  const [code, setCode] = useState<any>("");
   useEffect(() => {
     setSeconds(59);
   }, [stage]);
@@ -42,8 +63,37 @@ export default function SignUp() {
     };
   }, [seconds, stage]);
 
+  const sendEmailCode = () => {
+    if (email.replaceAll(" ", "") !== "") {
+      authService.forgotPassword(email).then((data) => {
+        setCode(data.data.code);
+        setSeconds(59);
+        setStage(2);
+      });
+    } else {
+      setError("Электронная почта не может быть пустой");
+    }
+  };
+
+  const sendCode = () => {
+    console.log(value, code);
+    if (value === code) {
+      setStage(3);
+    }
+  };
+
+  const resetPassword = () => {
+    if (newPassword.onePass === newPassword.twoPass) {
+      authService
+        .resetPassword(email, value, newPassword.onePass)
+        .then((data) => {
+          setVisible(true);
+        });
+    }
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
+    <Container>
       {stage === 1 && (
         <>
           <HeaderBack title="Forgot Password" />
@@ -59,13 +109,19 @@ export default function SignUp() {
             styleInput={{ marginTop: 13 }}
             label="Mail"
             left={<TextInput.Icon disabled icon={() => <Mail style={{}} />} />}
+            value={email}
+            onChangeText={(value: string) => {
+              setEmail(value);
+              setError(null);
+            }}
           />
 
           <Button
             title="Reset Password"
-            onPress={() => setStage(2)}
+            onPress={() => sendEmailCode()}
             style={styles.button}
           />
+          {error && <TypographyError error={error} style={{ marginTop: 13 }} />}
         </>
       )}
       {stage === 2 && (
@@ -76,15 +132,23 @@ export default function SignUp() {
             setStage={setStage}
           />
           <Typography type="sub" style={styles.titleTwo}>
-            Code has been send to ma******.com
+            Code has been send to{" "}
+            {email.substr(0, 3) + "*****" + email.substr(-3)}
           </Typography>
+          <CodeInput
+            value={value}
+            setValue={setValue}
+            getCellOnLayoutHandler={getCellOnLayoutHandler}
+            CELL_COUNT={CELL_COUNT}
+            ref={ref}
+          />
           <View style={styles.resendContainer}>
             {seconds > 0 ? (
               <Typography type="sub" style={styles.subtitleTwo}>
                 Resend code in{" "}
               </Typography>
             ) : (
-              <TouchableOpacity onPress={() => setSeconds(59)}>
+              <TouchableOpacity onPress={() => sendEmailCode()}>
                 <Typography
                   type="sub"
                   gradient={true}
@@ -104,21 +168,16 @@ export default function SignUp() {
           </View>
           <Button
             title="Verify"
-            onPress={() => setStage(3)}
+            onPress={() => sendCode()}
             style={styles.button}
           />
         </>
       )}
       {stage === 3 && (
         <>
-          <HeaderBackStage
-            title="Create New Password"
-            stage={stage}
-            setStage={setStage}
-          />
           <Image
             source={require("../../assets/acceptPhone.png")}
-            style={{ width: 313, height: 313 }}
+            style={{ width: 414, height: 313 }}
             resizeMode="contain"
           />
           <Typography style={styles.titleThree} type="sub">
@@ -139,6 +198,10 @@ export default function SignUp() {
               />
             }
             secureTextEntry={showPassword ? false : true}
+            value={newPassword.onePass}
+            onChangeText={(value: any) =>
+              setNewPassword({ ...newPassword, onePass: value })
+            }
           />
           <Input
             styleInput={{ marginTop: 10 }}
@@ -155,11 +218,15 @@ export default function SignUp() {
               />
             }
             secureTextEntry={showPassword ? false : true}
+            value={newPassword.twoPass}
+            onChangeText={(value: any) =>
+              setNewPassword({ ...newPassword, twoPass: value })
+            }
           />
 
           <Button
             title="Continue"
-            onPress={() => setVisible(true)}
+            onPress={() => resetPassword()}
             style={styles.button}
           />
         </>
@@ -169,7 +236,7 @@ export default function SignUp() {
         setVisible={setVisible}
         redirect="SignIn"
       />
-    </SafeAreaView>
+    </Container>
   );
 }
 

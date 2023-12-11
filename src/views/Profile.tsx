@@ -1,7 +1,9 @@
 import "react-native-gesture-handler";
 import React from "react";
 import { StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import Button from "../components/ui/Button";
+import userService from "../api/user/userService";
 
 export default function Profile() {
   return (

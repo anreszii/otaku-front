@@ -1,0 +1,23 @@
+[
+  { "title": "Action", "focus": false },
+  { "title": "Drama", "focus": false },
+  { "title": "Comedy", "focus": false },
+  { "title": "Ecchi", "focus": false },
+  { "title": "Adventure", "focus": false },
+  { "title": "Mecha", "focus": false },
+  { "title": "Romance", "focus": false },
+  { "title": "Science", "focus": false },
+  { "title": "Music", "focus": false },
+  { "title": "School", "focus": false },
+  { "title": "Seinen", "focus": false },
+  { "title": "Shoujo", "focus": false },
+  { "title": "Fantasy", "focus": false },
+  { "title": "Mystery", "focus": false },
+  { "title": "Vampire", "focus": false },
+  { "title": "Shounen", "focus": false },
+  { "title": "Television", "focus": false },
+  { "title": "Superheroes", "focus": false },
+  { "title": "Magic", "focus": false },
+  { "title": "Game", "focus": false },
+  { "title": "Slice of Life", "focus": false }
+]

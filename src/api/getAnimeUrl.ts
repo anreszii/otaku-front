@@ -28,8 +28,6 @@ export const getAnimeUrl = async (link: any) => {
   const timeAlive = String(getDataFormate());
   const reqSign = sha256.hmac(PRIVATE_KEY, `${link}:1.1.1.1:${timeAlive}`);
 
-  console.log(timeAlive, link, reqSign);
-
   return axios.get("http://kodik.biz/api/video-links", {
     params: {
       link: link,

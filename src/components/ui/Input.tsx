@@ -1,10 +1,16 @@
-import { View, Text, Pressable, StyleSheet } from "react-native";
 import React from "react";
+import { Pressable, StyleSheet } from "react-native";
 import { TextInput } from "react-native-paper";
-import { controlsStyle } from "../../style/controls";
 import Typography from "./Typography";
+import { controlsStyle } from "../../style/controls";
 
-export default function Input({ label, styleInput, ...props }: any) {
+interface InputProps {
+  label?: string;
+  styleInput?: Record<string, any>;
+  [key: string]: any;
+}
+
+const Input: React.FC<InputProps> = ({ label, styleInput, ...props }) => {
   return (
     <Pressable style={[styleInput, styles.inputView]}>
       <Typography type="button" style={styles.label}>
@@ -24,12 +30,12 @@ export default function Input({ label, styleInput, ...props }: any) {
       />
     </Pressable>
   );
-}
+};
 
 const styles = StyleSheet.create({
   inputView: {
-    maxWidth: "80%",
-    width: "80%",
+    maxWidth: "100%",
+    width: "100%",
   },
   label: {
     fontSize: 16,
@@ -39,3 +45,5 @@ const styles = StyleSheet.create({
     marginLeft: 16,
   },
 });
+
+export default Input;

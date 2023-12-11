@@ -10,11 +10,12 @@ export default function CompleteModal({ visible, setVisible, redirect }: any) {
 
   useEffect(() => {
     setTimeout(() => {
-      console.log("hello")
-      setVisible(false);
-      navigation.navigate(redirect);
+      if (visible) {
+        setVisible(false);
+        navigation.navigate(redirect);
+      }
     }, 5000);
-  }, []);
+  }, [visible]);
 
   return (
     <Modal visible={visible} setVisible={setVisible} animationType="fade" full>

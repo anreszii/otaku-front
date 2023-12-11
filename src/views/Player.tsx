@@ -38,7 +38,7 @@ export default function Player({ route }: any) {
 
   return (
     <View style={styles.container}>
-      <Text>{route.params.creature.title}</Text>
+      <Text>{route.params.creature.material_data.title}</Text>
       <Video
         ref={video}
         style={styles.video}

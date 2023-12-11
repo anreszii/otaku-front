@@ -23,7 +23,7 @@ export default function HeaderBackStage({ title, stage, setStage }: any) {
     <View
       style={[
         styles.container,
-        { position: "absolute", top: statusBarHeight + 12 + 34 },
+        { position: "absolute", top: statusBarHeight + 12 + 10 },
       ]}
     >
       <TouchableOpacity onPress={() => setStage(stage - 1)}>
@@ -38,7 +38,7 @@ export default function HeaderBackStage({ title, stage, setStage }: any) {
 
 const styles = StyleSheet.create({
   container: {
-    width: "80%",
+    width: "100%",
     height: 48,
     display: "flex",
     flexDirection: "row",

@@ -9,6 +9,7 @@ import React from "react";
 import Button from "../components/ui/Button";
 import Typography from "../components/ui/Typography";
 import { StackActions, useNavigation } from "@react-navigation/native";
+import Container from "../components/Layouts/Container";
 
 export default function Welcome() {
   const navigation = useNavigation<any>();
@@ -28,7 +29,7 @@ export default function Welcome() {
             justifyContent: "flex-end",
           }}
         >
-          <SafeAreaView style={{ alignItems: "center" }}>
+          <View style={styles.content}>
             <Typography type="title" style={styles.title}>
               Welcome to AniUp
             </Typography>
@@ -41,7 +42,7 @@ export default function Welcome() {
               title="Get Started"
               style={{ marginBottom: 24 }}
             />
-          </SafeAreaView>
+          </View>
         </ImageBackground>
       </ImageBackground>
     </View>
@@ -74,5 +75,11 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
     color: "#FFF",
     marginBottom: 24,
+  },
+  content: {
+    alignItems: "center",
+    marginBottom: 24,
+    marginRight: 24,
+    marginLeft: 24,
   },
 });

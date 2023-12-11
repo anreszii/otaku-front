@@ -1,9 +1,19 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  TouchableOpacityProps,
+  ViewStyle,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Typography from "./Typography";
 
-export default function Button({ onPress, title, style }: any) {
+interface ButtonProps extends TouchableOpacityProps {
+  title: string;
+  style?: ViewStyle;
+}
+
+const Button: React.FC<ButtonProps> = ({ onPress, title, style }) => {
   const GradientBtn = () => (
     <LinearGradient
       start={{ x: 1, y: 0 }}
@@ -22,12 +32,12 @@ export default function Button({ onPress, title, style }: any) {
       <GradientBtn />
     </TouchableOpacity>
   );
-}
+};
 
 const styles = StyleSheet.create({
   button: {
     backgroundColor: "#FFF",
-    width: "80%",
+    width: "100%",
     height: 58,
     borderRadius: 25,
   },
@@ -45,3 +55,5 @@ const styles = StyleSheet.create({
     height: "100%",
   },
 });
+
+export default Button;

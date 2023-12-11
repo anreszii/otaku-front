@@ -7,12 +7,12 @@ import {
   StatusBar,
 } from "react-native";
 import React, { useState } from "react";
-import { Back } from "../../icons";
+import { Nofification, Search } from "../../icons";
 import { useNavigation } from "@react-navigation/native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Typography from "../ui/Typography";
 
-export default function HeaderBack({ title }: any) {
+export default function HeaderHome() {
   const [statusBarHeight, setStatusBarHeight] = useState<any>(
     Platform.OS === "ios" ? getStatusBarHeight(true) : StatusBar.currentHeight
   );
@@ -22,15 +22,15 @@ export default function HeaderBack({ title }: any) {
     <View
       style={[
         styles.container,
-        { position: "absolute", top: statusBarHeight + 12 + 10 },
+        { position: "absolute", top: statusBarHeight + 12 + 34 },
       ]}
     >
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Back />
+      <TouchableOpacity style={{ marginRight: 20 }} onPress={() => {}}>
+        <Search />
       </TouchableOpacity>
-      <Typography type="title" style={styles.title}>
-        {title}
-      </Typography>
+      <TouchableOpacity style={{ marginRight: 24 }} onPress={() => {}}>
+        <Nofification />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "flex-end",
   },
   title: {
     marginLeft: 16,

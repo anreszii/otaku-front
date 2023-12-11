@@ -1,9 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Modal as NativeModal,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  ModalProps as NativeModalProps,
+  StyleProp,
+  ViewStyle,
 } from "react-native";
+
+interface ModalProps extends NativeModalProps {
+  visible: boolean;
+  setVisible?: React.Dispatch<React.SetStateAction<boolean>>;
+  useDefaultStyles?: boolean;
+  children: React.ReactNode;
+  full?: boolean;
+  style?: StyleProp<ViewStyle>;
+}
 
 export function Modal({
   visible,
@@ -12,7 +24,7 @@ export function Modal({
   children,
   full,
   ...props
-}: any) {
+}: ModalProps) {
   return (
     <NativeModal
       visible={visible}

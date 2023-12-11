@@ -7,6 +7,7 @@ import {
 } from "react-native";
 import React, { useEffect } from "react";
 import CircleProgress from "../components/ui/CircleProgress";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Intro() {
   return (

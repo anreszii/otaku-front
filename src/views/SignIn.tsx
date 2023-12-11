@@ -5,6 +5,7 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  DevSettings,
 } from "react-native";
 import React, { useState } from "react";
 import Input from "../components/ui/Input";
@@ -13,13 +14,35 @@ import { TextInput } from "react-native-paper";
 import { EyeClose, EyeOpen, Lock, Mail } from "../icons";
 import Button from "../components/ui/Button";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import RNRestart from "react-native-restart";
+import Container from "../components/Layouts/Container";
+import authService from "../api/auth/authService";
+import TypographyError from "../components/ui/TypographyError";
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState<any>(false);
+  const [user, setUser] = useState({
+    username: "",
+    password: "",
+  });
+  const [error, setError] = useState<any>(null);
   const navigation = useNavigation<any>();
 
+  const setToken = async () => {
+    await authService
+      .login(user.username, user.password)
+      .then(async (data) => {
+        await AsyncStorage.setItem("token", data.data.tokens.accessToken);
+        DevSettings.reload();
+      })
+      .catch((err) => {
+        setError(err.response.data.message);
+      });
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
+    <Container>
       <Image
         source={require("../../assets/icon.png")}
         style={{ width: 113, height: 67 }}
@@ -30,8 +53,12 @@ export default function SignIn() {
       </Typography>
       <Input
         styleInput={{ marginTop: 13 }}
-        label="Mail"
-        left={<TextInput.Icon disabled icon={() => <Mail style={{}} />} />}
+        label="Username"
+        value={user.username}
+        onChangeText={(value: string) => {
+          setUser({ ...user, username: value });
+          setError(null);
+        }}
       />
       <Input
         styleInput={{ marginTop: 13 }}
@@ -47,8 +74,18 @@ export default function SignIn() {
           />
         }
         secureTextEntry={showPassword ? false : true}
+        value={user.password}
+        onChangeText={(value: string) => {
+          setUser({ ...user, password: value });
+          setError(null);
+        }}
       />
-      <Button title="Sign In" style={styles.button} />
+      <Button
+        title="Sign In"
+        style={styles.button}
+        onPress={async () => await setToken()}
+      />
+      {error && <TypographyError error={error} style={{ marginTop: 15 }} />}
       <TouchableOpacity onPress={() => navigation.navigate("Forgot")}>
         <Typography type="button" gradient={true} style={styles.forgotPass}>
           Forgot the password?
@@ -64,7 +101,7 @@ export default function SignIn() {
           </Typography>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </Container>
   );
 }
 
