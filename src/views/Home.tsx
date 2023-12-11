@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Image, ImageBackground, SafeAreaView, View } from "react-native";
-import { getAnimeList } from "../api/getAnimeList";
+import { getAnimeList } from "../api/kodik/getAnimeList";
 import { useNavigation } from "@react-navigation/native";
 import HeaderHome from "../components/Layouts/HeaderHome";
 import homeStyles from "../style/homeStyles";
 import InfoSection from "../components/Home/InfoSection";
 import TopHitsSection from "../components/Home/TopHitsSection";
-import CircleProgress from "../components/ui/CircleProgress";
-import globalsStyle from "../style/globals";
 import Loader from "../components/ui/Loader";
 
 const Home: React.FC = () => {
@@ -17,7 +15,7 @@ const Home: React.FC = () => {
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [isBackgroundImageLoading, setIsBackgroundImageLoading] =
     useState(true);
- 
+
   useEffect(() => {
     const fetchAnimeList = async () => {
       try {
@@ -89,6 +87,19 @@ const Home: React.FC = () => {
     navigation.navigate("Player", { creature: item });
   };
 
+  const firstAnime = animeList[0]?.material_data;
+  const filteredGenres = (firstAnime?.all_genres || []).filter(
+    (genre: any) => !["аниме", "мультфильм"].includes(genre)
+  );
+
+  const middleIndex = Math.floor(filteredGenres.length / 2);
+  const firstHalf = filteredGenres.slice(0, middleIndex);
+
+  const title = firstAnime?.title || "";
+  const subtitle = firstHalf
+    .join(", ")
+    .substring(0, firstHalf.join(", ").length);
+
   return (
     <View style={homeStyles.container}>
       {isLoading || isImageLoading || isBackgroundImageLoading ? (
@@ -97,17 +108,16 @@ const Home: React.FC = () => {
         <>
           <ImageBackground
             source={{
-              uri: "https://shikimori.one/system/screenshots/original/b13ecb9e1d5971f9d4abd4b5541e481de5dfe17c.jpg",
+              uri: animeList[0].material_data.screenshots[0],
             }}
             style={homeStyles.bg}
+            blurRadius={5}
           >
+            <View style={homeStyles.overlay}></View>
             <SafeAreaView>
               <HeaderHome />
             </SafeAreaView>
-            <InfoSection
-              title="Магическая битва 2"
-              subtitle="боевик, ужасы, фэнтези, Сёнен, Фэнтези, Школа..."
-            />
+            <InfoSection title={title} subtitle={subtitle} />
           </ImageBackground>
           <TopHitsSection
             animeList={animeList}

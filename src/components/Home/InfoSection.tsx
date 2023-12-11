@@ -17,7 +17,14 @@ const InfoSection: React.FC<InfoSectionProps> = ({ title, subtitle }) => (
     <Typography style={homeStyles.subtitle} type="sub">
       {subtitle}
     </Typography>
-    <Button title="Play" style={homeStyles.playButton} />
+    <View style={homeStyles.buttonContainer}>
+      <Button title="Play" style={homeStyles.playButton} />
+      <Button
+        title="+ My List"
+        gradient={false}
+        style={homeStyles.listButton}
+      />
+    </View>
   </View>
 );
 

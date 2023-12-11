@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Platform, StatusBar } from "react-native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
+import Typography from "../ui/Typography";
 
 interface HeaderProps {
-  title: string;
   style?: object;
 }
 
-const Header: React.FC<HeaderProps> = ({ title, style }) => {
+const HeaderReleases: React.FC<HeaderProps> = ({ style }) => {
   const [statusBarHeight, setStatusBarHeight] = useState<number>(
     Platform.OS === "ios"
       ? getStatusBarHeight(true)
@@ -15,8 +15,10 @@ const Header: React.FC<HeaderProps> = ({ title, style }) => {
   );
 
   return (
-    <View style={[styles.container, { top: statusBarHeight + 12 + 10 }, style]}>
-      <Text>{title}</Text>
+    <View style={[styles.container, { top: statusBarHeight + 12 + 34 }, style]}>
+      <Typography type="title" style={styles.title}>
+        Release Calendar
+      </Typography>
     </View>
   );
 };
@@ -29,7 +31,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     position: "absolute",
+    marginLeft: 24,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "600",
+    lineHeight: 28.8,
   },
 });
 
-export default Header;
+export default HeaderReleases;

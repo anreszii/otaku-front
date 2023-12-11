@@ -1,9 +1,16 @@
 import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 import React from "react";
 
-export default function ContainerMain({ children }: any) {
-  return <View style={styles.container}>{children}</View>;
+interface IContainerMain {
+  children: any;
+  style?: any;
 }
+
+const ContainerMain: React.FC<IContainerMain> = ({ children, style }) => {
+  return <View style={[styles.container, style]}>{children}</View>;
+};
+
+export default ContainerMain;
 
 const styles = StyleSheet.create({
   container: {

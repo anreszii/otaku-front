@@ -157,7 +157,7 @@ export const PublicStackNavigator = () => {
   return (
     <Stack.Navigator
       initialRouteName="Public"
-      screenOptions={{ headerBackTitle: "" }}
+      screenOptions={{ headerShown: false }}
     >
       <Stack.Screen
         name="Welcome"
@@ -187,7 +187,7 @@ export const PrivateStackNavigator = ({ route }: any) => {
   return (
     <Stack.Navigator
       initialRouteName="Private"
-      screenOptions={{ headerBackTitle: "" }}
+      screenOptions={{ headerShown: false }}
     >
       <Stack.Screen
         name="Main"

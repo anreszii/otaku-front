@@ -4,7 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { Audio, ResizeMode, Video } from "expo-av";
 import { useNavigation } from "@react-navigation/core";
-import { getAnimeUrl } from "../api/getAnimeUrl";
+import { getAnimeUrl } from "../api/kodik/getAnimeUrl";
 
 export default function Player({ route }: any) {
   const video = useRef<any>(null);

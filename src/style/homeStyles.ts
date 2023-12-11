@@ -72,20 +72,36 @@ const homeStyles = StyleSheet.create({
     lineHeight: 19.6,
     letterSpacing: 0.2,
     color: "#FFF",
+    marginTop: 8,
   },
   bg: {
     width: "100%",
-    height: 300,
+    height: 400,
   },
   infoContainer: {
     position: "absolute",
     bottom: 24,
     left: 24,
+    width: "90%",
   },
   playButton: {
     width: 81,
     height: 50,
     marginTop: 8,
+    marginRight: 12,
+  },
+  listButton: {
+    width: 101,
+    height: 50,
+    marginTop: 8,
+  },
+  buttonContainer: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
 });
 
