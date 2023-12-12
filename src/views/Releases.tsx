@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  SafeAreaView,
-  Image,
-  ScrollView,
-  Dimensions,
-} from "react-native";
-import { format, addDays } from "date-fns";
+import { SafeAreaView, ScrollView, View } from "react-native";
+import { format, addDays } from "date-fns"; // Добавлен импорт
 import HeaderReleases from "../components/Layouts/HeaderReleases";
-import ContainerMain from "../components/Layouts/ContainerMain";
 import Calendar from "../components/ui/Calendar";
 import Loader from "../components/ui/Loader";
-import Typography from "../components/ui/Typography";
+import ReleaseItem from "../components/Release/ReleaseItem";
+import NoScheduleMessage from "../components/Release/NoScheduleMessage";
 import { getOngoingsList } from "../api/kodik/getOngoignsList";
+import { commonStyles } from "../style/releaseStyle";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface SeriesData {
   date: number;
@@ -24,6 +20,7 @@ interface SeriesData {
 interface OngoingData {
   material_data: {
     title: string;
+    anime_title: string;
     next_episode_at: string;
     screenshots?: string[];
     episodes_aired: number;
@@ -51,7 +48,6 @@ const Releases: React.FC = () => {
 
   const [dateList, setDateList] = useState<SeriesData[]>(initialDateList);
   const [isLoading, setIsLoading] = useState(true);
-  const [ongoings, setOngoings] = useState<OngoingData[]>([]);
 
   useEffect(() => {
     const fetchOngoings = async () => {
@@ -94,7 +90,6 @@ const Releases: React.FC = () => {
           };
         });
 
-        setOngoings(uniqueOngoings);
         setDateList(updatedDateList);
         setIsLoading(false);
       } catch (e) {
@@ -111,79 +106,38 @@ const Releases: React.FC = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <SafeAreaView>
+        <SafeAreaView style={commonStyles.container}>
           <HeaderReleases />
-          <View style={{ marginTop: 72 }}>
+          <View style={{ marginTop: 62 }}>
             <Calendar dateList={dateList} setDateList={setDateList} />
           </View>
-          <ContainerMain>
-            <ScrollView
-              style={{ height: Dimensions.get("window").height + 1000 }}
-            >
-              {dateList.map((item, index) => (
-                <React.Fragment key={index}>
-                  {item.focus && item.series && item.series.length > 0 ? (
-                    <>
-                      {console.log(item.series)}
-                      {item.series.map((seriesItem) => (
-                        <>
-                          <Image
-                            key={seriesItem.material_data.title}
-                            source={{
-                              uri:
-                                seriesItem.material_data.screenshots?.[0] ||
-                                seriesItem.screenshots?.[0],
-                            }}
-                            style={{ width: 300, height: 200 }}
-                          />
-                          <Typography>
-                            {seriesItem.material_data.episodes_aired + 1}
-                          </Typography>
-                        </>
-                      ))}
-                    </>
-                  ) : (
-                    <>
-                      {item.focus &&
-                        (!item.series || item.series.length === 0) && (
-                          <View
-                            style={{ width: "90%" }}
-                            key={`no-schedule-${index}`}
-                          >
-                            <Typography
-                              style={{
-                                fontSize: 24,
-                                fontWeight: "600",
-                                lineHeight: 28.8,
-                                textAlign: "center",
-                                marginTop: 124,
-                              }}
-                              type="title"
-                              gradient={true}
-                            >
-                              No Release Schedule
-                            </Typography>
-                            <Typography
-                              style={{
-                                fontSize: 18,
-                                fontWeight: "500",
-                                lineHeight: 25.2,
-                                letterSpacing: 0.2,
-                                textAlign: "center",
-                              }}
-                              type="sub"
-                            >
-                              Sorry, there is no anime release schedule on this
-                              date
-                            </Typography>
-                          </View>
-                        )}
-                    </>
-                  )}
-                </React.Fragment>
-              ))}
-            </ScrollView>
-          </ContainerMain>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={commonStyles.scrollContainer}
+          >
+            {dateList.map((item, index) => (
+              <React.Fragment key={index}>
+                {item.focus && item.series && item.series.length > 0 ? (
+                  <>
+                    {item.series.map(
+                      (seriesItem: OngoingData, seriesIndex: number) => (
+                        <React.Fragment key={seriesIndex}>
+                          <ReleaseItem seriesItem={seriesItem} />
+                        </React.Fragment>
+                      )
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {item.focus &&
+                      (!item.series || item.series.length === 0) && (
+                        <NoScheduleMessage key={`no-schedule-${index}`} />
+                      )}
+                  </>
+                )}
+              </React.Fragment>
+            ))}
+          </ScrollView>
         </SafeAreaView>
       )}
     </>

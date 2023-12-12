@@ -1,6 +1,7 @@
 import React from "react";
 import {
   StyleSheet,
+  TextStyle,
   TouchableOpacity,
   TouchableOpacityProps,
   View,
@@ -12,6 +13,7 @@ import Typography from "./Typography";
 interface ButtonProps extends TouchableOpacityProps {
   title: string;
   style?: ViewStyle;
+  styleText?: TextStyle;
   gradient?: boolean;
 }
 
@@ -19,6 +21,7 @@ const Button: React.FC<ButtonProps> = ({
   onPress,
   title,
   style,
+  styleText,
   gradient = true,
 }) => {
   const GradientBtn = () => (
@@ -28,7 +31,7 @@ const Button: React.FC<ButtonProps> = ({
       colors={["#7210FF", "#9D59FF"]}
       style={styles.container}
     >
-      <Typography type="button" style={styles.buttonTitle}>
+      <Typography type="button" style={{ ...styles.buttonTitle, ...styleText }}>
         {title}
       </Typography>
     </LinearGradient>
@@ -36,7 +39,7 @@ const Button: React.FC<ButtonProps> = ({
 
   const OutlinedButton = () => (
     <View style={styles.container}>
-      <Typography type="button" style={styles.buttonTitle}>
+      <Typography type="button" style={{ ...styles.buttonTitle, ...styleText }}>
         {title}
       </Typography>
     </View>

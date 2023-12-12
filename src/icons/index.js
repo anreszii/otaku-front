@@ -558,3 +558,31 @@ export const Nofification = ({ ...props }) => {
     </Svg>
   );
 };
+
+export const Qualifier = ({ ...props }) => {
+  return (
+    <Svg
+      width={16}
+      height={6}
+      viewBox="0 0 16 6"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <Rect width={16} height={6} rx={3} fill="url(#paint0_linear_1_3512)" />
+      <Defs>
+        <LinearGradient
+          id="paint0_linear_1_3512"
+          x1={16}
+          y1={6}
+          x2={3.08283}
+          y2={-3.98724}
+          gradientUnits="userSpaceOnUse"
+        >
+          <Stop stopColor="#7210FF" />
+          <Stop offset={1} stopColor="#9D59FF" />
+        </LinearGradient>
+      </Defs>
+    </Svg>
+  );
+};
