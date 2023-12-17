@@ -7,23 +7,48 @@ import { commonStyles } from "../../style/releaseStyle";
 import { Image } from "react-native-elements";
 import Loader from "../ui/Loader";
 import Skeleton from "../ui/Skeleton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import userService from "../../api/user/userService";
 
 interface ReleaseItemProps {
   seriesItem: OngoingData;
+  flag: boolean;
+  setFlag: any;
 }
 
 interface OngoingData {
+  isFavorite: boolean;
   material_data: {
     anime_title: string;
     title: string;
+    poster_url: string;
     next_episode_at: string;
     screenshots?: string[];
     episodes_aired: number;
+    shikimori_rating: string;
   };
   screenshots: string[];
 }
 
-const ReleaseItem: React.FC<ReleaseItemProps> = ({ seriesItem }) => {
+const ReleaseItem: React.FC<ReleaseItemProps> = ({
+  seriesItem,
+  flag,
+  setFlag,
+}) => {
+  const [_inFavoriteList, setInFavoriteList] = useState(seriesItem.isFavorite);
+  const handleAddList = async (
+    title: string,
+    poster: string,
+    rating: string
+  ) => {
+    const id = await AsyncStorage.getItem("id");
+    userService
+      .addFavoriteList(String(id), { title, poster, rating })
+      .then(() => {
+        setInFavoriteList(true);
+        setFlag(!flag);
+      });
+  };
   return (
     <View style={commonStyles.marginBottom16}>
       <View style={commonStyles.row}>
@@ -48,15 +73,35 @@ const ReleaseItem: React.FC<ReleaseItemProps> = ({ seriesItem }) => {
         />
 
         <View style={commonStyles.column}>
-          <Typography>{seriesItem.material_data.anime_title}</Typography>
+          <Typography>
+            {seriesItem.material_data.anime_title.length > 50
+              ? seriesItem.material_data.anime_title.substring(0, 50) + "..."
+              : seriesItem.material_data.anime_title}
+          </Typography>
           <Typography>
             {seriesItem.material_data.episodes_aired + 1} Episode
           </Typography>
-          <Button
-            title="+ My List"
-            style={commonStyles.button}
-            styleText={commonStyles.buttonText}
-          />
+          {_inFavoriteList ? (
+            <Button
+              title="✓ My List"
+              gradient={false}
+              style={commonStyles.button}
+              styleText={commonStyles.buttonText}
+            />
+          ) : (
+            <Button
+              title="+ My List"
+              onPress={() =>
+                handleAddList(
+                  seriesItem.material_data.title,
+                  seriesItem.material_data.poster_url,
+                  seriesItem.material_data.shikimori_rating
+                )
+              }
+              style={commonStyles.button}
+              styleText={commonStyles.buttonText}
+            />
+          )}
         </View>
       </View>
     </View>

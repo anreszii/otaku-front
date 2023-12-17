@@ -65,18 +65,22 @@ export default function SignUp() {
 
   const sendEmailCode = () => {
     if (email.replaceAll(" ", "") !== "") {
-      authService.forgotPassword(email).then((data) => {
-        setCode(data.data.code);
-        setSeconds(59);
-        setStage(2);
-      });
+      authService
+        .forgotPassword(email)
+        .then((data) => {
+          setCode(data.data.code);
+          setSeconds(59);
+          setStage(2);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     } else {
       setError("Электронная почта не может быть пустой");
     }
   };
 
   const sendCode = () => {
-    console.log(value, code);
     if (value === code) {
       setStage(3);
     }

@@ -7,6 +7,8 @@ import homeStyles from "../style/homeStyles";
 import InfoSection from "../components/Home/InfoSection";
 import TopHitsSection from "../components/Home/TopHitsSection";
 import Loader from "../components/ui/Loader";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import userService from "../api/user/userService";
 
 const Home: React.FC = () => {
   const navigation = useNavigation<any>();
@@ -56,7 +58,7 @@ const Home: React.FC = () => {
     const promises = animeList.map((item) => {
       return new Promise((resolve) => {
         Image.getSize(
-          item.material_data.poster_url,
+          item.material_data.screenshots[0],
           (width, height) => {
             resolve({ width, height });
           },
@@ -83,8 +85,24 @@ const Home: React.FC = () => {
     }
   }, [animeList]);
 
-  const navigateToPlayer = (item: any) => {
-    navigation.navigate("Player", { creature: item });
+  const [inFavoriteList, setInFavoriteList] = useState(false);
+
+  useEffect(() => {
+    const getFavoriteList = async () => {
+      const id = await AsyncStorage.getItem("id");
+      const favorites = (await userService.getFavoriteList(String(id))).data;
+      favorites.map((item: any) => {
+        if (item.title == title) {
+          setInFavoriteList(true);
+        }
+      });
+    };
+
+    getFavoriteList();
+  }, []);
+
+  const navigateToAnimePage = (item: any) => {
+    navigation.navigate("AnimePage", { creature: item });
   };
 
   const firstAnime = animeList[0]?.material_data;
@@ -99,6 +117,8 @@ const Home: React.FC = () => {
   const subtitle = firstHalf
     .join(", ")
     .substring(0, firstHalf.join(", ").length);
+  const poster = firstAnime?.poster_url;
+  const rating = firstAnime?.shikimori_rating;
 
   return (
     <View style={homeStyles.container}>
@@ -117,12 +137,18 @@ const Home: React.FC = () => {
             <SafeAreaView>
               <HeaderHome />
             </SafeAreaView>
-            <InfoSection title={title} subtitle={subtitle} />
+            <InfoSection
+              title={title}
+              subtitle={subtitle}
+              poster={poster}
+              rating={rating}
+              inFavoriteList={inFavoriteList}
+            />
           </ImageBackground>
           <TopHitsSection
             animeList={animeList}
             navigation={navigation}
-            navigateToPlayer={navigateToPlayer}
+            navigateToAnimePage={navigateToAnimePage}
           />
         </>
       )}

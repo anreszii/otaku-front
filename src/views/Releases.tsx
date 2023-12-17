@@ -9,6 +9,8 @@ import NoScheduleMessage from "../components/Release/NoScheduleMessage";
 import { getOngoingsList } from "../api/kodik/getOngoignsList";
 import { commonStyles } from "../style/releaseStyle";
 import { LinearGradient } from "expo-linear-gradient";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import userService from "../api/user/userService";
 
 interface SeriesData {
   date: number;
@@ -18,12 +20,15 @@ interface SeriesData {
 }
 
 interface OngoingData {
+  isFavorite: boolean;
   material_data: {
     title: string;
     anime_title: string;
+    poster_url: string;
     next_episode_at: string;
     screenshots?: string[];
     episodes_aired: number;
+    shikimori_rating: string;
   };
   screenshots: string[];
 }
@@ -48,6 +53,20 @@ const Releases: React.FC = () => {
 
   const [dateList, setDateList] = useState<SeriesData[]>(initialDateList);
   const [isLoading, setIsLoading] = useState(true);
+  const [flag, setFlag] = useState(false);
+
+  const getFavorite = async (title: string) => {
+    try {
+      const id = await AsyncStorage.getItem("id");
+      const response = await userService.getFavoriteList(String(id));
+      const favoriteList = response.data;
+
+      return favoriteList.findIndex((el: any) => el.title === title) !== -1;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
   useEffect(() => {
     const fetchOngoings = async () => {
@@ -78,20 +97,29 @@ const Releases: React.FC = () => {
             return dateA.getTime() - dateB.getTime();
           });
 
-        const updatedDateList: SeriesData[] = dateList.map((day) => {
+        const updatedDateList: any = dateList.map(async (day) => {
           const series = sortedOngoings.filter((item) => {
             const episodeDate = new Date(item.material_data.next_episode_at);
             return episodeDate.getDate() === day.date;
           });
 
+          const updatedSeries = await Promise.all(
+            series.map(async (item) => {
+              const isFavorite = await getFavorite(item.material_data.title); // Асинхронно получаем значение
+              return { ...item, isFavorite };
+            })
+          );
+
           return {
             ...day,
-            series,
+            series: updatedSeries,
           };
         });
 
-        setDateList(updatedDateList);
-        setIsLoading(false);
+        Promise.all(updatedDateList).then((data) => {
+          setDateList(data);
+          setIsLoading(false);
+        });
       } catch (e) {
         console.error(e);
         setIsLoading(false);
@@ -99,7 +127,7 @@ const Releases: React.FC = () => {
     };
 
     fetchOngoings();
-  }, []);
+  }, [flag]);
 
   return (
     <>
@@ -122,7 +150,11 @@ const Releases: React.FC = () => {
                     {item.series.map(
                       (seriesItem: OngoingData, seriesIndex: number) => (
                         <React.Fragment key={seriesIndex}>
-                          <ReleaseItem seriesItem={seriesItem} />
+                          <ReleaseItem
+                            flag={flag}
+                            setFlag={setFlag}
+                            seriesItem={seriesItem}
+                          />
                         </React.Fragment>
                       )
                     )}

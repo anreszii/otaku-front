@@ -16,6 +16,7 @@ const homeStyles = StyleSheet.create({
   },
   animeItem: {
     marginRight: 8,
+    marginBottom: 24,
   },
   poster: {
     width: 150,
@@ -86,14 +87,26 @@ const homeStyles = StyleSheet.create({
   },
   playButton: {
     width: 81,
-    height: 50,
+    height: 40,
     marginTop: 8,
     marginRight: 12,
   },
+  playButtonText: {
+    fontSize: 14,
+    fontWeight: "600",
+    lineHeight: 19.6,
+    letterSpacing: 0.2,
+  },
   listButton: {
     width: 101,
-    height: 50,
+    height: 40,
     marginTop: 8,
+  },
+  listButtonText: {
+    fontSize: 14,
+    fontWeight: "600",
+    lineHeight: 19.6,
+    letterSpacing: 0.2,
   },
   buttonContainer: {
     display: "flex",

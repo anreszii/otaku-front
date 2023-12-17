@@ -8,7 +8,7 @@ export const getAnimeList = async (limit?: any) => {
       token: PUBLIC_KEY,
       types: "anime-serial",
       with_material_data: true,
-      with_episodes: true,
+      with_episodes_data: true,
       sort: "shikimori_rating",
     },
   });

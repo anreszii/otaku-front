@@ -39,7 +39,10 @@ const Button: React.FC<ButtonProps> = ({
 
   const OutlinedButton = () => (
     <View style={styles.container}>
-      <Typography type="button" style={{ ...styles.buttonTitle, ...styleText }}>
+      <Typography
+        type="button"
+        style={{ ...styles.buttonTitleOut, ...styleText }}
+      >
         {title}
       </Typography>
     </View>
@@ -73,6 +76,13 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
     fontSize: 16,
   },
+  buttonTitleOut: {
+    color: "#7210FF",
+    fontWeight: "bold",
+    lineHeight: 22.4,
+    letterSpacing: 0.2,
+    fontSize: 16,
+  },
   container: {
     justifyContent: "center",
     alignItems: "center",
@@ -80,11 +90,10 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   outlinedButton: {
-    justifyContent: "center",
-    alignItems: "center",
     borderRadius: 25,
-    height: "100%",
-    borderColor: "#FFF",
+    width: "100%",
+    height: 58,
+    borderColor: "#7210FF",
     borderWidth: 2,
   },
 });

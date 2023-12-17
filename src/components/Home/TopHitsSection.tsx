@@ -8,13 +8,13 @@ import ContainerMain from "../Layouts/ContainerMain";
 interface TopHitsSectionProps {
   animeList: any[];
   navigation: any;
-  navigateToPlayer: any;
+  navigateToAnimePage: any;
 }
 
 const TopHitsSection: React.FC<TopHitsSectionProps> = ({
   animeList,
   navigation,
-  navigateToPlayer,
+  navigateToAnimePage,
 }) => (
   <ScrollView style={homeStyles.scrollView}>
     <ContainerMain>
@@ -22,15 +22,6 @@ const TopHitsSection: React.FC<TopHitsSectionProps> = ({
         <Typography style={homeStyles.title} type="title">
           Top Hits Anime
         </Typography>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("ListHist", { creature: animeList })
-          }
-        >
-          <Typography style={homeStyles.subtitle} type="sub" gradient={true}>
-            See all
-          </Typography>
-        </TouchableOpacity>
       </View>
       <ScrollView
         horizontal={true}
@@ -42,7 +33,7 @@ const TopHitsSection: React.FC<TopHitsSectionProps> = ({
             key={index}
             item={item}
             index={index}
-            onPress={navigateToPlayer}
+            onPress={() => navigateToAnimePage(item)}
           />
         ))}
       </ScrollView>

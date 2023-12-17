@@ -2,14 +2,18 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { DevSettings } from "react-native";
 
+const apiAuth = process.env.EXPO_PUBLIC_API_URL_AUTH;
+
+const apiUser = process.env.EXPO_PUBLIC_API_URL_USER;
+
 export const $apiAuth = axios.create({
   withCredentials: true,
-  baseURL: "http://localhost:3000/auth",
+  baseURL: apiAuth,
 });
 
 export const $apiUser = axios.create({
   withCredentials: true,
-  baseURL: "http://localhost:3000/user",
+  baseURL: apiUser,
 });
 
 $apiUser.interceptors.request.use(async (config) => {
@@ -31,9 +35,10 @@ $apiUser.interceptors.response.use(
     ) {
       originalRequest._isRetry = true;
       try {
-        console.log("hello")
         await axios
-          .get("http://localhost:3000/auth/refresh", { withCredentials: true })
+          .get(`${apiAuth}/refresh`, {
+            withCredentials: true,
+          })
           .then(async (data) => {
             await AsyncStorage.setItem("token", data.data.accessToken);
           })

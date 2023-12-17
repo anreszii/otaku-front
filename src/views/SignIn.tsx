@@ -33,6 +33,7 @@ export default function SignIn() {
     await authService
       .login(user.username, user.password)
       .then(async (data) => {
+        await AsyncStorage.setItem("id", data.data.user.id);
         await AsyncStorage.setItem("token", data.data.tokens.accessToken);
         DevSettings.reload();
       })

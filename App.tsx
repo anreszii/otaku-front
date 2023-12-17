@@ -6,6 +6,7 @@ import { DevSettings, LogBox } from "react-native";
 import authService from "./src/api/auth/authService";
 import Intro from "./src/views/Intro";
 import { PrivateStackNavigator, PublicStackNavigator } from "./src/navigation";
+import * as Linking from "expo-linking";
 
 LogBox.ignoreLogs([
   "Sending `onAnimatedValueUpdate` with no listeners registered.",
@@ -14,6 +15,16 @@ LogBox.ignoreLogs([
 export default function App() {
   const [appReady, setAppReady] = useState(false);
   const [isToken, setIsToken] = useState(false);
+  // const prefix = Linking.createURL("/");
+  // const linking = {
+  //   prefixes: [prefix],
+  //   config: {
+  //     screens: {
+  //       Main: "Main",
+  //     },
+  //   },
+  // };
+  // console.log(prefix, linking);
 
   const prepareApp = async () => {
     await Font.loadAsync({
@@ -30,11 +41,11 @@ export default function App() {
   useEffect(() => {
     const checkAuthentication = async () => {
       const token = await AsyncStorage.getItem("token");
-
       if (token) {
         try {
           const data = await authService.checkAuth();
           await AsyncStorage.setItem("token", data.data.accessToken);
+          await AsyncStorage.setItem("id", data.data.user.id);
         } catch (e) {
           await AsyncStorage.removeItem("token");
           DevSettings.reload();

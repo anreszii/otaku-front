@@ -26,7 +26,7 @@ export default function HeaderHome() {
       ]}
     >
       <TouchableOpacity style={{ marginRight: 20 }} onPress={() => {}}>
-        <Search />
+        <Search color="#FFF" />
       </TouchableOpacity>
       <TouchableOpacity style={{ marginRight: 24 }} onPress={() => {}}>
         <Nofification />

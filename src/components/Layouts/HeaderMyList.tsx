@@ -6,15 +6,17 @@ import {
   Platform,
   StatusBar,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Typography from "../ui/Typography";
+import { Search } from "../../icons";
 
 interface HeaderProps {
   style?: object;
 }
 
-const HeaderReleases: React.FC<HeaderProps> = ({ style }) => {
+const HeaderMyList: React.FC<HeaderProps> = ({ style }) => {
   const [statusBarHeight, setStatusBarHeight] = useState<number>(
     Platform.OS === "ios"
       ? getStatusBarHeight(true)
@@ -22,28 +24,40 @@ const HeaderReleases: React.FC<HeaderProps> = ({ style }) => {
   );
 
   return (
-    <View style={[styles.container, { top: statusBarHeight + 12 + 34 }, style]}>
-      <Image
-        source={require("../../../assets/icon.png")}
-        style={{ width: 31, height: 28, marginRight: 10 }}
-        resizeMode="contain"
-      />
-      <Typography type="title" style={styles.title}>
-        Release Calendar
-      </Typography>
+    <View
+      style={{
+        ...styles.container,
+        ...{ top: statusBarHeight + 12 + 34 },
+        ...style,
+      }}
+    >
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <Image
+          source={require("../../../assets/icon.png")}
+          style={{ width: 31, height: 28, marginRight: 10 }}
+          resizeMode="contain"
+        />
+        <Typography type="title" style={styles.title}>
+          My List
+        </Typography>
+      </View>
+      <TouchableOpacity>
+        <Search color="#000" />
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
+    width: "87%",
     height: 48,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     position: "absolute",
     marginLeft: 24,
+    justifyContent: "space-between",
   },
   title: {
     fontSize: 24,
@@ -52,4 +66,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HeaderReleases;
+export default HeaderMyList;

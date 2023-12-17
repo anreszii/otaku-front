@@ -20,12 +20,14 @@ import {
   ReleaseIcon,
 } from "../icons";
 import Typography from "../components/ui/Typography";
-import ListHitsAnime from "../views/ListHitsAnime";
+import Search from "../views/Search";
+import AnimePage from "../views/AnimePage";
+import Notification from "../views/Notification";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-export const TabNavigator = () => {
+export const TabNavigator = ({ route }: any) => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -83,6 +85,7 @@ export const TabNavigator = () => {
       <Tab.Screen
         name="List"
         component={List}
+        initialParams={route}
         options={{
           tabBarIcon: ({ size, focused, color }) => {
             return <ListIcon focus={focused} />;
@@ -159,26 +162,10 @@ export const PublicStackNavigator = () => {
       initialRouteName="Public"
       screenOptions={{ headerShown: false }}
     >
-      <Stack.Screen
-        name="Welcome"
-        options={{ headerShown: false }}
-        component={Welcome}
-      ></Stack.Screen>
-      <Stack.Screen
-        name="SignIn"
-        options={{ headerShown: false }}
-        component={SignIn}
-      ></Stack.Screen>
-      <Stack.Screen
-        name="SignUp"
-        options={{ headerShown: false }}
-        component={SignUp}
-      ></Stack.Screen>
-      <Stack.Screen
-        name="Forgot"
-        options={{ headerShown: false }}
-        component={ForgotPassword}
-      ></Stack.Screen>
+      <Stack.Screen name="Welcome" component={Welcome}></Stack.Screen>
+      <Stack.Screen name="SignIn" component={SignIn}></Stack.Screen>
+      <Stack.Screen name="SignUp" component={SignUp}></Stack.Screen>
+      <Stack.Screen name="Forgot" component={ForgotPassword}></Stack.Screen>
     </Stack.Navigator>
   );
 };
@@ -189,21 +176,19 @@ export const PrivateStackNavigator = ({ route }: any) => {
       initialRouteName="Private"
       screenOptions={{ headerShown: false }}
     >
-      <Stack.Screen
-        name="Main"
-        options={{ headerShown: false }}
-        component={TabNavigator}
-      ></Stack.Screen>
+      <Stack.Screen name="Main" component={TabNavigator}></Stack.Screen>
       <Stack.Screen
         name="Player"
         initialParams={route}
         component={Player}
       ></Stack.Screen>
+      <Stack.Screen name="Search" component={Search}></Stack.Screen>
       <Stack.Screen
-        name="ListHist"
+        name="AnimePage"
         initialParams={route}
-        component={ListHitsAnime}
+        component={AnimePage}
       ></Stack.Screen>
+      <Stack.Screen name="Notification" component={Notification}></Stack.Screen>
     </Stack.Navigator>
   );
 };

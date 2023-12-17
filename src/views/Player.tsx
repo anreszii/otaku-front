@@ -5,6 +5,9 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import { Audio, ResizeMode, Video } from "expo-av";
 import { useNavigation } from "@react-navigation/core";
 import { getAnimeUrl } from "../api/kodik/getAnimeUrl";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Asset } from "expo-asset";
+import { downloadAndSaveVideo } from "../api/downloadVideo";
 
 export default function Player({ route }: any) {
   const video = useRef<any>(null);
@@ -22,34 +25,30 @@ export default function Player({ route }: any) {
   };
 
   useEffect(() => {
-    getAnimeUrl(
-      Object.values<any>(
-        Object.values<any>(route.params.creature.seasons)[0].episodes
-      )[0]
-    )
-      .then((data) => {
-        setUrlVideo(data.data.links["720"].Src);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    if (status.isPlaying) triggerAudio(video);
+    (async () => {
+      const url: any = await AsyncStorage.getItem("videoPath");
+      setUrlVideo(url);
+      if (status.isPlaying) triggerAudio(video);
+    })();
   }, [video, status.isPlaying]);
 
   return (
     <View style={styles.container}>
       <Text>{route.params.creature.material_data.title}</Text>
-      <Video
-        ref={video}
-        style={styles.video}
-        source={{
-          uri: `https:${urlVideo}`,
-        }}
-        resizeMode={ResizeMode.CONTAIN}
-        useNativeControls={true}
-        volume={1}
-        onPlaybackStatusUpdate={(status) => setStatus(() => status)}
-      />
+      {urlVideo && (
+        <Video
+          ref={video}
+          style={styles.video}
+          source={{
+            uri: "file:///Users/reszi./Library/Developer/CoreSimulator/Devices/2D5946DE-A346-4772-A81E-9041A95D8F53/data/Containers/Data/Application/9AC0561C-AA98-46CA-B627-9DD43810EBDD/Library/Caches/ExponentExperienceData/%2540anonymous%252Faniup-front-e17ec6c5-3021-4101-8fd3-e1f769708639/ExponentAsset-76c381922169eb741af156794fca1f91.m3u8",
+          }}
+          resizeMode={ResizeMode.CONTAIN}
+          useNativeControls={true}
+          volume={1}
+          onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+        />
+      )}
+
       <View>
         <Button
           title={status.isPlaying ? "Pause" : "Play"}
