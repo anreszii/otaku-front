@@ -3,8 +3,6 @@ import axios from "axios";
 export const searchAnimeWithEpisodes = async (title: string) => {
   const PUBLIC_KEY: string = process.env.EXPO_PUBLIC_KODIK_PUBLIC_KEY || "";
 
-  console.log(title);
-
   try {
     const response = await axios.get(
       `https://kodikapi.com/search?token=${PUBLIC_KEY}&title=${title}&with_material_data=true&sort=shikimori_rating&types=anime,anime-serial&with_episodes_data=true&full_match=true`
@@ -14,14 +12,11 @@ export const searchAnimeWithEpisodes = async (title: string) => {
 
     return res;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
 
 const findAnimeWithMostEpisodes = (data: any) => {
-  console.log(data);
-
   if (
     !data ||
     !data.results ||
@@ -46,7 +41,6 @@ const findAnimeWithMostEpisodes = (data: any) => {
 
       if (episodes) {
         const episodesCount = Object.values<any>(episodes).length;
-        console.log(episodes_aired, episodesCount);
 
         if (episodesCount === episodes_aired) {
           animeWithMostEpisodes = anime;

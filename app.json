@@ -1,24 +1,23 @@
 {
   "expo": {
-    "name": "aniup-front",
-    "slug": "aniup-front",
+    "name": "aniup",
+    "slug": "aniup",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "scheme": "aniup",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.aniupfront"
+      "requireFullScreen": true,
+      "bundleIdentifier": "com.up.aniup"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.aniupfront"
+      "package": "com.up.aniup"
     },
     "extra": {
       "eas": {

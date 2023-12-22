@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Share as Sharing,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import MarqueeText from "react-native-marquee";
@@ -18,20 +19,40 @@ import userService from "../api/user/userService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { downloadAndSaveVideo } from "../api/downloadVideo";
 import { getAnimeUrl } from "../api/kodik/getAnimeUrl";
+import * as FileSystem from "expo-file-system";
+import DownloadModal from "../components/Modals/DownloadModal";
+import DownloadErrorModal from "../components/Modals/DownloadErrorModal";
+import { useNavigation } from "@react-navigation/native";
 
 export default function AnimePage({ route }: any) {
   const [animeInfo, setAnimeInfo] = useState<any>(null);
   const [showsFullDesc, setShowsFullDesc] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [visibleError, setVisibleError] = useState(false);
+  const [mb, setMB] = useState(0);
+  const [allMB, setAllMB] = useState(0);
+  const navigation = useNavigation<any>();
 
   useEffect(() => {
     (async () => {
-      let res = await searchAnimeWithEpisodes(route.params.creature.title);
+      console.log(
+        route.params?.creature?.hasOwnProperty("title")
+          ? route.params.creature.title
+          : route.params.title
+      );
+
+      let res = await searchAnimeWithEpisodes(
+        route.params?.creature?.hasOwnProperty("title")
+          ? route.params.creature.title
+          : route.params.title
+      );
       const id: any = await AsyncStorage.getItem("id");
       const favoriteList = await userService.getFavoriteList(id);
-      const inFavoriteList = favoriteList.data.find(
-        (el: any) => el.title === route.params.creature.material_data.title
+      const inFavoriteList = favoriteList.data.find((el: any) =>
+        el.title === route.params?.creature?.hasOwnProperty("title")
+          ? route.params.creature.title
+          : route.params.title
       );
-      console.log(res);
       setAnimeInfo(res);
 
       if (inFavoriteList !== undefined) {
@@ -84,14 +105,38 @@ export default function AnimePage({ route }: any) {
         .link
     );
 
-    const res = await downloadAndSaveVideo(
+    const res: any = await downloadAndSaveVideo(
       videoLink.data.links["720"].Src.includes("https:")
         ? videoLink.data.links["720"].Src
         : `https:${videoLink.data.links["720"].Src}`,
-      animeInfo.title_orig.replaceAll(" ", "") + "20" + ".mp4"
+      animeInfo.title_orig.replaceAll(" ", "") + "650" + ".mp4",
+      setMB,
+      setAllMB,
+      setVisibleError,
+      setVisible
     );
 
-    console.log(res, "animePage res");
+    await AsyncStorage.setItem(
+      "animePath",
+      FileSystem.documentDirectory +
+        animeInfo.title_orig.replaceAll(" ", "") +
+        "650" +
+        ".mp4"
+    );
+    console.log(
+      FileSystem.documentDirectory +
+        animeInfo.title_orig.replaceAll(" ", "") +
+        "650" +
+        ".mp4"
+    );
+  };
+
+  const handleShare = async () => {
+    const result = await Sharing.share({
+      message: `Посмотри аниме ${animeInfo.title}`,
+      url: `aniup://AnimePage?title=${animeInfo.title}`,
+    });
+    console.log(result);
   };
 
   const handleShowsDesc = () => {
@@ -106,8 +151,6 @@ export default function AnimePage({ route }: any) {
     ),
   ].filter((genre: string) => !["аниме", "мультфильм"].includes(genre));
   const genres = filteredGenres.join(", ");
-
-  console.log(animeInfo);
 
   return (
     <>
@@ -134,7 +177,7 @@ export default function AnimePage({ route }: any) {
               <TouchableOpacity onPress={() => handleFavorite()}>
                 {animeInfo.isFavorite ? <Text>✓</Text> : <List />}
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => handleShare()}>
                 <Share />
               </TouchableOpacity>
             </View>
@@ -157,7 +200,15 @@ export default function AnimePage({ route }: any) {
               </OutlineTypography>
             </View>
             <View style={styles.content}>
-              <Button title="Play" style={styles.button} />
+              <Button
+                title="Play"
+                onPress={() =>
+                  navigation.navigate("Player", {
+                    creature: route.params.creature,
+                  })
+                }
+                style={styles.button}
+              />
               <Button
                 title="Download"
                 onPress={() => handleDownload()}
@@ -239,6 +290,16 @@ export default function AnimePage({ route }: any) {
               </View>
             </ScrollView>
           </ScrollView>
+          <DownloadModal
+            visible={visible}
+            setVisible={setVisible}
+            mb={mb}
+            allMB={allMB}
+          />
+          <DownloadErrorModal
+            visible={visibleError}
+            setVisible={setVisibleError}
+          />
         </>
       )}
     </>

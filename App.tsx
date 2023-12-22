@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import * as Font from "expo-font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DevSettings, LogBox } from "react-native";
@@ -15,16 +15,16 @@ LogBox.ignoreLogs([
 export default function App() {
   const [appReady, setAppReady] = useState(false);
   const [isToken, setIsToken] = useState(false);
-  // const prefix = Linking.createURL("/");
-  // const linking = {
-  //   prefixes: [prefix],
-  //   config: {
-  //     screens: {
-  //       Main: "Main",
-  //     },
-  //   },
-  // };
-  // console.log(prefix, linking);
+  const [data, setData] = useState<any>(null);
+  const prefix = Linking.createURL("");
+  const linking = {
+    prefixes: [prefix],
+    config: {
+      screens: {
+        AnimePage: "Anime",
+      },
+    },
+  };
 
   const prepareApp = async () => {
     await Font.loadAsync({
@@ -38,7 +38,22 @@ export default function App() {
     setAppReady(true);
   };
 
+  const handleLink = (e: any) => {
+    const data = Linking.parse(e.url);
+    setData(data);
+  };
+
   useEffect(() => {
+    async function getInitialURL() {
+      const initialURL = await Linking.getInitialURL();
+      if (initialURL) setData(Linking.parse(initialURL));
+    }
+
+    Linking.addEventListener("url", handleLink);
+    if (!data) {
+      getInitialURL();
+    }
+
     const checkAuthentication = async () => {
       const token = await AsyncStorage.getItem("token");
       if (token) {
@@ -61,7 +76,7 @@ export default function App() {
   if (!appReady) return <Intro />;
 
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       {isToken ? <PrivateStackNavigator /> : <PublicStackNavigator />}
     </NavigationContainer>
   );

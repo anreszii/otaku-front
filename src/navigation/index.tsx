@@ -23,6 +23,7 @@ import Typography from "../components/ui/Typography";
 import Search from "../views/Search";
 import AnimePage from "../views/AnimePage";
 import Notification from "../views/Notification";
+import * as Linking from "expo-linking";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
