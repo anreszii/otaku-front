@@ -1,13 +1,20 @@
 import { StyleSheet, Dimensions } from "react-native";
 
 const homeStyles = StyleSheet.create({
+  wrapper: {
+    marginTop: 24,
+    marginHorizontal: 24,
+    width: "100%",
+  },
   container: {
     flex: 1,
     marginBottom: 20,
     height: Dimensions.get("window").height + 320,
+    backgroundColor: "#FFF",
   },
   scrollView: {
     height: "100%",
+    marginBottom: 108,
   },
   content: {
     flex: 1,
@@ -16,7 +23,6 @@ const homeStyles = StyleSheet.create({
   },
   animeItem: {
     marginRight: 8,
-    marginBottom: 24,
   },
   poster: {
     width: 150,
@@ -107,6 +113,7 @@ const homeStyles = StyleSheet.create({
     fontWeight: "600",
     lineHeight: 19.6,
     letterSpacing: 0.2,
+    color: "#FFF",
   },
   buttonContainer: {
     display: "flex",

@@ -7,10 +7,9 @@ export default function Container({ children }: any) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 24,
     marginLeft: 24,
-    marginBottom: 48,
     marginRight: 24,
+    marginBottom: 12,
     alignItems: "center",
     flex: 1,
     justifyContent: "center",

@@ -5,6 +5,8 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  ScrollView,
+  StatusBar,
 } from "react-native";
 import React, { useState } from "react";
 import Input from "../components/ui/Input";
@@ -26,13 +28,12 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState<any>(false);
   const [stage, setStage] = useState(1);
   const [badges, setBadges] = useState(data);
-  const [avatar, setAvatar] = useState(null);
+  const [avatar, setAvatar] = useState<string | null>(null);
   const [user, setUser] = useState({
     email: "",
     username: "",
     password: "",
     phoneNumber: "",
-    fullName: "",
   });
   const [interests, setInterests] = useState<any[]>([]);
   const [visible, setVisible] = useState(false);
@@ -80,138 +81,139 @@ export default function SignUp() {
   };
 
   return (
-    <Container>
-      {stage === 1 && (
-        <>
-          <Image
-            source={require("../../assets/icon.png")}
-            style={{ width: 113, height: 67 }}
-            resizeMode="contain"
-          />
-          <Typography style={styles.title} type="title">
-            Create Your Account
-          </Typography>
-          <Input
-            styleInput={{ marginTop: 13 }}
-            label="Username"
-            value={user.username}
-            onChangeText={(value: any) => {
-              setUser({ ...user, username: value });
-              setError(null);
-            }}
-          />
-          <Input
-            styleInput={{ marginTop: 13 }}
-            label="Password"
-            left={<TextInput.Icon disabled icon={() => <Lock style={{}} />} />}
-            right={
-              <TextInput.Icon
-                icon={() => (
-                  <TouchableOpacity
-                    onPress={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <EyeOpen /> : <EyeClose />}
-                  </TouchableOpacity>
-                )}
-              />
-            }
-            secureTextEntry={showPassword ? false : true}
-            value={user.password}
-            onChangeText={(value: any) => setUser({ ...user, password: value })}
-          />
-          <Button
-            title="Sign Up"
-            onPress={() => sendPreRegistration()}
-            style={styles.button}
-          />
-          {error && <TypographyError error={error} style={{ marginTop: 15 }} />}
-          <View style={styles.signContainer}>
-            <Typography type="sub" style={styles.haveAcc}>
-              Already have an account?
-            </Typography>
-            <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
-              <Typography type="button" gradient={true} style={styles.signUp}>
-                Sign In
-              </Typography>
-            </TouchableOpacity>
-          </View>
-        </>
-      )}
-      {stage === 2 && (
-        <>
-          <Typography type="sub" style={styles.titleTwo}>
-            Choose your interests and get the best anime recommendations. Don't
-            worry, you can always change it later.
-          </Typography>
-          <View style={styles.badgesContainer}>
-            {badges.map((item) => (
-              <TouchableOpacity
-                key={item.title}
-                onPress={() => handleGradient(item.title)}
-                style={styles.badge}
-              >
-                <Bagde title={item.title} gradient={item.focus} />
-              </TouchableOpacity>
-            ))}
-          </View>
-          <Button onPress={() => setStage(stage + 1)} title="Continue" />
-        </>
-      )}
-      {stage === 3 && (
-        <>
-          <HeaderBackStage
-            title="Fill Your Profile"
-            stage={stage}
-            setStage={setStage}
-          />
+    <View style={{ height: "100%", width: "100%", backgroundColor: "#FFF" }}>
+      <Container>
+        {stage === 1 && (
           <>
-            <ChangeAvatar avatar={avatar} setAvatar={setAvatar} />
-            <Input
-              label="Full Name"
-              styleInput={{ marginTop: 13 }}
-              value={user.fullName}
-              onChangeText={(value: any) =>
-                setUser({ ...user, fullName: value })
-              }
+            <Image
+              source={require("../../assets/icon.png")}
+              style={{ width: 113, height: 67 }}
+              resizeMode="contain"
             />
+            <Typography style={styles.title} type="title">
+              Create Your Account
+            </Typography>
             <Input
-              label="Email"
               styleInput={{ marginTop: 13 }}
-              value={user.email}
+              label="Username"
+              value={user.username}
               onChangeText={(value: any) => {
-                setUser({ ...user, email: value });
+                setUser({ ...user, username: value });
                 setError(null);
               }}
             />
             <Input
-              label="Phone Number"
-              keyboardType="phone-pad"
               styleInput={{ marginTop: 13 }}
-              maxLength={15}
-              value={user.phoneNumber}
+              label="Password"
+              left={
+                <TextInput.Icon disabled icon={() => <Lock style={{}} />} />
+              }
+              right={
+                <TextInput.Icon
+                  icon={() => (
+                    <TouchableOpacity
+                      onPress={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <EyeOpen /> : <EyeClose />}
+                    </TouchableOpacity>
+                  )}
+                />
+              }
+              secureTextEntry={showPassword ? false : true}
+              value={user.password}
               onChangeText={(value: any) =>
-                setUser({ ...user, phoneNumber: value })
+                setUser({ ...user, password: value })
               }
             />
             <Button
-              title="Continue"
+              title="Sign Up"
+              onPress={() => sendPreRegistration()}
               style={styles.button}
-              onPress={() => sendRegistration()}
             />
-            {error ? (
-              <TypographyError style={{ marginTop: 13 }} error={error} />
-            ) : (
-              ""
+            {error && (
+              <TypographyError error={error} style={{ marginTop: 15 }} />
             )}
+            <View style={styles.signContainer}>
+              <Typography type="sub" style={styles.haveAcc}>
+                Already have an account?
+              </Typography>
+              <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
+                <Typography type="button" gradient={true} style={styles.signUp}>
+                  Sign In
+                </Typography>
+              </TouchableOpacity>
+            </View>
           </>
-          <CompleteModal
-            visible={visible}
-            setVisible={setVisible}
-            redirect="SignIn"
-          />
-        </>
-      )}
-    </Container>
+        )}
+        {stage === 2 && (
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <Typography type="sub" style={styles.titleTwo}>
+              Choose your interests and get the best anime recommendations.
+              Don't worry, you can always change it later.
+            </Typography>
+            <View style={styles.badgesContainer}>
+              {badges.map((item) => (
+                <TouchableOpacity
+                  key={item.title}
+                  onPress={() => handleGradient(item.title)}
+                  style={styles.badge}
+                >
+                  <Bagde title={item.title} gradient={item.focus} />
+                </TouchableOpacity>
+              ))}
+            </View>
+            <Button onPress={() => setStage(stage + 1)} title="Continue" />
+          </ScrollView>
+        )}
+        {stage === 3 && (
+          <>
+            <HeaderBackStage
+              title="Fill Your Profile"
+              stage={stage}
+              setStage={setStage}
+            />
+            <View style={{ width: "100%" }}>
+              <View style={{ marginTop: 12 }}></View>
+              <ChangeAvatar avatar={avatar} setAvatar={setAvatar} />
+              <Input
+                label="Email"
+                styleInput={{ marginTop: 13 }}
+                value={user.email}
+                onChangeText={(value: any) => {
+                  setUser({ ...user, email: value });
+                  setError(null);
+                }}
+              />
+              <Input
+                label="Phone Number"
+                keyboardType="phone-pad"
+                styleInput={{ marginTop: 13 }}
+                maxLength={15}
+                value={user.phoneNumber}
+                onChangeText={(value: any) =>
+                  setUser({ ...user, phoneNumber: value })
+                }
+              />
+              <Button
+                title="Continue"
+                style={styles.button}
+                onPress={() => sendRegistration()}
+              />
+              {error ? (
+                <TypographyError style={{ marginTop: 13 }} error={error} />
+              ) : (
+                ""
+              )}
+            </View>
+            <CompleteModal
+              visible={visible}
+              setVisible={setVisible}
+              redirect="SignIn"
+            />
+          </>
+        )}
+      </Container>
+    </View>
   );
 }
 
@@ -262,6 +264,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     flexWrap: "wrap",
+    marginBottom: 24,
   },
   badge: {
     marginTop: 24,

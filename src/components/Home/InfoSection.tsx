@@ -5,9 +5,11 @@ import Button from "../ui/Button";
 import homeStyles from "../../style/homeStyles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import userService from "../../api/user/userService";
+import { useNavigation } from "@react-navigation/native";
 
 interface InfoSectionProps {
   title: string;
+  displayTitle: string;
   subtitle: string;
   poster: string;
   rating: string;
@@ -16,11 +18,13 @@ interface InfoSectionProps {
 
 const InfoSection: React.FC<InfoSectionProps> = ({
   title,
+  displayTitle,
   subtitle,
   poster,
   rating,
   inFavoriteList,
 }) => {
+  const navigation = useNavigation<any>();
   const [_inFavoriteList, setInFavoriteList] = useState(inFavoriteList);
   const handleAddList = async (
     title: string,
@@ -34,7 +38,7 @@ const InfoSection: React.FC<InfoSectionProps> = ({
   return (
     <View style={homeStyles.infoContainer}>
       <Typography style={homeStyles.titleHeader} type="title">
-        {title}
+        {displayTitle}
       </Typography>
       <Typography style={homeStyles.subtitle} type="sub">
         {subtitle}
@@ -44,14 +48,16 @@ const InfoSection: React.FC<InfoSectionProps> = ({
           title="Play"
           style={homeStyles.playButton}
           styleText={homeStyles.playButtonText}
+          onPress={() => navigation.navigate("Player", { creature: { title } })}
         />
-        {_inFavoriteList && (
+        {!_inFavoriteList && (
           <Button
             title="+ My List"
             gradient={false}
             onPress={async () => await handleAddList(title, poster, rating)}
             style={homeStyles.listButton}
             styleText={homeStyles.listButtonText}
+            whiteBorder={true}
           />
         )}
       </View>

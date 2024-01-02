@@ -49,5 +49,7 @@ const findAnimeWithMostEpisodes = (data: any) => {
     }
   });
 
+  console.log(animeWithMostEpisodes);
+
   return animeWithMostEpisodes;
 };

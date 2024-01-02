@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getAnimeList = async (limit?: any) => {
+export const getNewReleases = async (limit?: any) => {
   const PUBLIC_KEY: any = process.env.EXPO_PUBLIC_KODIK_PUBLIC_KEY;
 
   return axios.get("https://kodikapi.com/list", {
@@ -8,9 +8,8 @@ export const getAnimeList = async (limit?: any) => {
       token: PUBLIC_KEY,
       types: "anime,anime-serial",
       with_material_data: true,
-      with_episodes_data: true,
-      sort: "shikimori_rating",
       has_field: "shikimori_id",
+      limit: 5,
     },
   });
 };

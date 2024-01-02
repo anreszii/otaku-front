@@ -8,6 +8,7 @@ export const getOngoingsList = async (limit?: any) => {
       token: PUBLIC_KEY,
       with_material_data: true,
       anime_status: "ongoing",
+      has_field: "shikimori_id",
     },
   });
 };

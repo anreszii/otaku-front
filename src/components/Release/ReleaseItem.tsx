@@ -17,6 +17,7 @@ interface ReleaseItemProps {
 }
 
 interface OngoingData {
+  title: string;
   isFavorite: boolean;
   material_data: {
     anime_title: string;
@@ -36,19 +37,30 @@ const ReleaseItem: React.FC<ReleaseItemProps> = ({
   setFlag,
 }) => {
   const [_inFavoriteList, setInFavoriteList] = useState(seriesItem.isFavorite);
-  const handleAddList = async (
+
+  const handleChangeList = async (
     title: string,
     poster: string,
     rating: string
   ) => {
     const id = await AsyncStorage.getItem("id");
-    userService
-      .addFavoriteList(String(id), { title, poster, rating })
-      .then(() => {
-        setInFavoriteList(true);
-        setFlag(!flag);
-      });
+    if (_inFavoriteList) {
+      await userService
+        .delFavoriteList(String(id), { title, poster, rating })
+        .then(() => {
+          setInFavoriteList(false);
+          setFlag(!flag);
+        });
+    } else {
+      await userService
+        .addFavoriteList(String(id), { title, poster, rating })
+        .then(() => {
+          setInFavoriteList(true);
+          setFlag(!flag);
+        });
+    }
   };
+
   return (
     <View style={commonStyles.marginBottom16}>
       <View style={commonStyles.row}>
@@ -87,13 +99,20 @@ const ReleaseItem: React.FC<ReleaseItemProps> = ({
               gradient={false}
               style={commonStyles.button}
               styleText={commonStyles.buttonText}
+              onPress={() =>
+                handleChangeList(
+                  seriesItem.title,
+                  seriesItem.material_data.poster_url,
+                  seriesItem.material_data.shikimori_rating
+                )
+              }
             />
           ) : (
             <Button
               title="+ My List"
               onPress={() =>
-                handleAddList(
-                  seriesItem.material_data.title,
+                handleChangeList(
+                  seriesItem.title,
                   seriesItem.material_data.poster_url,
                   seriesItem.material_data.shikimori_rating
                 )

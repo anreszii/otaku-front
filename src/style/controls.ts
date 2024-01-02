@@ -1,17 +1,11 @@
 export const controlsStyle = {
   inputOutlinedTheme: {
-    roundness: 10,
+    roundness: 16,
     colors: {
-      placeholder: "#303030",
-      text: "#fff",
-      primary: "#303030",
+      primary: "transparent",
       underlineColor: "transparent",
       error: "#FF5A47",
-      background: "transparent",
+      background: "#F5F5F5",
     },
-    borderColor: "#000",
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderRadius: 25,
   },
 };

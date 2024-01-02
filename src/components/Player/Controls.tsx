@@ -1,46 +1,63 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
-import Button from "../ui/Button";
+import { View, TouchableOpacity, StyleSheet, SafeAreaView } from "react-native";
 import {
   Back,
   ChromeCast,
   Episodes,
+  Pause,
   PlayFill,
+  SkipLeft,
+  SkipRight,
   Speed,
   Voice,
 } from "../../icons";
 import Typography from "../ui/Typography";
-import MarqueeText from "react-native-marquee";
 import Slider from "@react-native-community/slider";
 import { useNavigation } from "@react-navigation/native";
 import * as ScreenOrientation from "expo-screen-orientation";
+import { CastButton, useRemoteMediaClient } from "react-native-google-cast";
 
 export default function Controls({
-  video,
-  status,
   position,
   duration,
-  title,
-  valueChange,
   full,
+  valueChange,
+  skipBack,
+  skipForward,
+  isPlaying,
+  setIsPlaying,
+  setVisibleSpeed,
+  setVisibleVoice,
+  setVisibleEpisode,
+  url,
 }: any) {
   const navigation = useNavigation<any>();
 
   const formatTime = (minute: any) => {
-    const minutes = Math.trunc(minute);
-    const remainingSeconds = Math.trunc(minute * 60 - minutes * 60);
-    return `${String(minutes).padStart(2, "0")}:${String(
+    const remainingSeconds = Math.trunc(minute * 60 - Math.trunc(minute) * 60);
+    return `${String(Math.trunc(minute)).padStart(2, "0")}:${String(
       remainingSeconds
     ).padStart(2, "0")}`;
   };
 
+  const client = useRemoteMediaClient();
+
+  if (client) {
+    client.loadMedia({
+      mediaInfo: {
+        contentUrl: url,
+      },
+      startTime: position,
+    });
+  }
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.headerContent}>
-        <View style={styles.headerTitle}>
+        <View style={styles.headerBack}>
           <TouchableOpacity
-            onPress={async () => {
-              await ScreenOrientation.lockAsync(
+            onPress={() => {
+              ScreenOrientation.lockAsync(
                 ScreenOrientation.OrientationLock.PORTRAIT_UP
               );
               navigation.goBack();
@@ -48,41 +65,38 @@ export default function Controls({
           >
             <Back color="#FFF" style={styles.backArrow} />
           </TouchableOpacity>
-          <MarqueeText
-            style={full ? styles.animeTitleFull : styles.animeTitle}
-            speed={0.2}
-            marqueeOnStart
-            loop
-            delay={4000}
-          >
-            {title}
-          </MarqueeText>
         </View>
         <View style={styles.headerIcons}>
           <TouchableOpacity
             style={full ? styles.iconsItemFull : styles.iconsItem}
+            onPress={() => setVisibleSpeed(true)}
           >
             <Speed />
           </TouchableOpacity>
           <TouchableOpacity
             style={full ? styles.iconsItemFull : styles.iconsItem}
+            onPress={() => setVisibleVoice(true)}
           >
             <Voice />
           </TouchableOpacity>
+
           <TouchableOpacity
             style={full ? styles.iconsItemFull : styles.iconsItem}
           >
-            <ChromeCast />
+            <CastButton style={{ width: 24, height: 20, tintColor: "#FFF" }}>
+              <ChromeCast />
+            </CastButton>
           </TouchableOpacity>
           <TouchableOpacity
             style={full ? styles.iconsItemFull : styles.iconsItem}
+            onPress={() => setVisibleEpisode(true)}
           >
             <Episodes />
           </TouchableOpacity>
         </View>
       </View>
       <View>
-        <View style={styles.sliderContent}>
+        <View style={full ? styles.sliderContentFull : styles.sliderContent}>
           <Typography
             style={full ? styles.timeTitleLeftFull : styles.timeTitleLeft}
           >
@@ -103,19 +117,26 @@ export default function Controls({
             {formatTime(duration)}
           </Typography>
         </View>
-        <View>
+        <View style={full ? styles.playContentFull : styles.playContent}>
+          <TouchableOpacity style={styles.skipLeft} onPress={() => skipBack()}>
+            <SkipLeft />
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() =>
-              status.isPlaying
-                ? video.current.pauseAsync()
-                : video.current.playAsync()
+              isPlaying ? setIsPlaying(false) : setIsPlaying(true)
             }
           >
-            <PlayFill />
+            {!isPlaying ? <PlayFill /> : <Pause />}
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.skipRight}
+            onPress={() => skipForward()}
+          >
+            <SkipRight />
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -124,32 +145,14 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "space-between",
   },
-  durationText: {
-    color: "white",
-  },
-  animeTitle: {
-    fontFamily: "NeueHaasDisplay",
-    fontSize: 12,
-    width: "50%",
-    color: "#FFF",
-  },
-  animeTitleFull: {
-    fontFamily: "NeueHaasDisplay",
-    fontSize: 20,
-    width: "60%",
-    color: "#FFF",
-  },
-  backArrow: {
-    marginRight: 20,
-  },
+  backArrow: {},
   headerContent: {
     flexDirection: "row",
     alignItems: "center",
     width: "100%",
     justifyContent: "space-between",
   },
-  headerTitle: {
-    flexDirection: "row",
+  headerBack: {
     alignItems: "center",
   },
   headerIcons: {
@@ -166,26 +169,54 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
   },
+  sliderContentFull: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginRight: 42,
+  },
   timeTitleLeft: {
     color: "#FFF",
     fontWeight: "600",
     marginRight: 2,
+    width: "10%",
   },
   timeTitleRight: {
     color: "#FFF",
     fontWeight: "600",
     marginLeft: 2,
+    width: "10%",
   },
   timeTitleLeftFull: {
     color: "#FFF",
     fontSize: 14,
     fontWeight: "600",
     marginRight: 8,
+    width: "10%",
+    textAlign: "right",
   },
   timeTitleRightFull: {
     color: "#FFF",
     fontSize: 14,
     fontWeight: "600",
     marginLeft: 8,
+    width: "10%",
+    textAlign: "left",
+  },
+  playContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  playContentFull: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 16,
+  },
+  skipLeft: {
+    marginRight: 44,
+  },
+  skipRight: {
+    marginLeft: 44,
   },
 });

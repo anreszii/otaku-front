@@ -5,16 +5,25 @@ import {
   TouchableOpacity,
   Platform,
   StatusBar,
+  NativeModules,
+  ViewStyle,
+  ViewProps,
 } from "react-native";
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import { Back } from "../../icons";
 import { useNavigation } from "@react-navigation/native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Typography from "../ui/Typography";
+const { StatusBarManager } = NativeModules;
 
-export default function HeaderBack({ title }: any) {
-  const [statusBarHeight, setStatusBarHeight] = useState<any>(
-    Platform.OS === "ios" ? getStatusBarHeight(true) : StatusBar.currentHeight
+interface HeaderBackProps extends ViewProps {
+  title: string;
+  style?: ViewStyle;
+}
+
+const HeaderBack: FC<HeaderBackProps> = ({ title, style }) => {
+  const [statusBarHeight, setStatusBarHeight] = useState<number>(
+    StatusBarManager.HEIGHT
   );
 
   const navigation = useNavigation();
@@ -22,18 +31,19 @@ export default function HeaderBack({ title }: any) {
     <View
       style={[
         styles.container,
-        { position: "absolute", top: statusBarHeight + 12 + 10 },
+        { position: "absolute", top: statusBarHeight + 12 },
+        { ...style },
       ]}
     >
       <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Back />
+        <Back color="#000" />
       </TouchableOpacity>
       <Typography type="title" style={styles.title}>
         {title}
       </Typography>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -42,6 +52,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    marginLeft: 24,
   },
   title: {
     marginLeft: 16,
@@ -50,3 +61,5 @@ const styles = StyleSheet.create({
     lineHeight: 28.8,
   },
 });
+
+export default HeaderBack;

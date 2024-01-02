@@ -23,6 +23,7 @@
       "eas": {
         "projectId": "65272881-f08e-4ed4-a33e-abaa0588ff33"
       }
-    }
+    },
+    "plugins": ["@config-plugins/react-native-google-cast"]
   }
 }

@@ -7,6 +7,7 @@ import authService from "./src/api/auth/authService";
 import Intro from "./src/views/Intro";
 import { PrivateStackNavigator, PublicStackNavigator } from "./src/navigation";
 import * as Linking from "expo-linking";
+import * as ScreenOrientation from "expo-screen-orientation";
 
 LogBox.ignoreLogs([
   "Sending `onAnimatedValueUpdate` with no listeners registered.",
@@ -27,6 +28,7 @@ export default function App() {
   };
 
   const prepareApp = async () => {
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
     await Font.loadAsync({
       NeueHaasDisplay: require("./assets/fonts/NeueHaasDisplay-Medium.ttf"),
       UrbanistRegular: require("./assets/fonts/Urbanist-Regular.ttf"),

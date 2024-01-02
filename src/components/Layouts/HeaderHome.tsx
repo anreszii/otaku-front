@@ -5,31 +5,38 @@ import {
   TouchableOpacity,
   Platform,
   StatusBar,
+  NativeModules,
 } from "react-native";
 import React, { useState } from "react";
-import { Nofification, Search } from "../../icons";
+import { Notification, Search } from "../../icons";
 import { useNavigation } from "@react-navigation/native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
-import Typography from "../ui/Typography";
+const { StatusBarManager } = NativeModules;
 
 export default function HeaderHome() {
-  const [statusBarHeight, setStatusBarHeight] = useState<any>(
-    Platform.OS === "ios" ? getStatusBarHeight(true) : StatusBar.currentHeight
+  const [statusBarHeight, setStatusBarHeight] = useState<number>(
+    StatusBarManager.HEIGHT
   );
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   return (
     <View
       style={[
         styles.container,
-        { position: "absolute", top: statusBarHeight + 12 + 34 },
+        { position: "absolute", top: statusBarHeight + 12 },
       ]}
     >
-      <TouchableOpacity style={{ marginRight: 20 }} onPress={() => {}}>
+      <TouchableOpacity
+        style={{ marginRight: 20 }}
+        onPress={() => navigation.navigate("Search")}
+      >
         <Search color="#FFF" />
       </TouchableOpacity>
-      <TouchableOpacity style={{ marginRight: 24 }} onPress={() => {}}>
-        <Nofification />
+      <TouchableOpacity
+        style={{ marginRight: 24 }}
+        onPress={() => navigation.navigate("Notification")}
+      >
+        <Notification color="#FFF" />
       </TouchableOpacity>
     </View>
   );

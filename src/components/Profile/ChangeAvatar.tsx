@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import {
   View,
   Image,
@@ -10,7 +10,21 @@ import { launchImageLibraryAsync, MediaTypeOptions } from "expo-image-picker";
 import { CroppingAvatar } from "../Modals/CroppingAvatar";
 import { Edit, UserDefault } from "../../icons";
 
-export function ChangeAvatar({ avatar, setAvatar }: any) {
+interface ChangeAvatarProps {
+  avatar: any;
+  setAvatar: React.Dispatch<React.SetStateAction<string | null>>;
+  handleChangeAvatar?: () => void;
+  widthAvatar?: number;
+  heightAvatar?: number;
+}
+
+export const ChangeAvatar: FC<ChangeAvatarProps> = ({
+  avatar,
+  setAvatar,
+  handleChangeAvatar,
+  widthAvatar,
+  heightAvatar,
+}: any) => {
   const [uri, setUri] = useState("");
   const [visible, setVisible] = useState(true);
   const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -33,11 +47,23 @@ export function ChangeAvatar({ avatar, setAvatar }: any) {
     <>
       <View style={styles.avatarContainer}>
         <TouchableOpacity onPress={pickImage}>
-          <View style={styles.avatar}>
+          <View
+            style={
+              !!widthAvatar && !!heightAvatar
+                ? [
+                    styles.avatar,
+                    { width: widthAvatar - 2, height: heightAvatar - 2 },
+                  ]
+                : styles.avatar
+            }
+          >
             {avatar ? (
               <Image source={{ uri: avatar }} style={styles.avatarImage} />
             ) : (
-              <UserDefault />
+              <UserDefault
+                width={!!widthAvatar ? widthAvatar : 140}
+                height={!!heightAvatar ? heightAvatar : 140}
+              />
             )}
           </View>
           <Edit style={styles.edit} />
@@ -54,23 +80,20 @@ export function ChangeAvatar({ avatar, setAvatar }: any) {
       )}
     </>
   );
-}
+};
 
 const styles = StyleSheet.create({
   avatarContainer: {
     alignItems: "center",
-    marginBottom: 20,
   },
   avatar: {
     backgroundColor: "#23292E",
     width: 138,
     height: 138,
     borderRadius: 100,
-    marginBottom: 12,
     alignItems: "center",
     justifyContent: "center",
     overflow: "hidden",
-    marginTop: 12,
   },
   avatarImage: {
     width: "100%",
@@ -84,7 +107,7 @@ const styles = StyleSheet.create({
   },
   edit: {
     position: "absolute",
-    bottom: 10,
-    right: 10,
+    bottom: 0,
+    right: 0,
   },
 });

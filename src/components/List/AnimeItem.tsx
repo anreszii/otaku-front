@@ -2,16 +2,28 @@ import React from "react";
 import { ImageBackground, TouchableOpacity, View } from "react-native";
 import BadgeRating from "../ui/BadgeRating";
 import homeStyles from "../../style/homeStyles";
+import { useNavigation } from "@react-navigation/native";
 
-interface AnimeItemProps {
-  item: any;
-  onPress?: (item: any) => void;
+interface AnimeItem {
+  poster: string;
+  title: string;
+  rating: string;
 }
 
-const AnimeItem: React.FC<AnimeItemProps> = ({ item, onPress }) => {
+interface AnimeItemProps {
+  item: AnimeItem;
+  flag?: boolean;
+  setFlag?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const AnimeItem: React.FC<AnimeItemProps> = ({ item, flag, setFlag }) => {
+  const navigation = useNavigation<any>();
+
   return (
     <View style={homeStyles.animeItem}>
-      <TouchableOpacity onPress={() => {}}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("AnimePage", { title: item.title })}
+      >
         <ImageBackground
           resizeMode="stretch"
           source={{ uri: item.poster }}

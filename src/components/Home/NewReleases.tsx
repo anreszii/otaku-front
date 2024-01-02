@@ -3,15 +3,16 @@ import { ScrollView, TouchableOpacity, View } from "react-native";
 import Typography from "../ui/Typography";
 import AnimeItem from "./AnimeItem";
 import homeStyles from "../../style/homeStyles";
+import AnimeItemSimple from "./AnimeItemSimple";
 
-interface TopHitsSectionProps {
+interface NewReleasesProps {
   animeList: any[];
   navigation: any;
   navigateToAnimePage: any;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const TopHitsSection: React.FC<TopHitsSectionProps> = ({
+const NewReleases: React.FC<NewReleasesProps> = ({
   animeList,
   navigation,
   navigateToAnimePage,
@@ -20,7 +21,7 @@ const TopHitsSection: React.FC<TopHitsSectionProps> = ({
   <View style={homeStyles.wrapper}>
     <View style={homeStyles.titleContainer}>
       <Typography style={homeStyles.title} type="title">
-        Top Hits Anime
+        New Episode Releases
       </Typography>
     </View>
     <ScrollView
@@ -29,7 +30,7 @@ const TopHitsSection: React.FC<TopHitsSectionProps> = ({
       style={homeStyles.content}
     >
       {animeList.map((item, index) => (
-        <AnimeItem
+        <AnimeItemSimple
           key={index}
           item={item}
           index={index}
@@ -41,4 +42,4 @@ const TopHitsSection: React.FC<TopHitsSectionProps> = ({
   </View>
 );
 
-export default TopHitsSection;
+export default NewReleases;

@@ -15,6 +15,7 @@ interface ModalProps extends NativeModalProps {
   children: React.ReactNode;
   full?: boolean;
   style?: StyleProp<ViewStyle>;
+  close?: boolean;
 }
 
 export function Modal({
@@ -23,6 +24,7 @@ export function Modal({
   useDefaultStyles,
   children,
   full,
+  close,
   ...props
 }: ModalProps) {
   return (
@@ -31,6 +33,13 @@ export function Modal({
       animationType="slide"
       transparent={true}
       onRequestClose={() => setVisible && setVisible(!visible)}
+      supportedOrientations={[
+        "portrait",
+        "portrait-upside-down",
+        "landscape",
+        "landscape-left",
+        "landscape-right",
+      ]}
       {...props}
     >
       <TouchableOpacity
@@ -38,6 +47,7 @@ export function Modal({
         style={[
           full && { height: "100%", backgroundColor: "rgba(11, 18, 24, .8)" },
         ]}
+        onPress={close ? () => setVisible && setVisible(!visible) : () => {}}
       >
         <TouchableWithoutFeedback>{children}</TouchableWithoutFeedback>
       </TouchableOpacity>

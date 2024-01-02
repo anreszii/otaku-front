@@ -13,4 +13,13 @@ export default class userService {
   static async getFavoriteList(id: string) {
     return $apiUser.get(`/getFavorite/${id}`);
   }
+  static async getUser(id: string) {
+    return $apiUser.get(`/getUser/${id}`);
+  }
+  static async checkPassword(id: string, password: any) {
+    return $apiUser.post(`/checkPassword`, {
+      id: id,
+      password: password,
+    });
+  }
 }

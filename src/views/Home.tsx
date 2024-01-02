@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Image, ImageBackground, SafeAreaView, View } from "react-native";
+import {
+  Image,
+  ImageBackground,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  View,
+} from "react-native";
 import { getAnimeList } from "../api/kodik/getAnimeList";
 import { useNavigation } from "@react-navigation/native";
 import HeaderHome from "../components/Layouts/HeaderHome";
@@ -9,103 +16,119 @@ import TopHitsSection from "../components/Home/TopHitsSection";
 import Loader from "../components/ui/Loader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import userService from "../api/user/userService";
+import axios from "axios";
+import * as ScreenOrientation from "expo-screen-orientation";
+import NewReleases from "../components/Home/NewReleases";
+import { getNewReleases } from "../api/kodik/getNewReleases";
 
-const Home: React.FC = () => {
+interface HomeProps {
+  route: any;
+}
+
+const Home: React.FC<HomeProps> = ({ route }) => {
   const navigation = useNavigation<any>();
-  const [animeList, setAnimeList] = useState<any[]>([]);
+  const [animeListHits, setAnimeListHits] = useState<any[]>([]);
+  const [animeListNew, setAnimeListNew] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [isBackgroundImageLoading, setIsBackgroundImageLoading] =
     useState(true);
 
   useEffect(() => {
-    const fetchAnimeList = async () => {
-      try {
-        const { data } = await getAnimeList();
-        const uniqueAnimeList = Array.from(
-          new Set(data.results.map((item: any) => item.material_data.title))
-        ).map((title) =>
-          data.results.find((item: any) => item.material_data.title === title)
-        );
-        setAnimeList(uniqueAnimeList);
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-        setIsLoading(false);
-      }
-    };
+    (async () => {
+      ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.PORTRAIT_UP
+      );
+      const fetchAnimeListHits = async () => {
+        try {
+          const { data } = await getAnimeList();
+          const uniqueAnimeList = Array.from(
+            new Set(data.results.map((item: any) => item.material_data.title))
+          ).map((title) =>
+            data.results.find((item: any) => item.material_data.title === title)
+          );
+          const editPostersAnimeList = await Promise.all(
+            uniqueAnimeList.map(async (item) => {
+              const animeID = item.shikimori_id;
+              const { data } = await axios.get(
+                `https://shikimori.one/api/animes/${animeID}`
+              );
+              return await {
+                ...item,
+                material_data: {
+                  ...item.material_data,
+                  poster_url: `https://shikimori.one${data.image.original}`,
+                },
+              };
+            })
+          );
+          setAnimeListHits(editPostersAnimeList);
+          return editPostersAnimeList;
+        } catch (error) {
+          console.error(error);
+          setIsLoading(false);
+        }
+      };
 
-    fetchAnimeList();
-  }, []);
+      const tempAnimeData: any = await fetchAnimeListHits();
 
-  const loadBackgroundImage = () => {
-    Image.getSize(
-      "https://shikimori.one/system/screenshots/original/b13ecb9e1d5971f9d4abd4b5541e481de5dfe17c.jpg",
-      () => {
-        setIsBackgroundImageLoading(false);
-      },
-      () => {
-        setIsBackgroundImageLoading(false);
-      }
-    );
-  };
-
-  useEffect(() => {
-    loadBackgroundImage();
-  }, []);
-
-  const loadImages = () => {
-    const promises = animeList.map((item) => {
-      return new Promise((resolve) => {
-        Image.getSize(
-          item.material_data.screenshots[0],
-          (width, height) => {
-            resolve({ width, height });
-          },
-          () => {
-            resolve(null);
+      const getFavoriteList = async () => {
+        const id = await AsyncStorage.getItem("id");
+        const favorites = (await userService.getFavoriteList(String(id))).data;
+        const title = tempAnimeData[0].material_data.title;
+        favorites.map((item: any) => {
+          if (item.title == title) {
+            setInFavoriteList(true);
           }
-        );
-      });
-    });
+        });
+      };
 
-    Promise.all(promises)
-      .then(() => {
-        setIsImageLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error loading images:", error);
-        setIsImageLoading(false);
-      });
-  };
+      await getFavoriteList();
 
-  useEffect(() => {
-    if (animeList.length > 0) {
-      loadImages();
-    }
-  }, [animeList]);
+      const fetchAnimeListNew = async () => {
+        try {
+          const { data } = await getNewReleases();
+          const uniqueAnimeList = Array.from(
+            new Set(data.results.map((item: any) => item.material_data.title))
+          ).map((title) =>
+            data.results.find((item: any) => item.material_data.title === title)
+          );
+          const editPostersAnimeList = await Promise.all(
+            uniqueAnimeList.map(async (item) => {
+              const animeID = item.shikimori_id;
+              const { data } = await axios.get(
+                `https://shikimori.one/api/animes/${animeID}`
+              );
+              return await {
+                ...item,
+                material_data: {
+                  ...item.material_data,
+                  poster_url: `https://shikimori.one${data.image.original}`,
+                },
+              };
+            })
+          );
+          setAnimeListNew(editPostersAnimeList);
+          return editPostersAnimeList;
+        } catch (error) {
+          console.error(error);
+          setIsLoading(false);
+        }
+      };
+
+      await fetchAnimeListNew();
+
+      setIsLoading(false);
+    })();
+  }, []);
 
   const [inFavoriteList, setInFavoriteList] = useState(false);
-
-  useEffect(() => {
-    const getFavoriteList = async () => {
-      const id = await AsyncStorage.getItem("id");
-      const favorites = (await userService.getFavoriteList(String(id))).data;
-      favorites.map((item: any) => {
-        if (item.title == title) {
-          setInFavoriteList(true);
-        }
-      });
-    };
-
-    getFavoriteList();
-  }, []);
 
   const navigateToAnimePage = (item: any) => {
     navigation.navigate("AnimePage", { creature: item });
   };
 
-  const firstAnime = animeList[0]?.material_data;
+  const firstAnime = animeListHits[0]?.material_data;
   const filteredGenres = (firstAnime?.all_genres || []).filter(
     (genre: any) => !["аниме", "мультфильм"].includes(genre)
   );
@@ -113,7 +136,8 @@ const Home: React.FC = () => {
   const middleIndex = Math.floor(filteredGenres.length / 2);
   const firstHalf = filteredGenres.slice(0, middleIndex);
 
-  const title = firstAnime?.title || "";
+  const displayTitle = firstAnime?.title || "";
+  const title = animeListHits[0]?.title || "";
   const subtitle = firstHalf
     .join(", ")
     .substring(0, firstHalf.join(", ").length);
@@ -122,14 +146,15 @@ const Home: React.FC = () => {
 
   return (
     <View style={homeStyles.container}>
-      {isLoading || isImageLoading || isBackgroundImageLoading ? (
+      {isLoading && isImageLoading && isBackgroundImageLoading ? (
         <Loader />
       ) : (
         <>
           <ImageBackground
             source={{
-              uri: animeList[0].material_data.screenshots[0],
+              uri: animeListHits[0]?.material_data?.screenshots[0],
             }}
+            onLoadEnd={() => setIsBackgroundImageLoading(false)}
             style={homeStyles.bg}
             blurRadius={5}
           >
@@ -139,17 +164,30 @@ const Home: React.FC = () => {
             </SafeAreaView>
             <InfoSection
               title={title}
+              displayTitle={displayTitle}
               subtitle={subtitle}
               poster={poster}
               rating={rating}
               inFavoriteList={inFavoriteList}
             />
           </ImageBackground>
-          <TopHitsSection
-            animeList={animeList}
-            navigation={navigation}
-            navigateToAnimePage={navigateToAnimePage}
-          />
+          <ScrollView
+            style={homeStyles.scrollView}
+            showsVerticalScrollIndicator={false}
+          >
+            <TopHitsSection
+              animeList={animeListHits}
+              navigation={navigation}
+              navigateToAnimePage={navigateToAnimePage}
+              setLoading={setIsImageLoading}
+            />
+            <NewReleases
+              animeList={animeListNew}
+              navigation={navigation}
+              navigateToAnimePage={navigateToAnimePage}
+              setLoading={setIsImageLoading}
+            />
+          </ScrollView>
         </>
       )}
     </View>

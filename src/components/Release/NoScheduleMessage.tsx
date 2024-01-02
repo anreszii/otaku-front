@@ -3,7 +3,7 @@ import { View } from "react-native";
 import Typography from "../ui/Typography";
 
 const NoScheduleMessage: React.FC = () => (
-  <View style={{ width: "90%" }}>
+  <View>
     <Typography
       style={{
         fontSize: 24,

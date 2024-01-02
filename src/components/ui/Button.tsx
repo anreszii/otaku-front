@@ -15,6 +15,7 @@ interface ButtonProps extends TouchableOpacityProps {
   style?: ViewStyle;
   styleText?: TextStyle;
   gradient?: boolean;
+  whiteBorder?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -23,6 +24,7 @@ const Button: React.FC<ButtonProps> = ({
   style,
   styleText,
   gradient = true,
+  whiteBorder = false,
 }) => {
   const GradientBtn = () => (
     <LinearGradient
@@ -54,6 +56,8 @@ const Button: React.FC<ButtonProps> = ({
       style={
         gradient
           ? { ...styles.button, ...style }
+          : whiteBorder
+          ? { ...styles.outlinedWhiteButton, ...style }
           : { ...styles.outlinedButton, ...style }
       }
     >
@@ -94,6 +98,13 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 58,
     borderColor: "#7210FF",
+    borderWidth: 2,
+  },
+  outlinedWhiteButton: {
+    borderRadius: 25,
+    width: "100%",
+    height: 58,
+    borderColor: "#FFF",
     borderWidth: 2,
   },
 });

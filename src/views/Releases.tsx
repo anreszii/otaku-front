@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, View } from "react-native";
-import { format, addDays } from "date-fns"; // Добавлен импорт
-import HeaderReleases from "../components/Layouts/HeaderReleases";
+import { format, addDays } from "date-fns";
 import Calendar from "../components/ui/Calendar";
 import Loader from "../components/ui/Loader";
 import ReleaseItem from "../components/Release/ReleaseItem";
 import NoScheduleMessage from "../components/Release/NoScheduleMessage";
 import { getOngoingsList } from "../api/kodik/getOngoignsList";
 import { commonStyles } from "../style/releaseStyle";
-import { LinearGradient } from "expo-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import userService from "../api/user/userService";
+import Header from "../components/Layouts/Header";
 
 interface SeriesData {
   date: number;
@@ -20,6 +19,7 @@ interface SeriesData {
 }
 
 interface OngoingData {
+  title: string;
   isFavorite: boolean;
   material_data: {
     title: string;
@@ -105,7 +105,7 @@ const Releases: React.FC = () => {
 
           const updatedSeries = await Promise.all(
             series.map(async (item) => {
-              const isFavorite = await getFavorite(item.material_data.title); // Асинхронно получаем значение
+              const isFavorite = await getFavorite(item.material_data.title);
               return { ...item, isFavorite };
             })
           );
@@ -135,7 +135,7 @@ const Releases: React.FC = () => {
         <Loader />
       ) : (
         <SafeAreaView style={commonStyles.container}>
-          <HeaderReleases />
+          <Header title="Release Calendar" />
           <View style={{ marginTop: 62 }}>
             <Calendar dateList={dateList} setDateList={setDateList} />
           </View>

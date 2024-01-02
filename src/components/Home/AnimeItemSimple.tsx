@@ -4,14 +4,14 @@ import BadgeRating from "../ui/BadgeRating";
 import Typography from "../ui/Typography";
 import homeStyles from "../../style/homeStyles";
 
-interface AnimeItemProps {
+interface AnimeItemSimpleProps {
   item: any;
   index: number;
   onPress: (item: any) => void;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AnimeItem: React.FC<AnimeItemProps> = ({
+const AnimeItemSimple: React.FC<AnimeItemSimpleProps> = ({
   item,
   index,
   onPress,
@@ -31,13 +31,10 @@ const AnimeItem: React.FC<AnimeItemProps> = ({
             style={homeStyles.badgeRating}
             title={item.material_data.shikimori_rating}
           />
-          <Typography type="title" style={homeStyles.posterNumber}>
-            {index + 1}
-          </Typography>
         </View>
       </ImageBackground>
     </TouchableOpacity>
   </View>
 );
 
-export default AnimeItem;
+export default AnimeItemSimple;

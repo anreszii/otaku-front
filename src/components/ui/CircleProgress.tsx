@@ -14,7 +14,6 @@ export default function CircleProgress() {
     Animated.timing(spinValue, {
       toValue: 1,
       duration: 1500,
-      easing: Easing.linear,
       useNativeDriver: true,
     }).start(() => spin());
   };

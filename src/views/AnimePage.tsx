@@ -7,6 +7,9 @@ import {
   TouchableOpacity,
   ScrollView,
   Share as Sharing,
+  StatusBar,
+  Image,
+  Animated,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import MarqueeText from "react-native-marquee";
@@ -23,6 +26,8 @@ import * as FileSystem from "expo-file-system";
 import DownloadModal from "../components/Modals/DownloadModal";
 import DownloadErrorModal from "../components/Modals/DownloadErrorModal";
 import { useNavigation } from "@react-navigation/native";
+import * as ScreenOrientation from "expo-screen-orientation";
+import axios from "axios";
 
 export default function AnimePage({ route }: any) {
   const [animeInfo, setAnimeInfo] = useState<any>(null);
@@ -35,34 +40,46 @@ export default function AnimePage({ route }: any) {
 
   useEffect(() => {
     (async () => {
-      console.log(
-        route.params?.creature?.hasOwnProperty("title")
-          ? route.params.creature.title
-          : route.params.title
+      ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.PORTRAIT_UP
       );
-
-      let res = await searchAnimeWithEpisodes(
-        route.params?.creature?.hasOwnProperty("title")
-          ? route.params.creature.title
-          : route.params.title
-      );
+      const title = route.params?.creature?.hasOwnProperty("title")
+        ? route.params.creature.title
+        : route.params.title;
+      const titleFavorite =
+        route.params?.creature?.material_data?.hasOwnProperty("title")
+          ? route.params.creature.material_data.title
+          : route.params.title;
+      const res: any = await searchAnimeWithEpisodes(title);
+      console.log(res);
       const id: any = await AsyncStorage.getItem("id");
-      const favoriteList = await userService.getFavoriteList(id);
-      const inFavoriteList = favoriteList.data.find((el: any) =>
-        el.title === route.params?.creature?.hasOwnProperty("title")
-          ? route.params.creature.title
-          : route.params.title
+      const animeID = res.shikimori_id;
+      const { data } = await axios.get(
+        `https://shikimori.one/api/animes/${animeID}`
       );
-      setAnimeInfo(res);
+      const editPosterAnime = {
+        ...res,
+        material_data: {
+          ...res.material_data,
+          poster_url: `https://shikimori.one${data.image.original}`,
+        },
+      };
+      const favoriteList = await userService.getFavoriteList(id);
+      const inFavoriteList = favoriteList.data.find(
+        (el: any) => el.title === titleFavorite
+      );
 
       if (inFavoriteList !== undefined) {
-        res = { ...res, isFavorite: true, favoriteItem: inFavoriteList };
-        setAnimeInfo(res);
+        setAnimeInfo({
+          ...editPosterAnime,
+          isFavorite: true,
+          favoriteItem: inFavoriteList,
+        });
       } else {
-        setAnimeInfo(res);
+        setAnimeInfo(editPosterAnime);
       }
     })();
-  }, []);
+  }, [route]);
 
   const handleFavorite = async () => {
     if (animeInfo.isFavorite) {
@@ -81,7 +98,7 @@ export default function AnimePage({ route }: any) {
       const favoriteItem = {
         poster: animeInfo.material_data.poster_url,
         rating: animeInfo.material_data.shikimori_rating,
-        title: animeInfo.material_data.title,
+        title: animeInfo.title,
       };
       await userService
         .addFavoriteList(id, favoriteItem)
@@ -195,9 +212,11 @@ export default function AnimePage({ route }: any) {
               <OutlineTypography type="button" style={styles.infoTitle}>
                 {animeInfo.material_data.rating_mpaa}
               </OutlineTypography>
-              <OutlineTypography type="button" style={styles.infoTitle}>
-                {animeInfo.material_data.countries[0]}
-              </OutlineTypography>
+              {animeInfo?.material_data?.countries?.length && (
+                <OutlineTypography type="button" style={styles.infoTitle}>
+                  {animeInfo?.material_data?.countries[0]}
+                </OutlineTypography>
+              )}
             </View>
             <View style={styles.content}>
               <Button
@@ -220,27 +239,43 @@ export default function AnimePage({ route }: any) {
               <Typography>Genre: {genres}</Typography>
             </View>
             <View style={styles.content}>
-              {showsFullDesc ? (
-                <Typography>
-                  {animeInfo.material_data.anime_description}
-                  <TouchableOpacity
-                    onPress={() => handleShowsDesc()}
-                    style={{ margin: -1.5 }}
-                  >
-                    <Typography gradient={true}>View All</Typography>
-                  </TouchableOpacity>
-                </Typography>
+              {!!animeInfo?.material_data?.anime_description ||
+              !!animeInfo?.material_data?.description ? (
+                <>
+                  {showsFullDesc ? (
+                    <Typography>
+                      {!!animeInfo?.material_data?.anime_description
+                        ? animeInfo.material_data.anime_description
+                        : animeInfo.material_data.description}
+                      <TouchableOpacity
+                        onPress={() => handleShowsDesc()}
+                        style={{ margin: -1.5 }}
+                      >
+                        <Typography gradient={true}>View All</Typography>
+                      </TouchableOpacity>
+                    </Typography>
+                  ) : (
+                    <Typography>
+                      {!!animeInfo?.material_data?.anime_description
+                        ? animeInfo.material_data.anime_description.substring(
+                            0,
+                            100
+                          )
+                        : animeInfo.material_data.description.substring(
+                            0,
+                            100
+                          ) + "..."}
+                      <TouchableOpacity
+                        onPress={() => handleShowsDesc()}
+                        style={{ margin: -1.5 }}
+                      >
+                        <Typography gradient={true}> View All</Typography>
+                      </TouchableOpacity>
+                    </Typography>
+                  )}
+                </>
               ) : (
-                <Typography>
-                  {animeInfo.material_data.anime_description.substring(0, 100) +
-                    "..."}
-                  <TouchableOpacity
-                    onPress={() => handleShowsDesc()}
-                    style={{ margin: -1.5 }}
-                  >
-                    <Typography gradient={true}> View All</Typography>
-                  </TouchableOpacity>
-                </Typography>
+                <></>
               )}
             </View>
             <View style={styles.content}>
@@ -277,7 +312,11 @@ export default function AnimePage({ route }: any) {
                           <Play />
                         </TouchableOpacity>
                         <View
-                          style={{ position: "absolute", bottom: 12, left: 12 }}
+                          style={{
+                            position: "absolute",
+                            bottom: 12,
+                            left: 12,
+                          }}
                         >
                           <Typography style={{ color: "#fff" }}>
                             Episode {index + 1}
@@ -290,6 +329,7 @@ export default function AnimePage({ route }: any) {
               </View>
             </ScrollView>
           </ScrollView>
+
           <DownloadModal
             visible={visible}
             setVisible={setVisible}
@@ -309,7 +349,9 @@ export default function AnimePage({ route }: any) {
 const styles = StyleSheet.create({
   poster: {
     width: "100%",
-    height: 320,
+    height: 350,
+    padding: 0,
+    backgroundColor: "#ccc",
   },
   container: {
     margin: 24,

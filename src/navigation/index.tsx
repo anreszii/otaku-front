@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import Player from "../views/Player";
 import Home from "../views/Home";
 import Profile from "../views/Profile";
-import Intro from "../views/Intro";
 import SignIn from "../views/SignIn";
 import SignUp from "../views/SignUp";
 import Welcome from "../views/Welcome";
@@ -23,7 +22,13 @@ import Typography from "../components/ui/Typography";
 import Search from "../views/Search";
 import AnimePage from "../views/AnimePage";
 import Notification from "../views/Notification";
-import * as Linking from "expo-linking";
+import EditProfile from "../views/EditProfile";
+import Security from "../views/Security";
+import HelpCenter from "../views/HelpCenter";
+import PrivacyPolicy from "../views/PrivacyPolicy";
+import Premium from "../views/Premium";
+import NotificationSettings from "../views/NotificationSettings";
+import DownloadSettings from "../views/DownloadSettings";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -32,7 +37,12 @@ export const TabNavigator = ({ route }: any) => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarStyle: { borderRadius: 25, marginTop: -100 },
+        tabBarStyle: {
+          borderTopLeftRadius: 16,
+          borderTopRightRadius: 16,
+          paddingTop: 8,
+          marginTop: -115,
+        },
         headerShown: false,
       }}
       initialRouteName="main"
@@ -40,6 +50,7 @@ export const TabNavigator = ({ route }: any) => {
       <Tab.Screen
         name="Home"
         component={Home}
+        initialParams={route}
         options={{
           tabBarIcon: ({ size, focused, color }) => {
             return <HomeIcon focus={focused} />;
@@ -53,7 +64,7 @@ export const TabNavigator = ({ route }: any) => {
                 letterSpacing: 0.2,
               }}
               type="button"
-              gradient={focused ? true : false}
+              gradient={focused}
             >
               Home
             </Typography>
@@ -190,6 +201,27 @@ export const PrivateStackNavigator = ({ route }: any) => {
         component={AnimePage}
       ></Stack.Screen>
       <Stack.Screen name="Notification" component={Notification}></Stack.Screen>
+      <Stack.Screen
+        name="EditProfile"
+        // @ts-ignore
+        component={EditProfile}
+        initialParams={route}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="NotificationSettings"
+        component={NotificationSettings}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="DownloadSettings"
+        component={DownloadSettings}
+      ></Stack.Screen>
+      <Stack.Screen name="Security" component={Security}></Stack.Screen>
+      <Stack.Screen name="HelpCenter" component={HelpCenter}></Stack.Screen>
+      <Stack.Screen
+        name="PrivacyPolicy"
+        component={PrivacyPolicy}
+      ></Stack.Screen>
+      <Stack.Screen name="Premium" component={Premium}></Stack.Screen>
     </Stack.Navigator>
   );
 };

@@ -5,6 +5,7 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  NativeModules,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Input from "../components/ui/Input";
@@ -24,6 +25,7 @@ import {
 } from "react-native-confirmation-code-field";
 import authService from "../api/auth/authService";
 import TypographyError from "../components/ui/TypographyError";
+const { StatusBarManager } = NativeModules;
 
 export default function SignUp() {
   const navigation = useNavigation<any>();
@@ -68,6 +70,7 @@ export default function SignUp() {
       authService
         .forgotPassword(email)
         .then((data) => {
+          console.log(data.data.code);
           setCode(data.data.code);
           setSeconds(59);
           setStage(2);
@@ -97,150 +100,160 @@ export default function SignUp() {
   };
 
   return (
-    <Container>
-      {stage === 1 && (
-        <>
-          <HeaderBack title="Forgot Password" />
-          <Image
-            source={require("../../assets/icon.png")}
-            style={{ width: 113, height: 67 }}
-            resizeMode="contain"
-          />
-          <Typography style={styles.title} type="title">
-            Reset Your Password
-          </Typography>
-          <Input
-            styleInput={{ marginTop: 13 }}
-            label="Mail"
-            left={<TextInput.Icon disabled icon={() => <Mail style={{}} />} />}
-            value={email}
-            onChangeText={(value: string) => {
-              setEmail(value);
-              setError(null);
-            }}
-          />
+    <View style={{ height: "100%", width: "100%", backgroundColor: "#FFF" }}>
+      <Container>
+        {stage === 1 && (
+          <>
+            <HeaderBack title="Forgot Password" style={{ marginLeft: 0 }} />
+            <Image
+              source={require("../../assets/icon.png")}
+              style={{ width: 113, height: 67 }}
+              resizeMode="contain"
+            />
+            <Typography style={styles.title} type="title">
+              Reset Your Password
+            </Typography>
+            <Input
+              styleInput={{ marginTop: 13 }}
+              label="Mail"
+              left={
+                <TextInput.Icon disabled icon={() => <Mail style={{}} />} />
+              }
+              value={email}
+              onChangeText={(value: string) => {
+                setEmail(value);
+                setError(null);
+              }}
+            />
 
-          <Button
-            title="Reset Password"
-            onPress={() => sendEmailCode()}
-            style={styles.button}
-          />
-          {error && <TypographyError error={error} style={{ marginTop: 13 }} />}
-        </>
-      )}
-      {stage === 2 && (
-        <>
-          <HeaderBackStage
-            title="Forgot Password"
-            stage={stage}
-            setStage={setStage}
-          />
-          <Typography type="sub" style={styles.titleTwo}>
-            Code has been send to{" "}
-            {email.substr(0, 3) + "*****" + email.substr(-3)}
-          </Typography>
-          <CodeInput
-            value={value}
-            setValue={setValue}
-            getCellOnLayoutHandler={getCellOnLayoutHandler}
-            CELL_COUNT={CELL_COUNT}
-            ref={ref}
-          />
-          <View style={styles.resendContainer}>
-            {seconds > 0 ? (
-              <Typography type="sub" style={styles.subtitleTwo}>
-                Resend code in{" "}
-              </Typography>
-            ) : (
-              <TouchableOpacity onPress={() => sendEmailCode()}>
-                <Typography
-                  type="sub"
-                  gradient={true}
-                  style={styles.subtitleTwo}
-                >
-                  Resend code
-                </Typography>
-              </TouchableOpacity>
+            <Button
+              title="Reset Password"
+              onPress={() => sendEmailCode()}
+              style={styles.button}
+            />
+            {error && (
+              <TypographyError error={error} style={{ marginTop: 13 }} />
             )}
-
-            <Typography type="sub" gradient={true} style={styles.subtitleTwo}>
-              {seconds > 0 ? `${seconds}${" "}` : ""}
+          </>
+        )}
+        {stage === 2 && (
+          <>
+            <HeaderBackStage
+              title="Forgot Password"
+              stage={stage}
+              setStage={setStage}
+            />
+            <Typography type="sub" style={styles.titleTwo}>
+              Code has been send to{" "}
+              {email.substr(0, 3) + "*****" + email.substr(-3)}
             </Typography>
-            <Typography type="sub" style={styles.subtitleTwo}>
-              {seconds > 0 ? `s` : ""}
-            </Typography>
-          </View>
-          <Button
-            title="Verify"
-            onPress={() => sendCode()}
-            style={styles.button}
-          />
-        </>
-      )}
-      {stage === 3 && (
-        <>
-          <Image
-            source={require("../../assets/acceptPhone.png")}
-            style={{ width: 414, height: 313 }}
-            resizeMode="contain"
-          />
-          <Typography style={styles.titleThree} type="sub">
-            Reset Your Password
-          </Typography>
-          <Input
-            styleInput={{ marginTop: 10 }}
-            left={<TextInput.Icon disabled icon={() => <Lock style={{}} />} />}
-            right={
-              <TextInput.Icon
-                icon={() => (
-                  <TouchableOpacity
-                    onPress={() => setShowPassword(!showPassword)}
+            <CodeInput
+              value={value}
+              setValue={setValue}
+              getCellOnLayoutHandler={getCellOnLayoutHandler}
+              CELL_COUNT={CELL_COUNT}
+              ref={ref}
+            />
+            <View style={styles.resendContainer}>
+              {seconds > 0 ? (
+                <Typography type="sub" style={styles.subtitleTwo}>
+                  Resend code in{" "}
+                </Typography>
+              ) : (
+                <TouchableOpacity onPress={() => sendEmailCode()}>
+                  <Typography
+                    type="sub"
+                    gradient={true}
+                    style={styles.subtitleTwo}
                   >
-                    {showPassword ? <EyeOpen /> : <EyeClose />}
-                  </TouchableOpacity>
-                )}
-              />
-            }
-            secureTextEntry={showPassword ? false : true}
-            value={newPassword.onePass}
-            onChangeText={(value: any) =>
-              setNewPassword({ ...newPassword, onePass: value })
-            }
-          />
-          <Input
-            styleInput={{ marginTop: 10 }}
-            left={<TextInput.Icon disabled icon={() => <Lock style={{}} />} />}
-            right={
-              <TextInput.Icon
-                icon={() => (
-                  <TouchableOpacity
-                    onPress={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <EyeOpen /> : <EyeClose />}
-                  </TouchableOpacity>
-                )}
-              />
-            }
-            secureTextEntry={showPassword ? false : true}
-            value={newPassword.twoPass}
-            onChangeText={(value: any) =>
-              setNewPassword({ ...newPassword, twoPass: value })
-            }
-          />
+                    Resend code
+                  </Typography>
+                </TouchableOpacity>
+              )}
 
-          <Button
-            title="Continue"
-            onPress={() => resetPassword()}
-            style={styles.button}
-          />
-        </>
-      )}
-      <CompleteModal
-        visible={visible}
-        setVisible={setVisible}
-        redirect="SignIn"
-      />
-    </Container>
+              <Typography type="sub" gradient={true} style={styles.subtitleTwo}>
+                {seconds > 0 ? `${seconds}${" "}` : ""}
+              </Typography>
+              <Typography type="sub" style={styles.subtitleTwo}>
+                {seconds > 0 ? `s` : ""}
+              </Typography>
+            </View>
+            <Button
+              title="Verify"
+              onPress={() => sendCode()}
+              style={styles.button}
+            />
+          </>
+        )}
+        {stage === 3 && (
+          <>
+            <Image
+              source={require("../../assets/acceptPhone.png")}
+              style={{ width: 414, height: 250 + StatusBarManager.HEIGHT }}
+              resizeMode="contain"
+            />
+            <Typography style={styles.titleThree} type="sub">
+              Reset Your Password
+            </Typography>
+            <Input
+              styleInput={{ marginTop: 10 }}
+              left={
+                <TextInput.Icon disabled icon={() => <Lock style={{}} />} />
+              }
+              right={
+                <TextInput.Icon
+                  icon={() => (
+                    <TouchableOpacity
+                      onPress={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <EyeOpen /> : <EyeClose />}
+                    </TouchableOpacity>
+                  )}
+                />
+              }
+              secureTextEntry={showPassword ? false : true}
+              value={newPassword.onePass}
+              onChangeText={(value: any) =>
+                setNewPassword({ ...newPassword, onePass: value })
+              }
+            />
+            <Input
+              styleInput={{ marginTop: 10 }}
+              left={
+                <TextInput.Icon disabled icon={() => <Lock style={{}} />} />
+              }
+              right={
+                <TextInput.Icon
+                  icon={() => (
+                    <TouchableOpacity
+                      onPress={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <EyeOpen /> : <EyeClose />}
+                    </TouchableOpacity>
+                  )}
+                />
+              }
+              secureTextEntry={showPassword ? false : true}
+              value={newPassword.twoPass}
+              onChangeText={(value: any) =>
+                setNewPassword({ ...newPassword, twoPass: value })
+              }
+            />
+
+            <Button
+              title="Continue"
+              onPress={() => resetPassword()}
+              style={styles.button}
+            />
+          </>
+        )}
+        <CompleteModal
+          visible={visible}
+          setVisible={setVisible}
+          redirect="SignIn"
+        />
+      </Container>
+    </View>
   );
 }
 
