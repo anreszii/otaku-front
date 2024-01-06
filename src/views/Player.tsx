@@ -168,15 +168,26 @@ export default function Player({ route }: any) {
       const title = route.params.creature.title;
       const res = await searchAnimeWithEpisodes(title);
 
-      const videoLink = await getAnimeUrl(
-        Object.values<any>(Object.values<any>(res.seasons)[0].episodes)[0].link
-      );
+      if (res.type === "anime") {
+        const videoLink = await getAnimeUrl(res.link);
 
-      setVideoLink(
-        videoLink.data.links["720"].Src.includes("https:")
-          ? videoLink.data.links["720"].Src
-          : `https:${videoLink.data.links["720"].Src}`
-      );
+        setVideoLink(
+          videoLink.data.links["720"].Src.includes("https:")
+            ? videoLink.data.links["720"].Src
+            : `https:${videoLink.data.links["720"].Src}`
+        );
+      } else {
+        const videoLink = await getAnimeUrl(
+          Object.values<any>(Object.values<any>(res.seasons)[0].episodes)[0]
+            .link
+        );
+
+        setVideoLink(
+          videoLink.data.links["720"].Src.includes("https:")
+            ? videoLink.data.links["720"].Src
+            : `https:${videoLink.data.links["720"].Src}`
+        );
+      }
 
       const subscription =
         ScreenOrientation.addOrientationChangeListener(changeOrientation);
@@ -323,7 +334,7 @@ export default function Player({ route }: any) {
                   <View
                     style={{
                       width: "100%",
-                      height: "55%",
+                      height: "50%",
                     }}
                   />
                 </GestureDetector>

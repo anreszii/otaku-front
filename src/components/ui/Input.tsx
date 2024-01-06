@@ -25,7 +25,7 @@ const Input: React.FC<InputProps> = ({
   const [isFocus, setIsFocus] = useState(false);
 
   return (
-    <Pressable style={[styleInput, styles.inputView]}>
+    <Pressable style={[styles.inputView, styleInput]}>
       <Typography type="button" style={styles.label}>
         {label}
       </Typography>
@@ -69,7 +69,6 @@ const Input: React.FC<InputProps> = ({
 
 const styles = StyleSheet.create({
   inputView: {
-    maxWidth: "100%",
     width: "100%",
   },
   label: {

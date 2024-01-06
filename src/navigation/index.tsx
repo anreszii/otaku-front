@@ -19,7 +19,7 @@ import {
   ReleaseIcon,
 } from "../icons";
 import Typography from "../components/ui/Typography";
-import Search from "../views/Search";
+import GlobalSearch from "../views/GlobalSearch";
 import AnimePage from "../views/AnimePage";
 import Notification from "../views/Notification";
 import EditProfile from "../views/EditProfile";
@@ -194,7 +194,7 @@ export const PrivateStackNavigator = ({ route }: any) => {
         initialParams={route}
         component={Player}
       ></Stack.Screen>
-      <Stack.Screen name="Search" component={Search}></Stack.Screen>
+      <Stack.Screen name="Search" component={GlobalSearch}></Stack.Screen>
       <Stack.Screen
         name="AnimePage"
         initialParams={route}

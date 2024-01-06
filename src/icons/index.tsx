@@ -1202,3 +1202,36 @@ export const Download = ({ ...props }) => {
     </Svg>
   );
 };
+
+export const Filter = ({ ...props }) => {
+  return (
+    <Svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={20}
+      height={18}
+      viewBox="0 0 20 18"
+      fill="none"
+      {...props}
+    >
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M6.878 3.379c0 1.866-1.54 3.38-3.44 3.38C1.54 6.758 0 5.244 0 3.378 0 1.513 1.54 0 3.439 0c1.9 0 3.439 1.513 3.439 3.379zm11.615-1.48c.831 0 1.507.663 1.507 1.48s-.676 1.48-1.507 1.48h-6.575c-.832 0-1.508-.663-1.508-1.48s.676-1.48 1.508-1.48h6.575zM1.508 12.957h6.575c.833 0 1.508.664 1.508 1.481 0 .817-.675 1.482-1.508 1.482H1.508C.676 15.92 0 15.256 0 14.439s.676-1.481 1.508-1.481zm15.053 4.82c1.9 0 3.439-1.513 3.439-3.379s-1.539-3.38-3.439-3.38c-1.899 0-3.439 1.514-3.439 3.38 0 1.866 1.54 3.379 3.44 3.379z"
+        fill="url(#paint0_linear_281_1536)"
+      />
+      <Defs>
+        <LinearGradient
+          id="paint0_linear_281_1536"
+          x1={20}
+          y1={17.7778}
+          x2={-3.31789}
+          y2={10.1719}
+          gradientUnits="userSpaceOnUse"
+        >
+          <Stop stopColor="#7210FF" />
+          <Stop offset={1} stopColor="#9D59FF" />
+        </LinearGradient>
+      </Defs>
+    </Svg>
+  );
+};

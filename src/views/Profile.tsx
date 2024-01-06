@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     marginTop: 62,
     marginRight: 24,
     marginLeft: 24,
-    marginBottom: 88,
+    marginBottom: 80,
   },
   userContent: {
     flexDirection: "row",
@@ -246,7 +246,9 @@ const styles = StyleSheet.create({
   premiumContent: {
     marginTop: 24,
   },
-  settingsContent: {},
+  settingsContent: {
+    marginBottom: 24,
+  },
   settingsItem: {
     flexDirection: "row",
     alignItems: "center",

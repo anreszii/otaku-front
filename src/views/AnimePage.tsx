@@ -46,10 +46,9 @@ export default function AnimePage({ route }: any) {
       const title = route.params?.creature?.hasOwnProperty("title")
         ? route.params.creature.title
         : route.params.title;
-      const titleFavorite =
-        route.params?.creature?.material_data?.hasOwnProperty("title")
-          ? route.params.creature.material_data.title
-          : route.params.title;
+      const titleFavorite = route.params?.creature?.hasOwnProperty("title")
+        ? route.params.creature.title
+        : route.params.title;
       const res: any = await searchAnimeWithEpisodes(title);
       console.log(res);
       const id: any = await AsyncStorage.getItem("id");
@@ -209,9 +208,11 @@ export default function AnimePage({ route }: any) {
                 </TouchableOpacity>
               </View>
               <Typography>{animeInfo.year}</Typography>
-              <OutlineTypography type="button" style={styles.infoTitle}>
-                {animeInfo.material_data.rating_mpaa}
-              </OutlineTypography>
+              {!!animeInfo.material_data.rating_mpaa && (
+                <OutlineTypography type="button" style={styles.infoTitle}>
+                  {animeInfo.material_data.rating_mpaa}
+                </OutlineTypography>
+              )}
               {animeInfo?.material_data?.countries?.length && (
                 <OutlineTypography type="button" style={styles.infoTitle}>
                   {animeInfo?.material_data?.countries[0]}
@@ -223,7 +224,9 @@ export default function AnimePage({ route }: any) {
                 title="Play"
                 onPress={() =>
                   navigation.navigate("Player", {
-                    creature: route.params.creature,
+                    creature: !!route.params.creature
+                      ? route.params.creature
+                      : { title: route.params.title },
                   })
                 }
                 style={styles.button}
@@ -238,96 +241,131 @@ export default function AnimePage({ route }: any) {
             <View style={styles.content}>
               <Typography>Genre: {genres}</Typography>
             </View>
-            <View style={styles.content}>
-              {!!animeInfo?.material_data?.anime_description ||
-              !!animeInfo?.material_data?.description ? (
-                <>
-                  {showsFullDesc ? (
-                    <Typography>
-                      {!!animeInfo?.material_data?.anime_description
-                        ? animeInfo.material_data.anime_description
-                        : animeInfo.material_data.description}
-                      <TouchableOpacity
-                        onPress={() => handleShowsDesc()}
-                        style={{ margin: -1.5 }}
-                      >
-                        <Typography gradient={true}>View All</Typography>
-                      </TouchableOpacity>
-                    </Typography>
-                  ) : (
-                    <Typography>
-                      {!!animeInfo?.material_data?.anime_description
-                        ? animeInfo.material_data.anime_description.substring(
-                            0,
-                            100
-                          )
-                        : animeInfo.material_data.description.substring(
-                            0,
-                            100
-                          ) + "..."}
-                      <TouchableOpacity
-                        onPress={() => handleShowsDesc()}
-                        style={{ margin: -1.5 }}
-                      >
-                        <Typography gradient={true}> View All</Typography>
-                      </TouchableOpacity>
-                    </Typography>
-                  )}
-                </>
-              ) : (
-                <></>
-              )}
-            </View>
+
+            {!!animeInfo?.material_data?.anime_description ||
+            !!animeInfo?.material_data?.description ? (
+              <View style={styles.content}>
+                {showsFullDesc ? (
+                  <Typography>
+                    {!!animeInfo?.material_data?.anime_description
+                      ? animeInfo.material_data.anime_description
+                      : animeInfo.material_data.description}
+                    <TouchableOpacity
+                      onPress={() => handleShowsDesc()}
+                      style={{ margin: -1.5 }}
+                    >
+                      <Typography gradient={true}>View All</Typography>
+                    </TouchableOpacity>
+                  </Typography>
+                ) : (
+                  <Typography>
+                    {!!animeInfo?.material_data?.anime_description
+                      ? animeInfo.material_data.anime_description.substring(
+                          0,
+                          100
+                        )
+                      : animeInfo.material_data.description.substring(0, 100) +
+                        "..."}
+                    <TouchableOpacity
+                      onPress={() => handleShowsDesc()}
+                      style={{ margin: -1.5 }}
+                    >
+                      <Typography gradient={true}> View All</Typography>
+                    </TouchableOpacity>
+                  </Typography>
+                )}
+              </View>
+            ) : (
+              <></>
+            )}
+
             <View style={styles.content}>
               <Typography type="title" style={styles.episodesTitle}>
                 Episodes
               </Typography>
             </View>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-            >
-              <View style={styles.content}>
-                {Object.values(
-                  Object.values<any>(animeInfo.seasons)[0].episodes
-                ).map((item: any, index) => {
-                  return (
-                    <View key={index}>
-                      <ImageBackground
-                        source={{ uri: item.screenshots[0] }}
-                        blurRadius={5}
-                        style={{
-                          width: 150,
-                          height: 113,
-                          marginRight: 12,
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                        imageStyle={{
-                          borderRadius: 10,
-                        }}
-                      >
-                        <View style={styles.overlay}></View>
-                        <TouchableOpacity>
-                          <Play />
-                        </TouchableOpacity>
-                        <View
+            {!!animeInfo?.seasons ? (
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+              >
+                <View style={styles.content}>
+                  {Object.values(
+                    Object.values<any>(animeInfo.seasons)[0].episodes
+                  ).map((item: any, index) => {
+                    return (
+                      <View key={index}>
+                        <ImageBackground
+                          source={{ uri: item.screenshots[0] }}
+                          blurRadius={5}
                           style={{
-                            position: "absolute",
-                            bottom: 12,
-                            left: 12,
+                            width: 150,
+                            height: 113,
+                            marginRight: 12,
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                          imageStyle={{
+                            borderRadius: 10,
                           }}
                         >
-                          <Typography style={{ color: "#fff" }}>
-                            Episode {index + 1}
-                          </Typography>
-                        </View>
-                      </ImageBackground>
-                    </View>
-                  );
-                })}
-              </View>
-            </ScrollView>
+                          <View style={styles.overlay}></View>
+                          <TouchableOpacity>
+                            <Play />
+                          </TouchableOpacity>
+                          <View
+                            style={{
+                              position: "absolute",
+                              bottom: 12,
+                              left: 12,
+                            }}
+                          >
+                            <Typography style={{ color: "#fff" }}>
+                              Episode {index + 1}
+                            </Typography>
+                          </View>
+                        </ImageBackground>
+                      </View>
+                    );
+                  })}
+                </View>
+              </ScrollView>
+            ) : (
+              <>
+                <ImageBackground
+                  source={{
+                    uri: !!animeInfo?.material_data?.screenshots
+                      ? animeInfo?.material_data?.screenshots[0]
+                      : animeInfo?.material_data?.poster_url,
+                  }}
+                  blurRadius={5}
+                  style={{
+                    width: 150,
+                    height: 113,
+                    marginRight: 12,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                  imageStyle={{
+                    borderRadius: 10,
+                  }}
+                >
+                  <View style={styles.overlay}></View>
+                  <TouchableOpacity>
+                    <Play />
+                  </TouchableOpacity>
+                  <View
+                    style={{
+                      position: "absolute",
+                      bottom: 12,
+                      left: 12,
+                    }}
+                  >
+                    <Typography style={{ color: "#fff" }}>Episode 1</Typography>
+                  </View>
+                </ImageBackground>
+              </>
+            )}
           </ScrollView>
 
           <DownloadModal
@@ -392,5 +430,13 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     borderRadius: 10,
+  },
+  noneEpisodes: {
+    width: "100%",
+    alignItems: "center",
+    marginTop: 12,
+  },
+  noneEpisodesTitle: {
+    fontSize: 20,
   },
 });

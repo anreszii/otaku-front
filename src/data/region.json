@@ -1,0 +1,6 @@
+[
+  { "title": "All", "focus": true },
+  { "title": "Japan", "focus": false },
+  { "title": "Chinese", "focus": false },
+  { "title": "Others", "focus": false }
+]

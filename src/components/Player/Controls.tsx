@@ -34,10 +34,19 @@ export default function Controls({
   const navigation = useNavigation<any>();
 
   const formatTime = (minute: any) => {
+    const hours = Math.trunc(minute / 60);
+    const remainingMinutes = Math.trunc(minute) % 60;
     const remainingSeconds = Math.trunc(minute * 60 - Math.trunc(minute) * 60);
-    return `${String(Math.trunc(minute)).padStart(2, "0")}:${String(
-      remainingSeconds
-    ).padStart(2, "0")}`;
+
+    if (hours > 0) {
+      return `${String(hours).padStart(2, "0")}:${String(
+        remainingMinutes
+      ).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
+    } else {
+      return `${String(remainingMinutes).padStart(2, "0")}:${String(
+        remainingSeconds
+      ).padStart(2, "0")}`;
+    }
   };
 
   const client = useRemoteMediaClient();
@@ -96,14 +105,30 @@ export default function Controls({
         </View>
       </View>
       <View>
-        <View style={full ? styles.sliderContentFull : styles.sliderContent}>
+        <View
+          style={
+            full || Math.trunc(duration / 60) > 0
+              ? Math.trunc(duration / 60) > 0
+                ? { ...styles.sliderContentFull, marginRight: 24 }
+                : styles.sliderContentFull
+              : styles.sliderContent
+          }
+        >
           <Typography
-            style={full ? styles.timeTitleLeftFull : styles.timeTitleLeft}
+            style={
+              full || Math.trunc(duration / 60) > 0
+                ? styles.timeTitleLeftFull
+                : styles.timeTitleLeft
+            }
           >
             {formatTime(position)}
           </Typography>
           <Slider
-            style={{ width: "80%", height: 20 }}
+            style={
+              full || Math.trunc(duration / 60) > 0
+                ? { width: "70%", height: 20 }
+                : { width: "80%", height: 20 }
+            }
             minimumValue={0}
             maximumValue={duration}
             value={position}
@@ -112,7 +137,11 @@ export default function Controls({
             maximumTrackTintColor="#9D59FF"
           />
           <Typography
-            style={full ? styles.timeTitleRightFull : styles.timeTitleRight}
+            style={
+              full || Math.trunc(duration / 60) > 0
+                ? styles.timeTitleRightFull
+                : styles.timeTitleRight
+            }
           >
             {formatTime(duration)}
           </Typography>
@@ -191,7 +220,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     marginRight: 8,
-    width: "10%",
+    width: "15%",
     textAlign: "right",
   },
   timeTitleRightFull: {
@@ -199,7 +228,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     marginLeft: 8,
-    width: "10%",
+    width: "15%",
     textAlign: "left",
   },
   playContent: {

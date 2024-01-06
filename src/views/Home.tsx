@@ -48,7 +48,7 @@ const Home: React.FC<HomeProps> = ({ route }) => {
             data.results.find((item: any) => item.material_data.title === title)
           );
           const editPostersAnimeList = await Promise.all(
-            uniqueAnimeList.map(async (item) => {
+            uniqueAnimeList.map(async (item, index) => {
               const animeID = item.shikimori_id;
               const { data } = await axios.get(
                 `https://shikimori.one/api/animes/${animeID}`
@@ -65,8 +65,8 @@ const Home: React.FC<HomeProps> = ({ route }) => {
           setAnimeListHits(editPostersAnimeList);
           return editPostersAnimeList;
         } catch (error) {
+          console.log("hi error");
           console.error(error);
-          setIsLoading(false);
         }
       };
 
@@ -94,7 +94,7 @@ const Home: React.FC<HomeProps> = ({ route }) => {
             data.results.find((item: any) => item.material_data.title === title)
           );
           const editPostersAnimeList = await Promise.all(
-            uniqueAnimeList.map(async (item) => {
+            uniqueAnimeList.map(async (item, index) => {
               const animeID = item.shikimori_id;
               const { data } = await axios.get(
                 `https://shikimori.one/api/animes/${animeID}`
@@ -109,16 +109,20 @@ const Home: React.FC<HomeProps> = ({ route }) => {
             })
           );
           setAnimeListNew(editPostersAnimeList);
-          return editPostersAnimeList;
-        } catch (error) {
-          console.error(error);
           setIsLoading(false);
+          return editPostersAnimeList;
+        } catch (error: any) {
+          console.log("hi error two");
+          if (error.response.status === 429) {
+            setTimeout(async () => {
+              await fetchAnimeListNew();
+            }, 5000);
+          }
+          console.log(error.response.data);
         }
       };
 
       await fetchAnimeListNew();
-
-      setIsLoading(false);
     })();
   }, []);
 

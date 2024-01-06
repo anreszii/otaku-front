@@ -18,7 +18,7 @@ const NewReleases: React.FC<NewReleasesProps> = ({
   navigateToAnimePage,
   setLoading,
 }) => (
-  <View style={homeStyles.wrapper}>
+  <View style={homeStyles.lastWrapper}>
     <View style={homeStyles.titleContainer}>
       <Typography style={homeStyles.title} type="title">
         New Episode Releases

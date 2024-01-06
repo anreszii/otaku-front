@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const searchAnimeWithEpisodes = async (title: string) => {
   const PUBLIC_KEY: string = process.env.EXPO_PUBLIC_KODIK_PUBLIC_KEY || "";
-
+  console.log(title);
   try {
     const response = await axios.get(
       `https://kodikapi.com/search?token=${PUBLIC_KEY}&title=${title}&with_material_data=true&sort=shikimori_rating&types=anime,anime-serial&with_episodes_data=true&full_match=true`
@@ -28,7 +28,8 @@ const findAnimeWithMostEpisodes = (data: any) => {
 
   let animeWithMostEpisodes: any = null;
   const episodes_aired =
-    data.results[0].material_data.anime_status !== "ongoing"
+    data.results[0].material_data.anime_status !== "ongoing" &&
+    data.results[0].material_data.anime_status !== "anons"
       ? data.results[0].material_data.episodes_total
       : data.results[0].material_data.episodes_aired;
 
@@ -41,15 +42,18 @@ const findAnimeWithMostEpisodes = (data: any) => {
 
       if (episodes) {
         const episodesCount = Object.values<any>(episodes).length;
-
-        if (episodesCount === episodes_aired) {
+        if (
+          episodesCount === episodes_aired ||
+          episodesCount === episodes_aired + 1
+        ) {
+          console.log("h3");
           animeWithMostEpisodes = anime;
         }
       }
+    } else {
+      animeWithMostEpisodes = anime;
     }
   });
-
-  console.log(animeWithMostEpisodes);
 
   return animeWithMostEpisodes;
 };

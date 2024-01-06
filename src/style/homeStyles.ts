@@ -6,6 +6,12 @@ const homeStyles = StyleSheet.create({
     marginHorizontal: 24,
     width: "100%",
   },
+  lastWrapper: {
+    marginTop: 24,
+    marginHorizontal: 24,
+    width: "100%",
+    marginBottom: 108,
+  },
   container: {
     flex: 1,
     marginBottom: 20,
@@ -14,7 +20,6 @@ const homeStyles = StyleSheet.create({
   },
   scrollView: {
     height: "100%",
-    marginBottom: 108,
   },
   content: {
     flex: 1,
@@ -23,6 +28,7 @@ const homeStyles = StyleSheet.create({
   },
   animeItem: {
     marginRight: 8,
+    marginBottom: 16,
   },
   poster: {
     width: 150,

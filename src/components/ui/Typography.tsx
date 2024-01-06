@@ -1,9 +1,21 @@
-import { StyleSheet, Text } from "react-native";
-import React from "react";
+import { StyleSheet, Text, TextStyle } from "react-native";
+import React, { FC } from "react";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";
 
-export default function Typography({ children, style, type, gradient }: any) {
+interface TypographyProps {
+  children: React.ReactNode;
+  style?: TextStyle;
+  type?: string;
+  gradient?: boolean;
+}
+
+const Typography: FC<TypographyProps> = ({
+  children,
+  style,
+  type,
+  gradient,
+}: any) => {
   const GradientText = (props: any) => {
     return (
       <MaskedView maskElement={<Text {...props} />}>
@@ -47,7 +59,7 @@ export default function Typography({ children, style, type, gradient }: any) {
       return <Text style={{ ...styles.textSub, ...style }}>{children}</Text>;
     }
   }
-}
+};
 
 const styles = StyleSheet.create({
   textButton: {
@@ -60,3 +72,5 @@ const styles = StyleSheet.create({
     fontFamily: "UrbanistRegular",
   },
 });
+
+export default Typography;
