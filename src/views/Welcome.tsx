@@ -1,15 +1,10 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  ImageBackground,
-  SafeAreaView,
-} from "react-native";
+import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 import React from "react";
 import Button from "../components/ui/Button";
 import Typography from "../components/ui/Typography";
 import { StackActions, useNavigation } from "@react-navigation/native";
 import Container from "../components/Layouts/Container";
+import { ImageBackground } from "expo-image";
 
 export default function Welcome() {
   const navigation = useNavigation<any>();
@@ -17,7 +12,7 @@ export default function Welcome() {
   return (
     <View style={styles.container}>
       <ImageBackground
-        resizeMode="cover"
+        contentFit="cover"
         style={styles.imageBackground}
         source={require("../../assets/welcome_back.png")}
       >

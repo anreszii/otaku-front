@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Image,
-  ImageBackground,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  View,
-} from "react-native";
+import { SafeAreaView, ScrollView, StatusBar, View } from "react-native";
 import { getAnimeList } from "../api/kodik/getAnimeList";
 import { useNavigation } from "@react-navigation/native";
 import HeaderHome from "../components/Layouts/HeaderHome";
@@ -20,6 +13,8 @@ import axios from "axios";
 import * as ScreenOrientation from "expo-screen-orientation";
 import NewReleases from "../components/Home/NewReleases";
 import { getNewReleases } from "../api/kodik/getNewReleases";
+import { ImageBackground } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface HomeProps {
   route: any;

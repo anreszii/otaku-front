@@ -2,7 +2,6 @@ import {
   View,
   Text,
   SafeAreaView,
-  Image,
   StyleSheet,
   TouchableOpacity,
   DevSettings,
@@ -19,6 +18,7 @@ import RNRestart from "react-native-restart";
 import Container from "../components/Layouts/Container";
 import authService from "../api/auth/authService";
 import TypographyError from "../components/ui/TypographyError";
+import { Image } from "expo-image";
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState<any>(false);
@@ -30,14 +30,17 @@ export default function SignIn() {
   const navigation = useNavigation<any>();
 
   const setToken = async () => {
+    console.log("hu");
     await authService
       .login(user.username, user.password)
       .then(async (data) => {
+        console.log(data, "huy");
         await AsyncStorage.setItem("id", data.data.user.id);
         await AsyncStorage.setItem("token", data.data.tokens.accessToken);
         DevSettings.reload();
       })
       .catch((err) => {
+        console.log(err.response, "huy2");
         setError(err.response.data.message);
       });
   };
@@ -48,7 +51,7 @@ export default function SignIn() {
         <Image
           source={require("../../assets/icon.png")}
           style={{ width: 113, height: 67 }}
-          resizeMode="contain"
+          contentFit="contain"
         />
         <Typography style={styles.title} type="title">
           Login to Your Account

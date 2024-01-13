@@ -1,8 +1,9 @@
 import React from "react";
-import { ImageBackground, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import BadgeRating from "../ui/BadgeRating";
 import Typography from "../ui/Typography";
 import homeStyles from "../../style/homeStyles";
+import { ImageBackground } from "expo-image";
 
 interface AnimeItemSimpleProps {
   item: any;
@@ -20,7 +21,7 @@ const AnimeItemSimple: React.FC<AnimeItemSimpleProps> = ({
   <View style={homeStyles.animeItem}>
     <TouchableOpacity onPress={() => onPress(item)}>
       <ImageBackground
-        resizeMode="stretch"
+        contentFit="fill"
         source={{ uri: item.material_data.poster_url }}
         style={homeStyles.poster}
         imageStyle={homeStyles.posterImage}

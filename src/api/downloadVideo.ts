@@ -9,6 +9,7 @@ export const downloadAndSaveVideo = async (
   setMB: any,
   setAllMB: any,
   setVisibleError: any,
+  setVisiblePrepare: any,
   setVisible: any
 ) => {
   try {
@@ -23,14 +24,18 @@ export const downloadAndSaveVideo = async (
         await session.getReturnCode().then((status) => {
           if (status.isValueCancel() || status.isValueError()) {
             FileSystem.deleteAsync(FileSystem.documentDirectory + fileNameMP4);
+            setVisiblePrepare(false);
             setVisibleError(true);
+          } else {
+            setVisible(false);
           }
         });
       },
       () => {},
       (stat) => {
-        setVisible(true);
         setMB(stat.getSize() / 1000000);
+        setVisiblePrepare(false);
+        setVisible(true);
       }
     );
   } catch (error) {

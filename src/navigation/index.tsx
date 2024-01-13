@@ -24,11 +24,11 @@ import AnimePage from "../views/AnimePage";
 import Notification from "../views/Notification";
 import EditProfile from "../views/EditProfile";
 import Security from "../views/Security";
-import HelpCenter from "../views/HelpCenter";
 import PrivacyPolicy from "../views/PrivacyPolicy";
 import Premium from "../views/Premium";
 import NotificationSettings from "../views/NotificationSettings";
 import DownloadSettings from "../views/DownloadSettings";
+import Language from "../views/Language";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -121,6 +121,7 @@ export const TabNavigator = ({ route }: any) => {
       <Tab.Screen
         name="Download"
         component={Download}
+        initialParams={route}
         options={{
           tabBarIcon: ({ size, focused, color }) => {
             return <DownloadIcon focus={focused} />;
@@ -144,6 +145,7 @@ export const TabNavigator = ({ route }: any) => {
       <Tab.Screen
         name="Profile"
         component={Profile}
+        initialParams={route}
         options={{
           tabBarIcon: ({ size, focused, color }) => {
             return <ProfileIcon focus={focused} />;
@@ -194,7 +196,11 @@ export const PrivateStackNavigator = ({ route }: any) => {
         initialParams={route}
         component={Player}
       ></Stack.Screen>
-      <Stack.Screen name="Search" component={GlobalSearch}></Stack.Screen>
+      <Stack.Screen
+        name="Search"
+        component={GlobalSearch}
+        initialParams={route}
+      ></Stack.Screen>
       <Stack.Screen
         name="AnimePage"
         initialParams={route}
@@ -216,12 +222,16 @@ export const PrivateStackNavigator = ({ route }: any) => {
         component={DownloadSettings}
       ></Stack.Screen>
       <Stack.Screen name="Security" component={Security}></Stack.Screen>
-      <Stack.Screen name="HelpCenter" component={HelpCenter}></Stack.Screen>
       <Stack.Screen
         name="PrivacyPolicy"
         component={PrivacyPolicy}
       ></Stack.Screen>
       <Stack.Screen name="Premium" component={Premium}></Stack.Screen>
+      <Stack.Screen
+        name="Language"
+        component={Language}
+        initialParams={route}
+      ></Stack.Screen>
     </Stack.Navigator>
   );
 };

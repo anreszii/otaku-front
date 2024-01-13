@@ -2,7 +2,6 @@ import {
   View,
   Text,
   SafeAreaView,
-  Image,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
@@ -23,6 +22,7 @@ import { ChangeAvatar } from "../components/Profile/ChangeAvatar";
 import CompleteModal from "../components/Modals/CompleteModal";
 import authService from "../api/auth/authService";
 import TypographyError from "../components/ui/TypographyError";
+import { Image } from "expo-image";
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState<any>(false);
@@ -88,7 +88,7 @@ export default function SignUp() {
             <Image
               source={require("../../assets/icon.png")}
               style={{ width: 113, height: 67 }}
-              resizeMode="contain"
+              contentFit="contain"
             />
             <Typography style={styles.title} type="title">
               Create Your Account
@@ -149,7 +149,6 @@ export default function SignUp() {
           <ScrollView showsVerticalScrollIndicator={false}>
             <Typography type="sub" style={styles.titleTwo}>
               Choose your interests and get the best anime recommendations.
-              Don't worry, you can always change it later.
             </Typography>
             <View style={styles.badgesContainer}>
               {badges.map((item) => (
@@ -188,7 +187,6 @@ export default function SignUp() {
                 label="Phone Number"
                 keyboardType="phone-pad"
                 styleInput={{ marginTop: 13 }}
-                maxLength={15}
                 value={user.phoneNumber}
                 onChangeText={(value: any) =>
                   setUser({ ...user, phoneNumber: value })

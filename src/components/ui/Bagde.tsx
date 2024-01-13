@@ -1,9 +1,15 @@
-import { StyleSheet, View } from "react-native";
-import React from "react";
+import { StyleSheet, View, ViewStyle } from "react-native";
+import React, { FC } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import Typography from "./Typography";
 
-export default function Bagde({ title, gradient, style }: any) {
+interface BadgeProps {
+  title: string;
+  gradient: boolean;
+  style?: ViewStyle;
+}
+
+const Bagde: FC<BadgeProps> = ({ title, gradient, style }: any) => {
   return (
     <>
       {gradient ? (
@@ -60,7 +66,7 @@ export default function Bagde({ title, gradient, style }: any) {
       )}
     </>
   );
-}
+};
 
 const styles = StyleSheet.create({
   titleGradient: {
@@ -77,3 +83,5 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
   },
 });
+
+export default Bagde;

@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import { Pressable, StyleSheet, View, ViewStyle } from "react-native";
-import { TextInput } from "react-native-paper";
+import { TextInput, TextInputProps } from "react-native-paper";
 import Typography from "./Typography";
 import { controlsStyle } from "../../style/controls";
 import TypographyError from "./TypographyError";
 
-interface InputProps {
+interface InputProps extends TextInputProps {
   label?: string;
   styleInput?: Record<string, any>;
   onPress?: () => void;
   error?: boolean;
   errorText?: any;
-  [key: string]: any;
 }
 
 const Input: React.FC<InputProps> = ({

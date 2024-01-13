@@ -1,9 +1,9 @@
 import { View, Text, Animated, Easing } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { CircleProgress as Circle } from "../../icons";
 
 export default function CircleProgress() {
-  const spinValue = new Animated.Value(0);
+  const spinValue = useRef(new Animated.Value(0.01)).current;
   const rotate = spinValue.interpolate({
     inputRange: [0, 1],
     outputRange: ["0deg", "360deg"],

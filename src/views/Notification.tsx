@@ -1,8 +1,8 @@
-import { View, Text, SafeAreaView, StyleSheet, Image } from "react-native";
+import { View, Text, SafeAreaView, StyleSheet } from "react-native";
 import React from "react";
-import HeaderDownload from "../components/Layouts/HeaderDownload";
 import Typography from "../components/ui/Typography";
 import HeaderBack from "../components/Layouts/HeaderBack";
+import { Image } from "expo-image";
 
 export default function Nofitication() {
   return (
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   imageContent: {
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 50
+    marginTop: 50,
   },
   noneImage: {
     width: "80%",

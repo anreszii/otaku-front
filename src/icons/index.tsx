@@ -1235,3 +1235,116 @@ export const Filter = ({ ...props }) => {
     </Svg>
   );
 };
+
+export const WiFi = ({ ...props }) => {
+  return (
+    <Svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={20}
+      viewBox="0 0 24 20"
+      fill="none"
+      {...props}
+    >
+      <Path
+        d="M11.973 19.326a1.167 1.167 0 100-2.333 1.167 1.167 0 000 2.334zM11.973 12.327c-1.51 0-2.96.585-4.048 1.633a1.168 1.168 0 001.622 1.68 3.593 3.593 0 014.853 0 1.167 1.167 0 101.622-1.68 5.833 5.833 0 00-4.049-1.633zm0-5.834a10.5 10.5 0 00-7.548 3.209 1.18 1.18 0 101.715 1.621 8.168 8.168 0 0111.76 0 1.167 1.167 0 00.828.35 1.166 1.166 0 00.84-1.971 10.501 10.501 0 00-7.595-3.209z"
+        fill="#212121"
+      />
+      <Path
+        d="M23.313 5.245a16.333 16.333 0 00-22.68 0 1.167 1.167 0 001.61 1.68 14 14 0 0119.46 0c.216.209.504.326.805.327a1.167 1.167 0 00.805-2.007z"
+        fill="#212121"
+      />
+    </Svg>
+  );
+};
+
+export const Trash = ({ ...props }) => {
+  return (
+    <Svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={21}
+      height={24}
+      viewBox="0 0 21 24"
+      fill="none"
+      {...props}
+    >
+      <Path
+        d="M18.037 9.146c0 9.356 1.347 13.585-7.71 13.585-9.06 0-7.685-4.229-7.685-13.585M19.76 5.56H.916M14.334 5.56s.617-4.394-3.997-4.394c-4.612 0-3.995 4.393-3.995 4.393"
+        stroke="#212121"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+};
+
+export const TrashGradient = ({ ...props }) => {
+  return (
+    <Svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={21}
+      height={24}
+      viewBox="0 0 16 17"
+      fill="none"
+      {...props}
+    >
+      <Path
+        d="M13.741 6.462c0 6.683.962 9.703-5.508 9.703s-5.489-3.02-5.489-9.703"
+        stroke="url(#paint0_linear_337_1121)"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <Path
+        d="M14.97 3.9H1.513"
+        stroke="url(#paint1_linear_337_1121)"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <Path
+        d="M11.096 3.9S11.536.762 8.24.762C4.947.762 5.387 3.9 5.387 3.9"
+        stroke="url(#paint2_linear_337_1121)"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <Defs>
+        <LinearGradient
+          id="paint0_linear_337_1121"
+          x1={13.7915}
+          y1={16.1651}
+          x2={0.891679}
+          y2={11.8863}
+          gradientUnits="userSpaceOnUse"
+        >
+          <Stop stopColor="#7210FF" />
+          <Stop offset={1} stopColor="#9D59FF" />
+        </LinearGradient>
+        <LinearGradient
+          id="paint1_linear_337_1121"
+          x1={14.9709}
+          y1={4.29658}
+          x2={14.2813}
+          y2={0.9059}
+          gradientUnits="userSpaceOnUse"
+        >
+          <Stop stopColor="#7210FF" />
+          <Stop offset={1} stopColor="#9D59FF" />
+        </LinearGradient>
+        <LinearGradient
+          id="paint2_linear_337_1121"
+          x1={11.1154}
+          y1={3.89981}
+          x2={5.33201}
+          y2={0.828419}
+          gradientUnits="userSpaceOnUse"
+        >
+          <Stop stopColor="#7210FF" />
+          <Stop offset={1} stopColor="#9D59FF" />
+        </LinearGradient>
+      </Defs>
+    </Svg>
+  );
+};

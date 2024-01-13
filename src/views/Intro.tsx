@@ -1,13 +1,8 @@
-import {
-  SafeAreaView,
-  Image,
-  StyleSheet,
-  Animated,
-  Easing,
-} from "react-native";
+import { SafeAreaView, StyleSheet, Animated, Easing } from "react-native";
 import React, { useEffect } from "react";
 import CircleProgress from "../components/ui/CircleProgress";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Image } from "expo-image";
 
 export default function Intro() {
   return (
@@ -15,7 +10,7 @@ export default function Intro() {
       <Image
         source={require("../../assets/icon.png")}
         style={{ width: 113, height: 67 }}
-        resizeMode="contain"
+        contentFit="contain"
       />
       <CircleProgress />
     </SafeAreaView>

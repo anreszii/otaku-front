@@ -28,10 +28,10 @@ const findAnimeWithMostEpisodes = (data: any) => {
 
   let animeWithMostEpisodes: any = null;
   const episodes_aired =
-    data.results[0].material_data.anime_status !== "ongoing" &&
-    data.results[0].material_data.anime_status !== "anons"
-      ? data.results[0].material_data.episodes_total
-      : data.results[0].material_data.episodes_aired;
+    data.results[0]?.material_data?.anime_status !== "ongoing" &&
+    data.results[0]?.material_data?.anime_status !== "anons"
+      ? data.results[0]?.material_data?.episodes_total
+      : data.results[0]?.material_data?.episodes_aired;
 
   data.results.forEach((anime: any) => {
     const seasons = anime?.seasons;
@@ -46,12 +46,11 @@ const findAnimeWithMostEpisodes = (data: any) => {
           episodesCount === episodes_aired ||
           episodesCount === episodes_aired + 1
         ) {
-          console.log("h3");
+          animeWithMostEpisodes = anime;
+        } else {
           animeWithMostEpisodes = anime;
         }
       }
-    } else {
-      animeWithMostEpisodes = anime;
     }
   });
 

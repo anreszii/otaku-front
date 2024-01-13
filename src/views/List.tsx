@@ -1,4 +1,12 @@
-import { View, Text, SafeAreaView, ScrollView, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  Animated,
+  LogBox,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import userService from "../api/user/userService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -9,6 +17,10 @@ import Skeleton from "../components/ui/Skeleton";
 import AnimeItem from "../components/List/AnimeItem";
 import Header from "../components/Layouts/Header";
 import { Search } from "../icons";
+import Input from "../components/ui/Input";
+import { TextInput } from "react-native-paper";
+import HeaderInput from "../components/Layouts/HeaderInput";
+import { FlatList } from "react-native-gesture-handler";
 
 interface FavoriteItem {
   poster: string;
@@ -18,7 +30,25 @@ interface FavoriteItem {
 
 export default function List({ route }: any) {
   const [favoriteList, setFavoriteList] = useState<FavoriteItem[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isSearch, setIsSearch] = useState(false);
+
+  const filterData = () => {
+    return favoriteList.filter((item) =>
+      item.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  };
+
+  const headerInputOpacity = new Animated.Value(0);
+
+  const animateHeaderInput = (show: boolean) => {
+    Animated.timing(headerInputOpacity, {
+      toValue: show ? 1 : 0,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+  };
 
   useEffect(() => {
     (async () => {
@@ -31,6 +61,10 @@ export default function List({ route }: any) {
     })();
   }, [route]);
 
+  useEffect(() => {
+    animateHeaderInput(isSearch);
+  }, [isSearch]);
+
   return (
     <>
       {isLoading ? (
@@ -38,30 +72,49 @@ export default function List({ route }: any) {
       ) : (
         <SafeAreaView
           style={{
+            flex: 1,
             backgroundColor: "#FFF",
             height: "100%",
           }}
         >
-          <Header title="My List" icon={<Search color="#000" />} />
-          <>
-            {favoriteList.length > 0 ? (
-              <ScrollView
-                style={styles.container}
-                showsVerticalScrollIndicator={false}
-              >
-                <View style={styles.content}>
-                  {favoriteList.map((item, index) => (
-                    <AnimeItem key={index} item={item} />
-                  ))}
-                </View>
-              </ScrollView>
-            ) : (
-              <View style={styles.contentNone}>
-                <Image
-                  source={require("../../assets/listNone.png")}
-                  style={{ width: 380, height: 380 }}
-                  PlaceholderContent={<Skeleton width={380} height={380} />}
-                />
+          {isSearch ? (
+            <HeaderInput
+              icon={<Search color="#000" />}
+              onPress={() => setIsSearch(false)}
+              value={searchQuery}
+              setValue={setSearchQuery}
+              opacity={headerInputOpacity}
+            />
+          ) : (
+            <Header
+              title="My List"
+              icon={<Search color="#000" />}
+              onPress={() => setIsSearch(true)}
+            />
+          )}
+
+          {favoriteList.length > 0 ? (
+            <View style={styles.container}>
+              <FlatList
+                data={filterData()}
+                keyExtractor={(item) => item.title}
+                renderItem={({ item }) => <AnimeItem item={item} />}
+                numColumns={2}
+                contentContainerStyle={
+                  isSearch
+                    ? { ...styles.content, marginTop: 12 }
+                    : styles.content
+                }
+              />
+            </View>
+          ) : (
+            <View style={styles.contentNone}>
+              <Image
+                source={require("../../assets/listNone.png")}
+                style={{ width: 380, height: 380 }}
+                PlaceholderContent={<Skeleton width={380} height={380} />}
+              />
+              <View style={styles.noneTextContent}>
                 <Typography
                   gradient={true}
                   type="title"
@@ -70,11 +123,11 @@ export default function List({ route }: any) {
                   Your List is Empty
                 </Typography>
                 <Typography style={styles.subtitleNone}>
-                  It seems that you haven't added{"\n"} any anime to the list
+                  It seems that you haven't added any anime to the list
                 </Typography>
               </View>
-            )}
-          </>
+            </View>
+          )}
         </SafeAreaView>
       )}
     </>
@@ -89,27 +142,30 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   content: {
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: "column",
     justifyContent: "space-between",
-    width: "89%",
+    paddingHorizontal: 12,
+    width: "100%",
   },
   contentNone: {
-    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
     marginTop: 50,
+  },
+  noneTextContent: {
+    width: "80%",
   },
   titleNone: {
     fontSize: 24,
     fontWeight: "600",
     lineHeight: 28.8,
+    textAlign: "center",
   },
   subtitleNone: {
-    textAlign: "center",
-    marginTop: 16,
     fontSize: 18,
     fontWeight: "500",
-    lineHeight: 25.2,
     letterSpacing: 0.2,
+    textAlign: "center",
+    marginTop: 16,
   },
 });

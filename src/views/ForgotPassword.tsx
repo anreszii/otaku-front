@@ -2,7 +2,6 @@ import {
   View,
   Text,
   SafeAreaView,
-  Image,
   StyleSheet,
   TouchableOpacity,
   NativeModules,
@@ -25,6 +24,7 @@ import {
 } from "react-native-confirmation-code-field";
 import authService from "../api/auth/authService";
 import TypographyError from "../components/ui/TypographyError";
+import { Image } from "expo-image";
 const { StatusBarManager } = NativeModules;
 
 export default function SignUp() {
@@ -108,7 +108,7 @@ export default function SignUp() {
             <Image
               source={require("../../assets/icon.png")}
               style={{ width: 113, height: 67 }}
-              resizeMode="contain"
+              contentFit="contain"
             />
             <Typography style={styles.title} type="title">
               Reset Your Password

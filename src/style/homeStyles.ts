@@ -35,6 +35,12 @@ const homeStyles = StyleSheet.create({
     height: 200,
     borderRadius: 12,
   },
+  posterList: {
+    width: "50%",
+    height: 200,
+    borderRadius: 12,
+  },
+
   posterImage: {
     borderRadius: 12,
   },
@@ -89,7 +95,7 @@ const homeStyles = StyleSheet.create({
   },
   bg: {
     width: "100%",
-    height: 400,
+    height: 320,
   },
   infoContainer: {
     position: "absolute",

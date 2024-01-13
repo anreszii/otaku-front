@@ -8,6 +8,7 @@ import {
   NativeModules,
   TouchableOpacity,
   Animated,
+  SafeAreaView,
 } from "react-native";
 import Typography from "../ui/Typography";
 import { Search } from "../../icons";
@@ -22,7 +23,7 @@ interface HeaderProps {
   onPress?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ title, style, icon, onPress }) => {
+const HeaderTest: React.FC<HeaderProps> = ({ title, style, icon, onPress }) => {
   const navigation = useNavigation<any>();
 
   const [statusBarHeight, setStatusBarHeight] = useState<number>(
@@ -30,41 +31,39 @@ const Header: React.FC<HeaderProps> = ({ title, style, icon, onPress }) => {
   );
 
   return (
-    <View
-      style={{
-        ...styles.container,
-        ...{ top: statusBarHeight + 12 },
-        ...style,
-      }}
-    >
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-          <Image
-            source={require("../../../assets/icon.png")}
-            style={{ width: 31, height: 28, marginRight: 10 }}
-            contentFit="contain"
-          />
+    <SafeAreaView>
+      <View
+        style={{
+          ...styles.container,
+          ...style,
+        }}
+      >
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+            <Image
+              source={require("../../../assets/icon.png")}
+              style={{ width: 31, height: 28, marginRight: 10 }}
+              contentFit="contain"
+            />
+          </TouchableOpacity>
+          <Typography type="title" style={styles.title}>
+            {title}
+          </Typography>
+        </View>
+        <TouchableOpacity onPress={() => onPress && onPress()}>
+          {icon}
         </TouchableOpacity>
-        <Typography type="title" style={styles.title}>
-          {title}
-        </Typography>
       </View>
-      <TouchableOpacity onPress={() => onPress && onPress()}>
-        {icon}
-      </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: "87%",
     height: 48,
-    display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    position: "absolute",
-    marginLeft: 24,
+    marginHorizontal: 24,
     justifyContent: "space-between",
   },
   title: {
@@ -74,4 +73,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Header;
+export default HeaderTest;

@@ -127,7 +127,7 @@ export default function Controls({
             style={
               full || Math.trunc(duration / 60) > 0
                 ? { width: "70%", height: 20 }
-                : { width: "80%", height: 20 }
+                : { width: "75%", height: 20 }
             }
             minimumValue={0}
             maximumValue={duration}
@@ -197,23 +197,26 @@ const styles = StyleSheet.create({
   sliderContent: {
     alignItems: "center",
     flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
   },
   sliderContentFull: {
     alignItems: "center",
     flexDirection: "row",
+    justifyContent: "space-between",
     marginRight: 42,
   },
   timeTitleLeft: {
     color: "#FFF",
     fontWeight: "600",
     marginRight: 2,
-    width: "10%",
+    width: "11%",
   },
   timeTitleRight: {
     color: "#FFF",
     fontWeight: "600",
     marginLeft: 2,
-    width: "10%",
+    width: "11%",
   },
   timeTitleLeftFull: {
     color: "#FFF",

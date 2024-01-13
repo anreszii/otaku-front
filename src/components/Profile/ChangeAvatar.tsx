@@ -1,14 +1,9 @@
 import React, { FC, useState } from "react";
-import {
-  View,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
 import { launchImageLibraryAsync, MediaTypeOptions } from "expo-image-picker";
 import { CroppingAvatar } from "../Modals/CroppingAvatar";
 import { Edit, UserDefault } from "../../icons";
+import { Image } from "expo-image";
 
 interface ChangeAvatarProps {
   avatar: any;

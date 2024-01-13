@@ -1,15 +1,10 @@
 import {
   View,
   Text,
-  SafeAreaView,
-  ImageBackground,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
   Share as Sharing,
-  StatusBar,
-  Image,
-  Animated,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import MarqueeText from "react-native-marquee";
@@ -28,18 +23,38 @@ import DownloadErrorModal from "../components/Modals/DownloadErrorModal";
 import { useNavigation } from "@react-navigation/native";
 import * as ScreenOrientation from "expo-screen-orientation";
 import axios from "axios";
+import { ImageBackground } from "expo-image";
+import ChoiceEpisodeModal from "../components/Modals/ChoiceEpisodeModal";
+import ChoiceVoiceModal from "../components/Modals/ChoiceVoiceModal";
+import { getAllVoiceAnime } from "../api/kodik/getAllVoiceAnime";
+import { searchAnimeWithVoice } from "../api/kodik/searchAnimeWithVoice";
+import PrepareDownload from "../components/Modals/PrepareDownload";
+import ChoiceQualityModal from "../components/Modals/ChoiceQualityVideo";
 
 export default function AnimePage({ route }: any) {
   const [animeInfo, setAnimeInfo] = useState<any>(null);
   const [showsFullDesc, setShowsFullDesc] = useState(false);
   const [visible, setVisible] = useState(false);
   const [visibleError, setVisibleError] = useState(false);
+  const [visibleChoice, setVisibleChoice] = useState(false);
+  const [visibleChoiseVoice, setVisibleChoiseVoice] = useState(false);
+  const [visiblePrepare, setVisiblePrepare] = useState(false);
+  const [visibleQuality, setVisibleQuality] = useState(false);
   const [mb, setMB] = useState(0);
   const [allMB, setAllMB] = useState(0);
+  const [episodeArray, setEpisodeArray] = useState<any[]>([]);
+  const [voiceArray, setVoiceArray] = useState<any[]>([]);
+  const [valueVoice, setValueVoice] = useState<string>("");
+  const [valueEpisode, setValueEpisode] = useState<string>("");
+  const [valueQuality, setValueQuality] = useState<string>("");
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
   const navigation = useNavigation<any>();
 
   useEffect(() => {
     (async () => {
+      setValueVoice("");
+      setValueEpisode("");
       ScreenOrientation.lockAsync(
         ScreenOrientation.OrientationLock.PORTRAIT_UP
       );
@@ -50,35 +65,69 @@ export default function AnimePage({ route }: any) {
         ? route.params.creature.title
         : route.params.title;
       const res: any = await searchAnimeWithEpisodes(title);
-      console.log(res);
       const id: any = await AsyncStorage.getItem("id");
       const animeID = res.shikimori_id;
-      const { data } = await axios.get(
-        `https://shikimori.one/api/animes/${animeID}`
-      );
-      const editPosterAnime = {
-        ...res,
-        material_data: {
-          ...res.material_data,
-          poster_url: `https://shikimori.one${data.image.original}`,
-        },
-      };
+      // const { data } = await axios.get(
+      //   `https://shikimori.one/api/animes/${animeID}`
+      // );
+      // console.log(data);
+      // const editPosterAnime = {
+      //   ...res,
+      //   material_data: {
+      //     ...res.material_data,
+      //     poster_url: `https://shikimori.one${data.image.original}`,
+      //   },
+      // };
       const favoriteList = await userService.getFavoriteList(id);
       const inFavoriteList = favoriteList.data.find(
         (el: any) => el.title === titleFavorite
       );
 
+      const allVoice: any[] = await getAllVoiceAnime(title);
+      const tempVoiceArray: any[] = [];
+      Array.from({ length: allVoice.length }).map((item, index) =>
+        tempVoiceArray.push({ label: allVoice[index], value: allVoice[index] })
+      );
+      setVoiceArray(tempVoiceArray);
+
       if (inFavoriteList !== undefined) {
         setAnimeInfo({
-          ...editPosterAnime,
+          ...res,
           isFavorite: true,
           favoriteItem: inFavoriteList,
         });
       } else {
-        setAnimeInfo(editPosterAnime);
+        setAnimeInfo(res);
       }
     })();
   }, [route]);
+
+  useEffect(() => {
+    (async () => {
+      if (valueVoice.trim() !== "") {
+        const title = route.params?.creature?.hasOwnProperty("title")
+          ? route.params.creature.title
+          : route.params.title;
+        const data = await searchAnimeWithVoice(title, valueVoice);
+        const tempEpisodeArray: any[] = [];
+        Array.from(
+          data.type === "anime"
+            ? { length: 1 }
+            : {
+                length: Object.values<any>(
+                  Object.values<any>(data.seasons)[0].episodes
+                ).length,
+              }
+        ).map((item, index) => {
+          tempEpisodeArray.push({
+            label: `Episode ${index + 1}`,
+            value: String(index + 1),
+          });
+        });
+        setEpisodeArray(tempEpisodeArray);
+      }
+    })();
+  }, [visibleChoice]);
 
   const handleFavorite = async () => {
     if (animeInfo.isFavorite) {
@@ -115,36 +164,99 @@ export default function AnimePage({ route }: any) {
     }
   };
 
+  const handlePreDownload = () => {
+    setVisibleChoiseVoice(true);
+  };
+
   const handleDownload = async () => {
+    setVisiblePrepare(true);
+
     const videoLink = await getAnimeUrl(
-      Object.values<any>(Object.values<any>(animeInfo.seasons)[0].episodes)[0]
-        .link
+      Object.values<any>(Object.values<any>(animeInfo.seasons)[0].episodes)[
+        Number(valueEpisode) - 1
+      ].link
     );
 
-    const res: any = await downloadAndSaveVideo(
-      videoLink.data.links["720"].Src.includes("https:")
-        ? videoLink.data.links["720"].Src
-        : `https:${videoLink.data.links["720"].Src}`,
-      animeInfo.title_orig.replaceAll(" ", "") + "650" + ".mp4",
+    console.log(
+      Object.values<any>(animeInfo.seasons)[0].episodes,
+      Number(valueEpisode) - 1,
+      Object.values<any>(Object.values<any>(animeInfo.seasons)[0].episodes)[
+        Number(valueEpisode) - 1
+      ]
+    );
+
+    await downloadAndSaveVideo(
+      videoLink.data.links[valueQuality].Src.includes("https:")
+        ? videoLink.data.links[valueQuality].Src
+        : `https:${videoLink.data.links[valueQuality].Src}`,
+      animeInfo.title_orig.replaceAll(" ", "") +
+        valueEpisode +
+        valueVoice +
+        ".mp4",
       setMB,
       setAllMB,
       setVisibleError,
+      setVisiblePrepare,
       setVisible
     );
 
-    await AsyncStorage.setItem(
-      "animePath",
-      FileSystem.documentDirectory +
-        animeInfo.title_orig.replaceAll(" ", "") +
-        "650" +
-        ".mp4"
+    const downloadsArray: any = await AsyncStorage.getItem("downloadsArray");
+
+    const response = await fetch(
+      videoLink.data.links[valueQuality].Src.includes("https:")
+        ? videoLink.data.links[valueQuality].Src
+        : `https:${videoLink.data.links[valueQuality].Src}`,
+      { method: "HEAD" }
     );
-    console.log(
-      FileSystem.documentDirectory +
-        animeInfo.title_orig.replaceAll(" ", "") +
-        "650" +
-        ".mp4"
-    );
+    const fileSize: any = response.headers.get("content-length");
+    const initialFileSize = parseFloat(fileSize);
+
+    if (downloadsArray) {
+      await AsyncStorage.setItem(
+        "downloadsArray",
+        JSON.stringify([
+          ...JSON.parse(downloadsArray),
+          {
+            title: animeInfo?.title,
+            displayTitle: animeInfo?.material_data?.anime_title,
+            image: animeInfo?.material_data?.screenshots?.length
+              ? animeInfo?.material_data?.screenshots[0]
+              : animeInfo?.material_data?.poster_url,
+            episodeNumber: valueEpisode,
+            voiceName: valueVoice,
+            memory: (initialFileSize / 1000000).toFixed(2),
+            video_url:
+              FileSystem.documentDirectory +
+              animeInfo.title_orig.replaceAll(" ", "") +
+              valueEpisode +
+              valueVoice +
+              ".mp4",
+          },
+        ])
+      );
+    } else {
+      await AsyncStorage.setItem(
+        "downloadsArray",
+        JSON.stringify([
+          {
+            title: animeInfo?.title,
+            displayTitle: animeInfo?.material_data?.anime_title,
+            image: animeInfo?.material_data?.screenshots?.length
+              ? animeInfo?.material_data?.screenshots[0]
+              : animeInfo?.material_data?.poster_url,
+            episodeNumber: valueEpisode,
+            voiceName: valueVoice,
+            memory: allMB,
+            video_url:
+              FileSystem.documentDirectory +
+              animeInfo.title_orig.replaceAll(" ", "") +
+              valueEpisode +
+              valueVoice +
+              ".mp4",
+          },
+        ])
+      );
+    }
   };
 
   const handleShare = async () => {
@@ -173,7 +285,9 @@ export default function AnimePage({ route }: any) {
       {animeInfo && (
         <>
           <ImageBackground
-            source={{ uri: animeInfo.material_data.poster_url }}
+            source={{
+              uri: animeInfo.material_data.poster_url,
+            }}
             style={styles.poster}
           ></ImageBackground>
           <ScrollView
@@ -233,7 +347,7 @@ export default function AnimePage({ route }: any) {
               />
               <Button
                 title="Download"
-                onPress={() => handleDownload()}
+                onPress={() => handlePreDownload()}
                 gradient={false}
                 style={styles.button}
               />
@@ -246,33 +360,27 @@ export default function AnimePage({ route }: any) {
             !!animeInfo?.material_data?.description ? (
               <View style={styles.content}>
                 {showsFullDesc ? (
-                  <Typography>
-                    {!!animeInfo?.material_data?.anime_description
-                      ? animeInfo.material_data.anime_description
-                      : animeInfo.material_data.description}
-                    <TouchableOpacity
-                      onPress={() => handleShowsDesc()}
-                      style={{ margin: -1.5 }}
-                    >
-                      <Typography gradient={true}>View All</Typography>
-                    </TouchableOpacity>
-                  </Typography>
+                  <TouchableOpacity onPress={() => handleShowsDesc()}>
+                    <Typography>
+                      {!!animeInfo?.material_data?.anime_description
+                        ? animeInfo.material_data.anime_description
+                        : animeInfo.material_data.description}
+                    </Typography>
+                  </TouchableOpacity>
                 ) : (
-                  <Typography>
-                    {!!animeInfo?.material_data?.anime_description
-                      ? animeInfo.material_data.anime_description.substring(
-                          0,
-                          100
-                        )
-                      : animeInfo.material_data.description.substring(0, 100) +
-                        "..."}
-                    <TouchableOpacity
-                      onPress={() => handleShowsDesc()}
-                      style={{ margin: -1.5 }}
-                    >
-                      <Typography gradient={true}> View All</Typography>
-                    </TouchableOpacity>
-                  </Typography>
+                  <TouchableOpacity onPress={() => handleShowsDesc()}>
+                    <Typography>
+                      {!!animeInfo?.material_data?.anime_description
+                        ? animeInfo.material_data.anime_description.substring(
+                            0,
+                            100
+                          ) + "..."
+                        : animeInfo.material_data.description.substring(
+                            0,
+                            100
+                          ) + "..."}
+                    </Typography>
+                  </TouchableOpacity>
                 )}
               </View>
             ) : (
@@ -367,12 +475,45 @@ export default function AnimePage({ route }: any) {
               </>
             )}
           </ScrollView>
-
+          <ChoiceEpisodeModal
+            visible={visibleChoice}
+            setVisible={setVisibleChoice}
+            data={episodeArray}
+            value={valueEpisode}
+            setValue={setValueEpisode}
+            setVisibleQuality={setVisibleQuality}
+          />
+          <ChoiceVoiceModal
+            visible={visibleChoiseVoice}
+            setVisible={setVisibleChoiseVoice}
+            data={voiceArray}
+            setVisibleEpisode={setVisibleChoice}
+            value={valueVoice}
+            setValue={setValueVoice}
+          />
+          <ChoiceQualityModal
+            visible={visibleQuality}
+            setVisible={setVisibleQuality}
+            data={[
+              { label: "720", value: "720" },
+              { label: "480", value: "480" },
+              { label: "360", value: "360" },
+            ]}
+            value={valueQuality}
+            setValue={setValueQuality}
+            setVisiblePrepare={handleDownload}
+          />
+          <PrepareDownload
+            visible={visiblePrepare}
+            setVisible={setVisiblePrepare}
+            episodeNumber={Number(valueEpisode)}
+          />
           <DownloadModal
             visible={visible}
             setVisible={setVisible}
             mb={mb}
             allMB={allMB}
+            episodeNumber={Number(valueEpisode)}
           />
           <DownloadErrorModal
             visible={visibleError}
@@ -387,7 +528,7 @@ export default function AnimePage({ route }: any) {
 const styles = StyleSheet.create({
   poster: {
     width: "100%",
-    height: 350,
+    height: 320,
     padding: 0,
     backgroundColor: "#ccc",
   },

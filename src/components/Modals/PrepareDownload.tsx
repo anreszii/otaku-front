@@ -4,35 +4,43 @@ import { Modal } from "../ui/Modal";
 import Typography from "../ui/Typography";
 import Button from "../ui/Button";
 import { ProgressBar } from "react-native-paper";
+import CircleProgress from "../ui/CircleProgress";
 
-export default function DownloadModal({
+interface PrepareDownloadProps {
+  visible: boolean;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  episodeNumber: number;
+}
+
+export default function PrepareDownload({
   visible,
   setVisible,
-  mb = 0,
-  allMB = 0,
   episodeNumber,
-}: any) {
+}: PrepareDownloadProps) {
   return (
-    <Modal visible={visible} setVisible={setVisible} animationType="fade" full>
+    <Modal
+      visible={visible}
+      setVisible={setVisible}
+      animationType="fade"
+      full
+      close={true}
+    >
       <View style={styles.container}>
         <Typography type="title" gradient={true} style={styles.title}>
-          Download
+          Prepare
         </Typography>
         <Typography style={styles.subtitle}>
-          Episode {episodeNumber} is still downloading... Please wait the
-          process
+          Episode {episodeNumber} is being prepared for download... Please wait
+          or hide the process
         </Typography>
-        <View>
-          <Typography style={styles.subtitle}>
-            {Math.min(mb, allMB).toFixed(2)} / {allMB.toFixed(2)} MB
-          </Typography>
-          <Typography style={styles.subtitle}>
-            {Math.min((mb / allMB) * 100, 100).toFixed(2)}%
-          </Typography>
-          <ProgressBar
-            progress={mb / allMB}
-            color="#7210FF"
-            style={{ marginBottom: 24 }}
+        <View style={{ marginBottom: 24 }}>
+          <CircleProgress />
+        </View>
+        <View style={{ width: 200, height: 60 }}>
+          <Button
+            title="Спрятать"
+            gradient={false}
+            onPress={() => setVisible(false)}
           />
         </View>
       </View>
@@ -70,6 +78,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
     textAlign: "center",
     marginTop: 16,
-    marginBottom: 24,
+    marginBottom: 32,
   },
 });

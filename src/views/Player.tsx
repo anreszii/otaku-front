@@ -123,7 +123,7 @@ export default function Player({ route }: any) {
   };
 
   const handleLoad = (meta: any) => {
-    console.log(meta);
+    console.log(meta, "hello");
     setDuration(meta.duration / 60);
     setIsLoading(false);
   };
@@ -284,16 +284,7 @@ export default function Player({ route }: any) {
               rate={speed}
             />
             {isLoading ? (
-              <View
-                style={{
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                  backgroundColor: "#000",
-                }}
-              >
-                <CircleProgress />
-              </View>
+              <View></View>
             ) : (
               <Animated.View
                 style={[
