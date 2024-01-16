@@ -23,6 +23,7 @@ export function DeleteDownloadModal({
   const handleDelete = async () => {
     handleVisible();
     setLoading(true);
+    console.log(deleteItem.video_url);
     await FileSystem.deleteAsync(deleteItem.video_url);
     const downloads: any = await AsyncStorage.getItem("downloadsArray");
     const downloadsWithoutDeleteItem = JSON.parse(downloads).filter(

@@ -6,8 +6,9 @@ import {
   TouchableOpacity,
   Animated,
   LogBox,
+  ScrollView,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import userService from "../api/user/userService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Typography from "../components/ui/Typography";
@@ -21,6 +22,8 @@ import Input from "../components/ui/Input";
 import { TextInput } from "react-native-paper";
 import HeaderInput from "../components/Layouts/HeaderInput";
 import { FlatList } from "react-native-gesture-handler";
+import { backgroundColors } from "../constants/colors";
+import { useFocusEffect } from "@react-navigation/native";
 
 interface FavoriteItem {
   poster: string;
@@ -50,16 +53,19 @@ export default function List({ route }: any) {
     }).start();
   };
 
-  useEffect(() => {
-    (async () => {
-      const id = await AsyncStorage.getItem("id");
-      const list: FavoriteItem[] = (
-        await userService.getFavoriteList(String(id))
-      ).data;
-      setFavoriteList(list);
-      setIsLoading(false);
-    })();
-  }, [route]);
+  useFocusEffect(
+    useCallback(() => {
+      (async () => {
+        setIsLoading(true);
+        const id = await AsyncStorage.getItem("id");
+        const list: FavoriteItem[] = (
+          await userService.getFavoriteList(String(id))
+        ).data;
+        setFavoriteList(list);
+        setIsLoading(false);
+      })();
+    }, [route])
+  );
 
   useEffect(() => {
     animateHeaderInput(isSearch);
@@ -80,7 +86,10 @@ export default function List({ route }: any) {
           {isSearch ? (
             <HeaderInput
               icon={<Search color="#000" />}
-              onPress={() => setIsSearch(false)}
+              onPress={() => {
+                setIsSearch(false);
+                setSearchQuery("");
+              }}
               value={searchQuery}
               setValue={setSearchQuery}
               opacity={headerInputOpacity}
@@ -95,17 +104,18 @@ export default function List({ route }: any) {
 
           {favoriteList.length > 0 ? (
             <View style={styles.container}>
-              <FlatList
-                data={filterData()}
-                keyExtractor={(item) => item.title}
-                renderItem={({ item }) => <AnimeItem item={item} />}
-                numColumns={2}
+              <ScrollView
                 contentContainerStyle={
                   isSearch
                     ? { ...styles.content, marginTop: 12 }
                     : styles.content
                 }
-              />
+                showsVerticalScrollIndicator={false}
+              >
+                {filterData().map((item) => (
+                  <AnimeItem key={item.title} item={item} />
+                ))}
+              </ScrollView>
             </View>
           ) : (
             <View style={styles.contentNone}>
@@ -136,16 +146,17 @@ export default function List({ route }: any) {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: backgroundColors.backgroundLight,
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 72,
-    marginHorizontal: 24,
     marginBottom: 72,
-    width: "100%",
+    marginHorizontal: 24,
   },
   content: {
-    flexDirection: "column",
+    flexDirection: "row",
     justifyContent: "space-between",
-    paddingHorizontal: 12,
-    width: "100%",
+    flexWrap: "wrap",
   },
   contentNone: {
     alignItems: "center",

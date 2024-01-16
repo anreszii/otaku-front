@@ -10,7 +10,9 @@ export const downloadAndSaveVideo = async (
   setAllMB: any,
   setVisibleError: any,
   setVisiblePrepare: any,
-  setVisible: any
+  setVisible: any,
+  flag: any,
+  setFlag: any
 ) => {
   try {
     const response = await fetch(urlM3U8, { method: "HEAD" });
@@ -35,6 +37,7 @@ export const downloadAndSaveVideo = async (
       (stat) => {
         setMB(stat.getSize() / 1000000);
         setVisiblePrepare(false);
+        setFlag(!flag);
         setVisible(true);
       }
     );

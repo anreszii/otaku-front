@@ -56,9 +56,9 @@ export default function GlobalSearch({ route }: any) {
       try {
         const { data } = await getNewAnimes();
         const uniqueAnimeList = Array.from(
-          new Set(data.results.map((item: any) => item.material_data.title))
+          new Set(data.results.map((item: any) => item.title))
         ).map((title) =>
-          data.results.find((item: any) => item.material_data.title === title)
+          data.results.find((item: any) => item.title === title)
         );
         setNewAnimesList(uniqueAnimeList);
         setIsLoading(false);
@@ -130,11 +130,13 @@ export default function GlobalSearch({ route }: any) {
   const fetchAnimeList = async (params: any) => {
     try {
       const { data } = await searchAnime(params);
+      console.log(data);
       const uniqueAnimeList = Array.from(
         new Set(data.results.map((item: any) => item.material_data.title))
       ).map((title) =>
         data.results.find((item: any) => item.material_data.title === title)
       );
+      console.log(uniqueAnimeList, "unique");
       setSearchData(uniqueAnimeList);
       setIsLoading(false);
     } catch (e: any) {
@@ -266,9 +268,9 @@ export default function GlobalSearch({ route }: any) {
                       }
                     >
                       <View style={{ marginBottom: 152 }}>
-                        {searchData.map((item) => (
+                        {searchData.map((item, index) => (
                           <TouchableOpacity
-                            key={item.title}
+                            key={index}
                             style={styles.animeContent}
                             onPress={() =>
                               navigation.navigate("AnimePage", {
@@ -290,12 +292,12 @@ export default function GlobalSearch({ route }: any) {
                               transition={1000}
                             />
                             <Typography type="title" style={styles.animeTitle}>
-                              {item.material_data.anime_title.length >= 100
-                                ? item.material_data.anime_title.substring(
+                              {item?.material_data?.anime_title.length >= 100
+                                ? item?.material_data?.anime_title.substring(
                                     0,
                                     100
                                   ) + "..."
-                                : item.material_data.anime_title}
+                                : item?.material_data?.anime_title}
                             </Typography>
                           </TouchableOpacity>
                         ))}
@@ -321,9 +323,9 @@ export default function GlobalSearch({ route }: any) {
                     >
                       {newAnimesList && (
                         <View style={{ marginBottom: 152 }}>
-                          {newAnimesList.map((item) => (
+                          {newAnimesList.map((item, index) => (
                             <TouchableOpacity
-                              key={item.title}
+                              key={index}
                               style={styles.animeContent}
                               onPress={() =>
                                 navigation.navigate("AnimePage", {

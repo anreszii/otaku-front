@@ -40,15 +40,14 @@ export default function AnimePage({ route }: any) {
   const [visibleChoiseVoice, setVisibleChoiseVoice] = useState(false);
   const [visiblePrepare, setVisiblePrepare] = useState(false);
   const [visibleQuality, setVisibleQuality] = useState(false);
-  const [mb, setMB] = useState(0);
-  const [allMB, setAllMB] = useState(0);
+  const [mb, setMB] = useState(1);
+  const [allMB, setAllMB] = useState(1);
   const [episodeArray, setEpisodeArray] = useState<any[]>([]);
   const [voiceArray, setVoiceArray] = useState<any[]>([]);
   const [valueVoice, setValueVoice] = useState<string>("");
   const [valueEpisode, setValueEpisode] = useState<string>("");
   const [valueQuality, setValueQuality] = useState<string>("");
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
+  const [flag, setFlag] = useState(false);
   const navigation = useNavigation<any>();
 
   useEffect(() => {
@@ -66,7 +65,7 @@ export default function AnimePage({ route }: any) {
         : route.params.title;
       const res: any = await searchAnimeWithEpisodes(title);
       const id: any = await AsyncStorage.getItem("id");
-      const animeID = res.shikimori_id;
+      console.log(title, res);
       // const { data } = await axios.get(
       //   `https://shikimori.one/api/animes/${animeID}`
       // );
@@ -171,19 +170,21 @@ export default function AnimePage({ route }: any) {
   const handleDownload = async () => {
     setVisiblePrepare(true);
 
-    const videoLink = await getAnimeUrl(
-      Object.values<any>(Object.values<any>(animeInfo.seasons)[0].episodes)[
-        Number(valueEpisode) - 1
-      ].link
-    );
+    let videoLink;
 
-    console.log(
-      Object.values<any>(animeInfo.seasons)[0].episodes,
-      Number(valueEpisode) - 1,
-      Object.values<any>(Object.values<any>(animeInfo.seasons)[0].episodes)[
-        Number(valueEpisode) - 1
-      ]
-    );
+    if (!!animeInfo?.seasons) {
+      videoLink = await getAnimeUrl(
+        Object.values<any>(Object.values<any>(animeInfo.seasons)[0].episodes)[
+          Number(valueEpisode) - 1
+        ].link
+      );
+    } else {
+      videoLink = await getAnimeUrl(
+        animeInfo.link.includes("https:")
+          ? animeInfo.link
+          : `https:${animeInfo.link}`
+      );
+    }
 
     await downloadAndSaveVideo(
       videoLink.data.links[valueQuality].Src.includes("https:")
@@ -197,7 +198,9 @@ export default function AnimePage({ route }: any) {
       setAllMB,
       setVisibleError,
       setVisiblePrepare,
-      setVisible
+      setVisible,
+      flag,
+      setFlag
     );
 
     const downloadsArray: any = await AsyncStorage.getItem("downloadsArray");
@@ -257,6 +260,13 @@ export default function AnimePage({ route }: any) {
         ])
       );
     }
+    console.log(
+      FileSystem.documentDirectory +
+        animeInfo.title_orig.replaceAll(" ", "") +
+        valueEpisode +
+        valueVoice +
+        ".mp4"
+    );
   };
 
   const handleShare = async () => {
@@ -315,7 +325,9 @@ export default function AnimePage({ route }: any) {
               <View style={styles.ratingContent}>
                 <Star />
                 <Typography gradient={true}>
-                  {animeInfo.material_data.shikimori_rating}
+                  {animeInfo.material_data.shikimori_rating
+                    ? animeInfo.material_data.shikimori_rating
+                    : "Нет оценки"}
                 </Typography>
                 <TouchableOpacity>
                   <ArrowGradient />

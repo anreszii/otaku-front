@@ -71,11 +71,11 @@ const Releases: React.FC = () => {
   useEffect(() => {
     const fetchOngoings = async () => {
       try {
-        const { data } = await getOngoingsList();
+        const result = await getOngoingsList();
         const uniqueAnimeMap: Record<string, OngoingData[]> = {};
 
-        data.results.forEach((item: OngoingData) => {
-          const title = item.material_data.title;
+        result.forEach((item: OngoingData) => {
+          const title = item.title;
           if (!uniqueAnimeMap[title]) {
             uniqueAnimeMap[title] = [];
           }
@@ -85,8 +85,8 @@ const Releases: React.FC = () => {
         const uniqueOngoings: OngoingData[] = Object.values(uniqueAnimeMap)
           .flat()
           .filter((value, index, self) => {
-            const titles = self.map((item) => item.material_data.title);
-            return titles.indexOf(value.material_data.title) === index;
+            const titles = self.map((item) => item.title);
+            return titles.indexOf(value.title) === index;
           });
 
         const sortedOngoings = uniqueOngoings
@@ -105,7 +105,7 @@ const Releases: React.FC = () => {
 
           const updatedSeries = await Promise.all(
             series.map(async (item) => {
-              const isFavorite = await getFavorite(item.material_data.title);
+              const isFavorite = await getFavorite(item.title);
               return { ...item, isFavorite };
             })
           );

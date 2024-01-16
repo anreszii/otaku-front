@@ -1,16 +1,27 @@
 import { View, Text, StyleSheet, SafeAreaView } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import Button from "../components/ui/Button";
 import Typography from "../components/ui/Typography";
 import { StackActions, useNavigation } from "@react-navigation/native";
 import Container from "../components/Layouts/Container";
 import { ImageBackground } from "expo-image";
+import { StatusBar } from "expo-status-bar";
+import { LinearGradient } from "expo-linear-gradient";
+import HeaderLang from "../components/Layouts/HeaderLang";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Welcome() {
   const navigation = useNavigation<any>();
+  const [lang, setLang] = useState<string>("russian");
+
+  const getStarted = async () => {
+    await AsyncStorage.setItem("lang", lang);
+    navigation.navigate("SignIn");
+  };
 
   return (
     <View style={styles.container}>
+      <HeaderLang lang={lang} setLang={setLang} />
       <ImageBackground
         contentFit="cover"
         style={styles.imageBackground}
@@ -33,7 +44,7 @@ export default function Welcome() {
               every day
             </Typography>
             <Button
-              onPress={() => navigation.navigate("SignIn")}
+              onPress={() => getStarted()}
               title="Get Started"
               style={{ marginBottom: 24 }}
             />

@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
 import userService from "../api/user/userService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
@@ -28,6 +27,7 @@ import PremiumBadge from "../components/Profile/PremiumBadge";
 import { ChangeAvatar } from "../components/Profile/ChangeAvatar";
 import {
   NavigationProp,
+  useFocusEffect,
   useNavigation,
   useRoute,
 } from "@react-navigation/native";
@@ -66,17 +66,20 @@ const Profile = () => {
 
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
-  useEffect(() => {
-    (async () => {
-      const id: any = await AsyncStorage.getItem("id");
-      const userData: IUser = (await userService.getUser(id)).data;
-      setUser(userData);
-      setAvatar(!!userData.avatar ? userData.avatar : null);
-      const lang: any = await AsyncStorage.getItem("lang");
-      setLang(lang?.charAt(0).toUpperCase() + lang?.slice(1));
-      setIsLoading(false);
-    })();
-  }, [route]);
+  useFocusEffect(
+    useCallback(() => {
+      (async () => {
+        setIsLoading(true);
+        const id: any = await AsyncStorage.getItem("id");
+        const userData: IUser = (await userService.getUser(id)).data;
+        setUser(userData);
+        setAvatar(!!userData.avatar ? userData.avatar : null);
+        const lang: any = await AsyncStorage.getItem("lang");
+        setLang(lang?.charAt(0).toUpperCase() + lang?.slice(1));
+        setIsLoading(false);
+      })();
+    }, [route])
+  );
 
   return (
     <>

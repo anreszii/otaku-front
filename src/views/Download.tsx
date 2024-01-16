@@ -87,9 +87,9 @@ export default function Download({ route }: any) {
               style={styles.content}
               showsVerticalScrollIndicator={false}
             >
-              {downloads.map((item) => (
+              {downloads.map((item, index) => (
                 <TouchableOpacity
-                  key={item.video_url}
+                  key={index}
                   style={styles.downloadItem}
                   onPress={() => handlePlay(item.title)}
                 >

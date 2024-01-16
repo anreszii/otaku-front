@@ -86,9 +86,8 @@ const ReleaseItem: React.FC<ReleaseItemProps> = ({
 
         <View style={commonStyles.column}>
           <Typography>
-            {seriesItem.material_data.anime_title.length > 50
-              ? seriesItem.material_data.anime_title.substring(0, 50) + "..."
-              : seriesItem.material_data.anime_title}
+            {seriesItem.material_data.anime_title.substring(0, 50) +
+              (seriesItem.material_data.anime_title.length <= 50 ? "" : "...")}
           </Typography>
           <Typography>
             {seriesItem.material_data.episodes_aired + 1} Episode
