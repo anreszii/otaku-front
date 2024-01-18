@@ -23,6 +23,8 @@ import CompleteModal from "../components/Modals/CompleteModal";
 import authService from "../api/auth/authService";
 import TypographyError from "../components/ui/TypographyError";
 import { Image } from "expo-image";
+import { useTranslation } from "react-i18next";
+import { i18n } from "../plugins/i18n";
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState<any>(false);
@@ -33,12 +35,15 @@ export default function SignUp() {
     email: "",
     username: "",
     password: "",
-    phoneNumber: "",
+    phoneNumber: "+79459494",
   });
   const [interests, setInterests] = useState<any[]>([]);
   const [visible, setVisible] = useState(false);
   const [error, setError] = useState<any>(null);
+  const lang = i18n.language;
+
   const navigation = useNavigation<any>();
+  const { t } = useTranslation();
 
   const handleGradient = (title: any) => {
     badges[badges.findIndex((el) => el.title === title)].focus =
@@ -91,11 +96,11 @@ export default function SignUp() {
               contentFit="contain"
             />
             <Typography style={styles.title} type="title">
-              Create Your Account
+              {t("screens.signUp.title")}
             </Typography>
             <Input
               styleInput={{ marginTop: 13 }}
-              label="Username"
+              label={t("inputs.labels.username")}
               value={user.username}
               onChangeText={(value: any) => {
                 setUser({ ...user, username: value });
@@ -104,7 +109,7 @@ export default function SignUp() {
             />
             <Input
               styleInput={{ marginTop: 13 }}
-              label="Password"
+              label={t("inputs.labels.password.title")}
               left={
                 <TextInput.Icon disabled icon={() => <Lock style={{}} />} />
               }
@@ -126,7 +131,7 @@ export default function SignUp() {
               }
             />
             <Button
-              title="Sign Up"
+              title={t("buttons.signUp")}
               onPress={() => sendPreRegistration()}
               style={styles.button}
             />
@@ -134,12 +139,12 @@ export default function SignUp() {
               <TypographyError error={error} style={{ marginTop: 15 }} />
             )}
             <View style={styles.signContainer}>
-              <Typography type="sub" style={styles.haveAcc}>
-                Already have an account?
+              <Typography type="regular" style={styles.haveAcc}>
+                {t("screens.signUp.already")}
               </Typography>
               <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
-                <Typography type="button" gradient={true} style={styles.signUp}>
-                  Sign In
+                <Typography type="bold" gradient={true} style={styles.signUp}>
+                  {t("screens.signUp.signIn")}
                 </Typography>
               </TouchableOpacity>
             </View>
@@ -147,8 +152,8 @@ export default function SignUp() {
         )}
         {stage === 2 && (
           <ScrollView showsVerticalScrollIndicator={false}>
-            <Typography type="sub" style={styles.titleTwo}>
-              Choose your interests and get the best anime recommendations.
+            <Typography type="regular" style={styles.titleTwo}>
+              {t("screens.signUp.choose")}
             </Typography>
             <View style={styles.badgesContainer}>
               {badges.map((item) => (
@@ -157,17 +162,23 @@ export default function SignUp() {
                   onPress={() => handleGradient(item.title)}
                   style={styles.badge}
                 >
-                  <Bagde title={item.title} gradient={item.focus} />
+                  <Bagde
+                    title={lang === "en" ? item.title : item.ru_title}
+                    gradient={item.focus}
+                  />
                 </TouchableOpacity>
               ))}
             </View>
-            <Button onPress={() => setStage(stage + 1)} title="Continue" />
+            <Button
+              onPress={() => setStage(stage + 1)}
+              title={t("buttons.сontinue")}
+            />
           </ScrollView>
         )}
         {stage === 3 && (
           <>
             <HeaderBackStage
-              title="Fill Your Profile"
+              title={t("headerTitles.signUpFill")}
               stage={stage}
               setStage={setStage}
             />
@@ -175,25 +186,16 @@ export default function SignUp() {
               <View style={{ marginTop: 12 }}></View>
               <ChangeAvatar avatar={avatar} setAvatar={setAvatar} />
               <Input
-                label="Email"
-                styleInput={{ marginTop: 13 }}
+                label={t("inputs.labels.email")}
+                styleInput={{ marginTop: 24 }}
                 value={user.email}
                 onChangeText={(value: any) => {
                   setUser({ ...user, email: value });
                   setError(null);
                 }}
               />
-              <Input
-                label="Phone Number"
-                keyboardType="phone-pad"
-                styleInput={{ marginTop: 13 }}
-                value={user.phoneNumber}
-                onChangeText={(value: any) =>
-                  setUser({ ...user, phoneNumber: value })
-                }
-              />
               <Button
-                title="Continue"
+                title={t("buttons.сontinue")}
                 style={styles.button}
                 onPress={() => sendRegistration()}
               />

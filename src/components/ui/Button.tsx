@@ -33,7 +33,7 @@ const Button: React.FC<ButtonProps> = ({
       colors={["#7210FF", "#9D59FF"]}
       style={styles.container}
     >
-      <Typography type="button" style={{ ...styles.buttonTitle, ...styleText }}>
+      <Typography type="bold" style={{ ...styles.buttonTitle, ...styleText }}>
         {title}
       </Typography>
     </LinearGradient>
@@ -42,7 +42,7 @@ const Button: React.FC<ButtonProps> = ({
   const OutlinedButton = () => (
     <View style={styles.container}>
       <Typography
-        type="button"
+        type="bold"
         style={{ ...styles.buttonTitleOut, ...styleText }}
       >
         {title}

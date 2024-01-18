@@ -25,6 +25,7 @@ import {
 import authService from "../api/auth/authService";
 import TypographyError from "../components/ui/TypographyError";
 import { Image } from "expo-image";
+import { useTranslation } from "react-i18next";
 const { StatusBarManager } = NativeModules;
 
 export default function SignUp() {
@@ -34,19 +35,16 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState<any>(false);
   const [visible, setVisible] = useState(false);
   const [email, setEmail] = useState<any>("");
-  const [value, setValue] = useState<any>("");
+  const [value, setValue] = useState<string>("");
   const [newPassword, setNewPassword] = useState({
     onePass: "",
     twoPass: "",
   });
-  const [props, getCellOnLayoutHandler] = useClearByFocusCell({
-    value,
-    setValue,
-  });
   const [error, setError] = useState<any>(null);
-  const CELL_COUNT = 4;
-  const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [code, setCode] = useState<any>("");
+
+  const { t } = useTranslation();
+
   useEffect(() => {
     setSeconds(59);
   }, [stage]);
@@ -104,18 +102,21 @@ export default function SignUp() {
       <Container>
         {stage === 1 && (
           <>
-            <HeaderBack title="Forgot Password" style={{ marginLeft: 0 }} />
+            <HeaderBack
+              title={t("headerTitles.forgotPassword")}
+              style={{ marginLeft: 0 }}
+            />
             <Image
               source={require("../../assets/icon.png")}
               style={{ width: 113, height: 67 }}
               contentFit="contain"
             />
             <Typography style={styles.title} type="title">
-              Reset Your Password
+              {t("screens.resetPassword.title")}
             </Typography>
             <Input
               styleInput={{ marginTop: 13 }}
-              label="Mail"
+              label={t("inputs.labels.email")}
               left={
                 <TextInput.Icon disabled icon={() => <Mail style={{}} />} />
               }
@@ -127,7 +128,7 @@ export default function SignUp() {
             />
 
             <Button
-              title="Reset Password"
+              title={t("buttons.reset")}
               onPress={() => sendEmailCode()}
               style={styles.button}
             />
@@ -139,47 +140,45 @@ export default function SignUp() {
         {stage === 2 && (
           <>
             <HeaderBackStage
-              title="Forgot Password"
+              title={t("headerTitles.forgotPassword")}
               stage={stage}
               setStage={setStage}
             />
-            <Typography type="sub" style={styles.titleTwo}>
-              Code has been send to{" "}
+            <Typography type="regular" style={styles.titleTwo}>
+              {t("screens.resetPassword.code")}{" "}
               {email.substr(0, 3) + "*****" + email.substr(-3)}
             </Typography>
-            <CodeInput
-              value={value}
-              setValue={setValue}
-              getCellOnLayoutHandler={getCellOnLayoutHandler}
-              CELL_COUNT={CELL_COUNT}
-              ref={ref}
-            />
+            <CodeInput code={value} setCode={setValue} />
             <View style={styles.resendContainer}>
               {seconds > 0 ? (
-                <Typography type="sub" style={styles.subtitleTwo}>
-                  Resend code in{" "}
+                <Typography type="regular" style={styles.subtitleTwo}>
+                  {t("screens.resetPassword.resendIn")}{" "}
                 </Typography>
               ) : (
                 <TouchableOpacity onPress={() => sendEmailCode()}>
                   <Typography
-                    type="sub"
+                    type="regular"
                     gradient={true}
                     style={styles.subtitleTwo}
                   >
-                    Resend code
+                    {t("screens.resetPassword.resend")}
                   </Typography>
                 </TouchableOpacity>
               )}
 
-              <Typography type="sub" gradient={true} style={styles.subtitleTwo}>
+              <Typography
+                type="regular"
+                gradient={true}
+                style={styles.subtitleTwo}
+              >
                 {seconds > 0 ? `${seconds}${" "}` : ""}
               </Typography>
-              <Typography type="sub" style={styles.subtitleTwo}>
+              <Typography type="regular" style={styles.subtitleTwo}>
                 {seconds > 0 ? `s` : ""}
               </Typography>
             </View>
             <Button
-              title="Verify"
+              title={t("buttons.verify")}
               onPress={() => sendCode()}
               style={styles.button}
             />
@@ -189,11 +188,11 @@ export default function SignUp() {
           <>
             <Image
               source={require("../../assets/acceptPhone.png")}
-              style={{ width: 414, height: 250 + StatusBarManager.HEIGHT }}
-              resizeMode="contain"
+              style={{ width: 414, height: "50%" }}
+              contentFit="contain"
             />
-            <Typography style={styles.titleThree} type="sub">
-              Reset Your Password
+            <Typography style={styles.titleThree} type="regular">
+              {t("screens.resetPassword.reset")}
             </Typography>
             <Input
               styleInput={{ marginTop: 10 }}
@@ -241,7 +240,7 @@ export default function SignUp() {
             />
 
             <Button
-              title="Continue"
+              title={t("buttons.сontinue")}
               onPress={() => resetPassword()}
               style={styles.button}
             />

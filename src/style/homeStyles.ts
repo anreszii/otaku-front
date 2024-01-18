@@ -104,7 +104,7 @@ const homeStyles = StyleSheet.create({
     width: "90%",
   },
   playButton: {
-    width: 81,
+    width: "100%",
     height: 40,
     marginTop: 8,
     marginRight: 12,
@@ -116,7 +116,7 @@ const homeStyles = StyleSheet.create({
     letterSpacing: 0.2,
   },
   listButton: {
-    width: 101,
+    width: "100%",
     height: 40,
     marginTop: 8,
   },
@@ -128,8 +128,8 @@ const homeStyles = StyleSheet.create({
     color: "#FFF",
   },
   buttonContainer: {
-    display: "flex",
     flexDirection: "row",
+    width: "35%",
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,

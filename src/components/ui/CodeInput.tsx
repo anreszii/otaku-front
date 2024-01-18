@@ -1,122 +1,81 @@
-import { View, Text, StyleSheet } from "react-native";
-import React from "react";
-import { CodeField, Cursor } from "react-native-confirmation-code-field";
-import { LinearGradient } from "expo-linear-gradient";
-import Typography from "./Typography";
+import React, { useState, useRef, FC } from "react";
+import { View, TextInput, StyleSheet, Alert } from "react-native";
+import Button from "./Button";
 
-export default function CodeInput({
-  value,
-  setValue,
-  getCellOnLayoutHandler,
-  CELL_COUNT,
-  ref,
-  ...props
-}: any) {
-  return (
-    <View>
-      <CodeField
-        ref={ref}
-        {...props}
-        value={value}
-        onChangeText={setValue}
-        cellCount={CELL_COUNT}
-        rootStyle={styles.codeFieldRoot}
-        keyboardType="number-pad"
-        textContentType="oneTimeCode"
-        renderCell={({ index, symbol, isFocused }) => (
-          <>
-            {isFocused ? (
-              <LinearGradient
-                key={index}
-                start={{ x: 1, y: 0 }}
-                end={{ x: 0, y: 1 }}
-                colors={["#7210FF", "#9D59FF"]}
-                style={
-                  index === 3
-                    ? {
-                        width: 40,
-                        height: 45,
-                        borderRadius: 25,
-                      }
-                    : {
-                        width: 40,
-                        height: 45,
-                        borderRadius: 25,
-                        marginRight: 16,
-                      }
-                }
-              >
-                <View
-                  style={{
-                    borderRadius: 25,
-                    flex: 1,
-                    margin: 2,
-                    backgroundColor: "#fff",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    paddingLeft: 14,
-                    paddingRight: 14,
-                  }}
-                >
-                  <Text style={styles.cell}>
-                    {symbol || (isFocused ? <Cursor /> : null)}
-                  </Text>
-                </View>
-              </LinearGradient>
-            ) : (
-              <View
-                key={index}
-                style={
-                  index === 3
-                    ? {
-                        borderRadius: 25,
-                        flex: 1,
-                        margin: 2,
-                        backgroundColor: "#fff",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        paddingLeft: 14,
-                        paddingRight: 14,
-                        paddingTop: 5,
-                        width: 40,
-                        height: 45,
-                      }
-                    : {
-                        borderRadius: 25,
-                        flex: 1,
-                        margin: 2,
-                        backgroundColor: "#fff",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        paddingLeft: 14,
-                        paddingRight: 14,
-                        marginRight: 16,
-                        paddingTop: 5,
-                        width: 40,
-                        height: 45,
-                      }
-                }
-              >
-                <Text style={styles.cell}>
-                  {symbol || (isFocused ? <Cursor /> : null)}
-                </Text>
-              </View>
-            )}
-          </>
-        )}
-      />
-    </View>
-  );
+interface CodeInputProps {
+  code: string;
+  setCode: React.Dispatch<React.SetStateAction<string>>;
 }
 
+const CodeInput: FC<CodeInputProps> = ({ code, setCode }) => {
+  const codeInputs = Array(4).fill(0);
+  const codeInputRefs = codeInputs.map(() => useRef<any>(null));
+
+  const handleCodeChange = (index: any, value: any) => {
+    setCode((prevCode) => {
+      const newCode = prevCode.split("");
+      newCode[index] = value;
+
+      return newCode.join("");
+    });
+
+    if (value === "" && index > 0) {
+      codeInputRefs[index - 1].current.focus();
+    } else if (index < codeInputs.length - 1 && value !== "") {
+      codeInputRefs[index + 1].current.focus();
+    }
+  };
+
+  const handleCodeKeyPress = (index: any, event: any) => {
+    if (event.nativeEvent.key === "Backspace" && index > 0) {
+      codeInputRefs[index - 1].current.focus();
+    } else if (
+      index < codeInputs.length - 1 &&
+      event.nativeEvent.key !== "Backspace"
+    ) {
+      codeInputRefs[index + 1].current.focus();
+    }
+  };
+
+  const handleCodeInput = () => {
+    Alert.alert("Введенный код:", code);
+  };
+
+  return (
+    <View style={styles.container}>
+      {codeInputs.map((_, index) => (
+        <TextInput
+          key={index}
+          ref={codeInputRefs[index]}
+          style={styles.codeInput}
+          keyboardType="numeric"
+          maxLength={1}
+          onChangeText={(value) => handleCodeChange(index, value)}
+          onKeyPress={(event) => handleCodeKeyPress(index, event)}
+        />
+      ))}
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
-  codeFieldRoot: { marginTop: 20, marginBottom: 20 },
-  cell: {
+  container: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  codeInput: {
     width: 40,
-    height: 45,
-    lineHeight: 38,
-    fontSize: 24,
+    height: 40,
+    borderWidth: 1,
+    borderRadius: 8,
+    margin: 5,
     textAlign: "center",
-    borderRadius: 25,
+    fontSize: 18,
+  },
+  submitButtonContainer: {
+    marginTop: 20,
   },
 });
+
+export default CodeInput;

@@ -5,6 +5,7 @@ import Typography from "../ui/Typography";
 import Button from "../ui/Button";
 import { ProgressBar } from "react-native-paper";
 import CircleProgress from "../ui/CircleProgress";
+import { useTranslation } from "react-i18next";
 
 interface PrepareDownloadProps {
   visible: boolean;
@@ -17,6 +18,8 @@ export default function PrepareDownload({
   setVisible,
   episodeNumber,
 }: PrepareDownloadProps) {
+  const { t } = useTranslation();
+
   return (
     <Modal
       visible={visible}
@@ -27,18 +30,19 @@ export default function PrepareDownload({
     >
       <View style={styles.container}>
         <Typography type="title" gradient={true} style={styles.title}>
-          Prepare
+          {t("modals.title.prepare")}
         </Typography>
-        <Typography style={styles.subtitle}>
-          Episode {episodeNumber} is being prepared for download... Please wait
-          or hide the process
+        <Typography style={styles.subtitle} type="regular">
+          {t("modals.subtitle.prepareDownload.prepareDownloadFirst")}{" "}
+          {episodeNumber}{" "}
+          {t("modals.subtitle.prepareDownload.prepareDownloadSecond")}
         </Typography>
         <View style={{ marginBottom: 24 }}>
           <CircleProgress />
         </View>
         <View style={{ width: 200, height: 60 }}>
           <Button
-            title="Спрятать"
+            title={t("buttons.hide")}
             gradient={false}
             onPress={() => setVisible(false)}
           />

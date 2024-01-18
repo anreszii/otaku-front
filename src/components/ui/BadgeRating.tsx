@@ -26,7 +26,7 @@ const BagdeRating: React.FC<BagdeRatingProps> = ({ title, style }) => {
       style={containerStyle}
     >
       <View>
-        <Typography type="button" style={styles.titleGradient}>
+        <Typography type="bold" style={styles.titleGradient}>
           {title}
         </Typography>
       </View>

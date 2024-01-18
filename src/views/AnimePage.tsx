@@ -22,7 +22,6 @@ import DownloadModal from "../components/Modals/DownloadModal";
 import DownloadErrorModal from "../components/Modals/DownloadErrorModal";
 import { useNavigation } from "@react-navigation/native";
 import * as ScreenOrientation from "expo-screen-orientation";
-import axios from "axios";
 import { ImageBackground } from "expo-image";
 import ChoiceEpisodeModal from "../components/Modals/ChoiceEpisodeModal";
 import ChoiceVoiceModal from "../components/Modals/ChoiceVoiceModal";
@@ -30,6 +29,12 @@ import { getAllVoiceAnime } from "../api/kodik/getAllVoiceAnime";
 import { searchAnimeWithVoice } from "../api/kodik/searchAnimeWithVoice";
 import PrepareDownload from "../components/Modals/PrepareDownload";
 import ChoiceQualityModal from "../components/Modals/ChoiceQualityVideo";
+import { useNetwork } from "../providers/NetworkContext";
+import DownloadInternet from "../components/Modals/DownloadInternet";
+import { i18n } from "../plugins/i18n";
+import { t } from "i18next";
+import data from "../data/interests.json";
+import dataRegion from "../data/region.json";
 
 export default function AnimePage({ route }: any) {
   const [animeInfo, setAnimeInfo] = useState<any>(null);
@@ -40,6 +45,7 @@ export default function AnimePage({ route }: any) {
   const [visibleChoiseVoice, setVisibleChoiseVoice] = useState(false);
   const [visiblePrepare, setVisiblePrepare] = useState(false);
   const [visibleQuality, setVisibleQuality] = useState(false);
+  const [visibleWiFi, setVisibleWiFi] = useState(false);
   const [mb, setMB] = useState(1);
   const [allMB, setAllMB] = useState(1);
   const [episodeArray, setEpisodeArray] = useState<any[]>([]);
@@ -48,7 +54,9 @@ export default function AnimePage({ route }: any) {
   const [valueEpisode, setValueEpisode] = useState<string>("");
   const [valueQuality, setValueQuality] = useState<string>("");
   const [flag, setFlag] = useState(false);
+  const { networkType } = useNetwork();
   const navigation = useNavigation<any>();
+  const lang = i18n.language;
 
   useEffect(() => {
     (async () => {
@@ -65,7 +73,6 @@ export default function AnimePage({ route }: any) {
         : route.params.title;
       const res: any = await searchAnimeWithEpisodes(title);
       const id: any = await AsyncStorage.getItem("id");
-      console.log(title, res);
       // const { data } = await axios.get(
       //   `https://shikimori.one/api/animes/${animeID}`
       // );
@@ -163,8 +170,13 @@ export default function AnimePage({ route }: any) {
     }
   };
 
-  const handlePreDownload = () => {
-    setVisibleChoiseVoice(true);
+  const handlePreDownload = async () => {
+    const settingWiFi = await AsyncStorage.getItem("downloadWiFi");
+    if (settingWiFi === "true" && networkType === "cellular") {
+      setVisibleWiFi(true);
+    } else {
+      setVisibleChoiseVoice(true);
+    }
   };
 
   const handleDownload = async () => {
@@ -221,6 +233,7 @@ export default function AnimePage({ route }: any) {
           ...JSON.parse(downloadsArray),
           {
             title: animeInfo?.title,
+            title_en: animeInfo?.material_data?.title_en,
             displayTitle: animeInfo?.material_data?.anime_title,
             image: animeInfo?.material_data?.screenshots?.length
               ? animeInfo?.material_data?.screenshots[0]
@@ -243,6 +256,7 @@ export default function AnimePage({ route }: any) {
         JSON.stringify([
           {
             title: animeInfo?.title,
+            title_en: animeInfo?.material_data?.title_en,
             displayTitle: animeInfo?.material_data?.anime_title,
             image: animeInfo?.material_data?.screenshots?.length
               ? animeInfo?.material_data?.screenshots[0]
@@ -288,7 +302,31 @@ export default function AnimePage({ route }: any) {
       )
     ),
   ].filter((genre: string) => !["аниме", "мультфильм"].includes(genre));
-  const genres = filteredGenres.join(", ");
+  const objectGenres = filteredGenres
+    .map((item: any) => {
+      return data.find(
+        (el) => el.ru_title.toLowerCase() === item.toLowerCase()
+      );
+    })
+    .filter((item) => item !== undefined);
+  const genres = objectGenres
+    .map((el: any) => (lang === "en" ? el.title : el.ru_title))
+    .join(", ")
+    .substring(0, filteredGenres.join(", ").length);
+  const objectCountry = dataRegion.find((el) => {
+    if (!!animeInfo?.material_data?.countries) {
+      return (
+        el.ru_title.toLowerCase() ===
+        animeInfo?.material_data?.countries[0]?.toLowerCase()
+      );
+    }
+  });
+  const country =
+    objectCountry === undefined
+      ? false
+      : lang === "en"
+      ? objectCountry?.title
+      : objectCountry?.ru_title;
 
   return (
     <>
@@ -312,7 +350,9 @@ export default function AnimePage({ route }: any) {
                 loop
                 delay={4000}
               >
-                {animeInfo.material_data.anime_title}
+                {lang === "en"
+                  ? animeInfo.material_data.title_en
+                  : animeInfo.material_data.anime_title}
               </MarqueeText>
               <TouchableOpacity onPress={() => handleFavorite()}>
                 {animeInfo.isFavorite ? <Text>✓</Text> : <List />}
@@ -324,30 +364,28 @@ export default function AnimePage({ route }: any) {
             <View style={styles.content}>
               <View style={styles.ratingContent}>
                 <Star />
-                <Typography gradient={true}>
-                  {animeInfo.material_data.shikimori_rating
-                    ? animeInfo.material_data.shikimori_rating
-                    : "Нет оценки"}
+                <Typography gradient={true} type="semibold">
+                  {animeInfo.material_data.shikimori_rating}
                 </Typography>
                 <TouchableOpacity>
                   <ArrowGradient />
                 </TouchableOpacity>
               </View>
-              <Typography>{animeInfo.year}</Typography>
+              <Typography type="semibold">{animeInfo.year}</Typography>
               {!!animeInfo.material_data.rating_mpaa && (
-                <OutlineTypography type="button" style={styles.infoTitle}>
+                <OutlineTypography type="semibold" style={styles.infoTitle}>
                   {animeInfo.material_data.rating_mpaa}
                 </OutlineTypography>
               )}
               {animeInfo?.material_data?.countries?.length && (
-                <OutlineTypography type="button" style={styles.infoTitle}>
-                  {animeInfo?.material_data?.countries[0]}
+                <OutlineTypography type="semibold" style={styles.infoTitle}>
+                  {country}
                 </OutlineTypography>
               )}
             </View>
             <View style={styles.content}>
               <Button
-                title="Play"
+                title={t("buttons.play")}
                 onPress={() =>
                   navigation.navigate("Player", {
                     creature: !!route.params.creature
@@ -358,14 +396,16 @@ export default function AnimePage({ route }: any) {
                 style={styles.button}
               />
               <Button
-                title="Download"
+                title={t("buttons.download")}
                 onPress={() => handlePreDownload()}
                 gradient={false}
                 style={styles.button}
               />
             </View>
             <View style={styles.content}>
-              <Typography>Genre: {genres}</Typography>
+              <Typography type="medium">
+                {t("screens.animePage.labels.genre")} {genres}
+              </Typography>
             </View>
 
             {!!animeInfo?.material_data?.anime_description ||
@@ -373,7 +413,7 @@ export default function AnimePage({ route }: any) {
               <View style={styles.content}>
                 {showsFullDesc ? (
                   <TouchableOpacity onPress={() => handleShowsDesc()}>
-                    <Typography>
+                    <Typography type="medium">
                       {!!animeInfo?.material_data?.anime_description
                         ? animeInfo.material_data.anime_description
                         : animeInfo.material_data.description}
@@ -381,7 +421,7 @@ export default function AnimePage({ route }: any) {
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity onPress={() => handleShowsDesc()}>
-                    <Typography>
+                    <Typography type="medium">
                       {!!animeInfo?.material_data?.anime_description
                         ? animeInfo.material_data.anime_description.substring(
                             0,
@@ -440,7 +480,7 @@ export default function AnimePage({ route }: any) {
                               left: 12,
                             }}
                           >
-                            <Typography style={{ color: "#fff" }}>
+                            <Typography style={{ color: "#fff" }} type="medium">
                               Episode {index + 1}
                             </Typography>
                           </View>
@@ -481,12 +521,15 @@ export default function AnimePage({ route }: any) {
                       left: 12,
                     }}
                   >
-                    <Typography style={{ color: "#fff" }}>Episode 1</Typography>
+                    <Typography style={{ color: "#fff" }} type="medium">
+                      Episode 1
+                    </Typography>
                   </View>
                 </ImageBackground>
               </>
             )}
           </ScrollView>
+          <DownloadInternet visible={visibleWiFi} setVisible={setVisibleWiFi} />
           <ChoiceEpisodeModal
             visible={visibleChoice}
             setVisible={setVisibleChoice}
@@ -566,7 +609,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   infoTitle: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: "600",
     letterSpacing: 0.2,
   },

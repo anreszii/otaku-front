@@ -8,16 +8,13 @@ import {
 import React, { FC, useEffect, useState } from "react";
 import Typography from "../ui/Typography";
 import Bagde from "../ui/Bagde";
-
-interface BadgePropsWithRu {
-  title: string;
-  ru_title: string;
-  focus: boolean;
-}
+import { useTranslation } from "react-i18next";
+import { i18n } from "../../plugins/i18n";
 
 interface BadgeProps {
   title: string;
   focus: boolean;
+  ru_title: string;
 }
 
 interface searchFilterProps {
@@ -32,8 +29,8 @@ interface FilterProps {
   setCategories: React.Dispatch<React.SetStateAction<BadgeProps[]>>;
   region: BadgeProps[];
   setRegion: React.Dispatch<React.SetStateAction<BadgeProps[]>>;
-  genre: BadgePropsWithRu[];
-  setGenre: React.Dispatch<React.SetStateAction<BadgePropsWithRu[]>>;
+  genre: BadgeProps[];
+  setGenre: React.Dispatch<React.SetStateAction<BadgeProps[]>>;
   releaseYear: BadgeProps[];
   setReleaseYear: React.Dispatch<React.SetStateAction<BadgeProps[]>>;
 }
@@ -52,6 +49,8 @@ const Filter: FC<FilterProps> = ({
 }) => {
   const [seeAllGenre, setSeeAllGenre] = useState(false);
   const [seeAllYear, setSeeAllYear] = useState(false);
+  const lang = i18n.language;
+  const { t } = useTranslation();
 
   useEffect(() => {
     const nowYear = new Date().getFullYear();
@@ -62,6 +61,7 @@ const Filter: FC<FilterProps> = ({
         {
           title: index === 0 ? "All" : String(nowYear - index + 1),
           focus: index === 0 ? true : false,
+          ru_title: index === 0 ? "Все" : String(nowYear - index + 1),
         },
       ];
     });
@@ -153,7 +153,7 @@ const Filter: FC<FilterProps> = ({
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.filterItem}>
         <Typography style={styles.filterTitle} type="title">
-          Categories
+          {t("screens.search.filter.categoriesTitle")}
         </Typography>
         <View style={styles.filterContent}>
           {categories.map((item, index) => (
@@ -163,14 +163,17 @@ const Filter: FC<FilterProps> = ({
               onPress={() => handleGradient(item.title, "categories")}
               disabled={item.focus}
             >
-              <Bagde title={item.title} gradient={item.focus} />
+              <Bagde
+                title={lang === "en" ? item.title : item.ru_title}
+                gradient={item.focus}
+              />
             </TouchableOpacity>
           ))}
         </View>
       </View>
       <View style={styles.filterItem}>
         <Typography style={styles.filterTitle} type="title">
-          Region
+          {t("screens.search.filter.regionTitle")}
         </Typography>
         <View style={styles.filterContent}>
           {region.map((item, index) => (
@@ -180,7 +183,10 @@ const Filter: FC<FilterProps> = ({
               onPress={() => handleGradient(item.title, "region")}
               disabled={item.focus}
             >
-              <Bagde title={item.title} gradient={item.focus} />
+              <Bagde
+                title={lang === "en" ? item.title : item.ru_title}
+                gradient={item.focus}
+              />
             </TouchableOpacity>
           ))}
         </View>
@@ -188,11 +194,15 @@ const Filter: FC<FilterProps> = ({
       <View style={styles.filterItem}>
         <View style={styles.seeAllHeader}>
           <Typography style={styles.filterTitle} type="title">
-            Genre
+            {t("screens.search.filter.genreTitle")}
           </Typography>
           <TouchableOpacity onPress={() => setSeeAllGenre(!seeAllGenre)}>
-            <Typography gradient={true} style={styles.seeAllTitle}>
-              See All
+            <Typography
+              gradient={true}
+              style={styles.seeAllTitle}
+              type="semibold"
+            >
+              {t("screens.search.filter.seeAll")}
             </Typography>
           </TouchableOpacity>
         </View>
@@ -205,7 +215,10 @@ const Filter: FC<FilterProps> = ({
                   style={styles.badge}
                   onPress={() => handleGradient(item.title, "genre")}
                 >
-                  <Bagde title={item.title} gradient={item.focus} />
+                  <Bagde
+                    title={lang === "en" ? item.title : item.ru_title}
+                    gradient={item.focus}
+                  />
                 </TouchableOpacity>
               ) : (
                 <>
@@ -215,7 +228,10 @@ const Filter: FC<FilterProps> = ({
                       style={styles.badge}
                       onPress={() => handleGradient(item.title, "genre")}
                     >
-                      <Bagde title={item.title} gradient={item.focus} />
+                      <Bagde
+                        title={lang === "en" ? item.title : item.ru_title}
+                        gradient={item.focus}
+                      />
                     </TouchableOpacity>
                   )}
                 </>
@@ -227,11 +243,15 @@ const Filter: FC<FilterProps> = ({
       <View style={styles.filterItem}>
         <View style={styles.seeAllHeader}>
           <Typography style={styles.filterTitle} type="title">
-            Release Year
+            {t("screens.search.filter.releaseYearTitle")}
           </Typography>
           <TouchableOpacity onPress={() => setSeeAllYear(!seeAllYear)}>
-            <Typography gradient={true} style={styles.seeAllTitle}>
-              See All
+            <Typography
+              gradient={true}
+              style={styles.seeAllTitle}
+              type="semibold"
+            >
+              {t("screens.search.filter.seeAll")}
             </Typography>
           </TouchableOpacity>
         </View>
@@ -245,7 +265,10 @@ const Filter: FC<FilterProps> = ({
                   onPress={() => handleGradient(item.title, "year")}
                   disabled={item.focus}
                 >
-                  <Bagde title={item.title} gradient={item.focus} />
+                  <Bagde
+                    title={lang === "en" ? item.title : item.ru_title}
+                    gradient={item.focus}
+                  />
                 </TouchableOpacity>
               ) : (
                 <>
@@ -256,7 +279,10 @@ const Filter: FC<FilterProps> = ({
                       onPress={() => handleGradient(item.title, "year")}
                       disabled={item.focus}
                     >
-                      <Bagde title={item.title} gradient={item.focus} />
+                      <Bagde
+                        title={lang === "en" ? item.title : item.ru_title}
+                        gradient={item.focus}
+                      />
                     </TouchableOpacity>
                   )}
                 </>

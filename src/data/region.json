@@ -1,5 +1,5 @@
 [
-  { "title": "All", "focus": true },
-  { "title": "Japan", "focus": false },
-  { "title": "Chinese", "focus": false }
+  { "title": "All", "ru_title": "Все", "focus": true },
+  { "title": "Japan", "ru_title": "Япония", "focus": false },
+  { "title": "Chinese", "ru_title": "Китай", "focus": false }
 ]

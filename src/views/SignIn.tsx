@@ -19,6 +19,7 @@ import Container from "../components/Layouts/Container";
 import authService from "../api/auth/authService";
 import TypographyError from "../components/ui/TypographyError";
 import { Image } from "expo-image";
+import { t } from "i18next";
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState<any>(false);
@@ -54,11 +55,11 @@ export default function SignIn() {
           contentFit="contain"
         />
         <Typography style={styles.title} type="title">
-          Login to Your Account
+          {t("screens.signIn.title")}
         </Typography>
         <Input
-          styleInput={{ marginTop: 13 }}
-          label="Username"
+          styleInput={{ marginTop: 24 }}
+          label={t("inputs.labels.username")}
           value={user.username}
           onChangeText={(value: string) => {
             setUser({ ...user, username: value });
@@ -67,7 +68,7 @@ export default function SignIn() {
         />
         <Input
           styleInput={{ marginTop: 13 }}
-          label="Password"
+          label={t("inputs.labels.password.title")}
           left={<TextInput.Icon disabled icon={() => <Lock style={{}} />} />}
           right={
             <TextInput.Icon
@@ -88,23 +89,23 @@ export default function SignIn() {
           }}
         />
         <Button
-          title="Sign In"
+          title={t("buttons.signIn")}
           style={styles.button}
           onPress={async () => await setToken()}
         />
         {error && <TypographyError error={error} style={{ marginTop: 15 }} />}
         <TouchableOpacity onPress={() => navigation.navigate("Forgot")}>
-          <Typography type="button" gradient={true} style={styles.forgotPass}>
-            Forgot the password?
+          <Typography type="bold" gradient={true} style={styles.forgotPass}>
+            {t("screens.signIn.forgot")}
           </Typography>
         </TouchableOpacity>
         <View style={styles.signContainer}>
-          <Typography type="sub" style={styles.haveAcc}>
-            Don’t have an account?
+          <Typography type="regular" style={styles.haveAcc}>
+            {t("screens.signIn.dontHave")}
           </Typography>
           <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-            <Typography type="button" gradient={true} style={styles.signUp}>
-              Sign Up
+            <Typography type="bold" gradient={true} style={styles.signUp}>
+              {t("screens.signIn.signUp")}
             </Typography>
           </TouchableOpacity>
         </View>

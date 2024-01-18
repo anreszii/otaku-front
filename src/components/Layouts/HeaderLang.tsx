@@ -9,6 +9,7 @@ import Typography from "../ui/Typography";
 import { LinearGradient } from "expo-linear-gradient";
 import Vr from "../ui/Vr";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { i18n } from "../../plugins/i18n";
 const { StatusBarManager } = NativeModules;
 
 interface HeaderProps {
@@ -24,6 +25,8 @@ const HeaderLang: React.FC<HeaderProps> = ({ style, lang, setLang }) => {
 
   const handleLang = async (lang: string) => {
     setLang(lang);
+    console.log(lang);
+    i18n.changeLanguage(lang === "russian" ? "ru" : "en");
   };
 
   return (
@@ -40,7 +43,7 @@ const HeaderLang: React.FC<HeaderProps> = ({ style, lang, setLang }) => {
       <TouchableOpacity onPress={() => handleLang("russian")}>
         <Typography
           style={{ ...styles.ruLang, fontSize: lang === "russian" ? 20 : 16 }}
-          type="button"
+          type="bold"
         >
           ru
         </Typography>
@@ -49,7 +52,7 @@ const HeaderLang: React.FC<HeaderProps> = ({ style, lang, setLang }) => {
       <TouchableOpacity onPress={() => handleLang("english")}>
         <Typography
           style={{ ...styles.enLang, fontSize: lang === "english" ? 20 : 16 }}
-          type="button"
+          type="bold"
         >
           en
         </Typography>

@@ -24,6 +24,7 @@ import HeaderInput from "../components/Layouts/HeaderInput";
 import { FlatList } from "react-native-gesture-handler";
 import { backgroundColors } from "../constants/colors";
 import { useFocusEffect } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 
 interface FavoriteItem {
   poster: string;
@@ -36,6 +37,8 @@ export default function List({ route }: any) {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [isSearch, setIsSearch] = useState(false);
+
+  const { t } = useTranslation();
 
   const filterData = () => {
     return favoriteList.filter((item) =>
@@ -96,7 +99,7 @@ export default function List({ route }: any) {
             />
           ) : (
             <Header
-              title="My List"
+              title={t("headerTitles.myList")}
               icon={<Search color="#000" />}
               onPress={() => setIsSearch(true)}
             />
@@ -130,10 +133,10 @@ export default function List({ route }: any) {
                   type="title"
                   style={styles.titleNone}
                 >
-                  Your List is Empty
+                  {t("screens.myList.noneList.title")}
                 </Typography>
-                <Typography style={styles.subtitleNone}>
-                  It seems that you haven't added any anime to the list
+                <Typography style={styles.subtitleNone} type="medium">
+                  {t("screens.myList.noneList.subtitle")}
                 </Typography>
               </View>
             </View>

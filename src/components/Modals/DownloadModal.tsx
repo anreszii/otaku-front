@@ -5,6 +5,7 @@ import Typography from "../ui/Typography";
 import Button from "../ui/Button";
 import { ProgressBar } from "react-native-paper";
 import Hr from "../ui/Hr";
+import { useTranslation } from "react-i18next";
 
 export default function DownloadModal({
   visible,
@@ -13,23 +14,25 @@ export default function DownloadModal({
   allMB = 0,
   episodeNumber,
 }: any) {
+  const { t } = useTranslation();
   return (
     <Modal visible={visible} setVisible={setVisible} animationType="fade" full>
       <View style={styles.container}>
         <Typography type="title" gradient={true} style={styles.title}>
-          Download
+          {t("modals.title.download")}
         </Typography>
-        <Typography style={styles.subtitle}>
-          Episode {episodeNumber} is still downloading... Please wait the
-          process
+        <Typography style={styles.subtitle} type="regular">
+          {t("modals.subtitle.episodeStillDownload.episodeStillDownloadFirst")}{" "}
+          {episodeNumber}{" "}
+          {t("modals.subtitle.episodeStillDownload.episodeStillDownloadSecond")}
         </Typography>
         <Hr />
         <View style={styles.wrapper}>
           <View style={styles.content}>
-            <Typography style={styles.subtitle} type="button">
+            <Typography style={styles.subtitle} type="bold">
               {Math.min(mb, allMB).toFixed(2)} / {allMB.toFixed(2)} MB
             </Typography>
-            <Typography style={styles.subtitle} gradient={true}>
+            <Typography style={styles.subtitle} gradient={true} type="bold">
               {Math.min((mb / allMB) * 100, 100).toFixed(2)}%
             </Typography>
           </View>

@@ -2,6 +2,7 @@ import { View, Text, SafeAreaView, StyleSheet, Switch } from "react-native";
 import React, { useState } from "react";
 import HeaderBack from "../components/Layouts/HeaderBack";
 import Typography from "../components/ui/Typography";
+import { useTranslation } from "react-i18next";
 
 export default function NotificationSettings() {
   const [generalNotif, setGeneralNotif] = useState(false);
@@ -9,12 +10,14 @@ export default function NotificationSettings() {
   const [newMovieNotif, setNewMovieNotif] = useState(false);
   const [appUpdateNotif, setAppUpdateNotif] = useState(false);
 
+  const { t } = useTranslation();
+
   return (
     <SafeAreaView style={styles.wrapper}>
-      <HeaderBack title="Notification" />
+      <HeaderBack title={t("headerTitles.notification")} />
       <View style={styles.container}>
         <View style={styles.content}>
-          <Typography style={styles.contentTitle}>
+          <Typography style={styles.contentTitle} type="semibold">
             General Notification
           </Typography>
           <Switch
@@ -25,7 +28,9 @@ export default function NotificationSettings() {
           />
         </View>
         <View style={styles.content}>
-          <Typography style={styles.contentTitle}>New Arrival</Typography>
+          <Typography style={styles.contentTitle} type="semibold">
+            New Arrival
+          </Typography>
           <Switch
             trackColor={{ false: "#EEEEEE", true: "#7210FF" }}
             ios_backgroundColor={"#EEEEEE"}
@@ -34,7 +39,7 @@ export default function NotificationSettings() {
           />
         </View>
         <View style={styles.content}>
-          <Typography style={styles.contentTitle}>
+          <Typography style={styles.contentTitle} type="semibold">
             New Releases Movie
           </Typography>
           <Switch
@@ -45,7 +50,9 @@ export default function NotificationSettings() {
           />
         </View>
         <View style={styles.content}>
-          <Typography style={styles.contentTitle}>App Updates</Typography>
+          <Typography style={styles.contentTitle} type="semibold">
+            App Updates
+          </Typography>
           <Switch
             trackColor={{ false: "#EEEEEE", true: "#7210FF" }}
             ios_backgroundColor={"#EEEEEE"}

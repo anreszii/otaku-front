@@ -34,7 +34,7 @@ export const commonStyles = StyleSheet.create({
     justifyContent: "space-between",
   },
   button: {
-    width: 80,
+    width: "70%",
     height: 25,
   },
   buttonText: {

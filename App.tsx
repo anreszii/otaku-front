@@ -8,6 +8,9 @@ import Intro from "./src/views/Intro";
 import { PrivateStackNavigator, PublicStackNavigator } from "./src/navigation";
 import * as Linking from "expo-linking";
 import * as ScreenOrientation from "expo-screen-orientation";
+import { NetworkProvider } from "./src/providers/NetworkContext";
+import { I18nextProvider } from "react-i18next";
+import { i18n } from "./src/plugins/i18n";
 
 LogBox.ignoreLogs([
   "Sending `onAnimatedValueUpdate` with no listeners registered.",
@@ -33,6 +36,8 @@ export default function App() {
       NeueHaasDisplay: require("./assets/fonts/NeueHaasDisplay-Medium.ttf"),
       UrbanistRegular: require("./assets/fonts/Urbanist-Regular.ttf"),
       UrbanistBold: require("./assets/fonts/Urbanist-Bold.ttf"),
+      UrbanistSemiBold: require("./assets/fonts/Urbanist-SemiBold.ttf"),
+      UrbanistMedium: require("./assets/fonts/Urbanist-Medium.ttf"),
     });
 
     const token = await AsyncStorage.getItem("token");
@@ -78,8 +83,12 @@ export default function App() {
   if (!appReady) return <Intro />;
 
   return (
-    <NavigationContainer linking={linking}>
-      {isToken ? <PrivateStackNavigator /> : <PublicStackNavigator />}
-    </NavigationContainer>
+    <I18nextProvider i18n={i18n}>
+      <NetworkProvider>
+        <NavigationContainer linking={linking}>
+          {isToken ? <PrivateStackNavigator /> : <PublicStackNavigator />}
+        </NavigationContainer>
+      </NetworkProvider>
+    </I18nextProvider>
   );
 }

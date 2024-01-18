@@ -3,11 +3,14 @@ import React from "react";
 import Typography from "../components/ui/Typography";
 import HeaderBack from "../components/Layouts/HeaderBack";
 import { Image } from "expo-image";
+import { useTranslation } from "react-i18next";
 
 export default function Nofitication() {
+  const { t } = useTranslation();
+
   return (
     <SafeAreaView style={styles.container}>
-      <HeaderBack title="Notification" />
+      <HeaderBack title={t("headerTitles.notification")} />
       <View style={styles.imageContent}>
         <Image
           source={require("../../assets/notifNone.png")}
@@ -15,10 +18,10 @@ export default function Nofitication() {
         />
         <View style={styles.noneTextContent}>
           <Typography gradient={true} type="title" style={styles.noneTitle}>
-            Your Notification is Empty
+            {t("screens.notification.noneNotification.title")}
           </Typography>
-          <Typography style={styles.noneSubtitle}>
-            They will be here very soon
+          <Typography style={styles.noneSubtitle} type="medium">
+            {t("screens.notification.noneNotification.subtitle")}
           </Typography>
         </View>
       </View>

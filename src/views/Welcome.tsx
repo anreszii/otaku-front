@@ -9,6 +9,7 @@ import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
 import HeaderLang from "../components/Layouts/HeaderLang";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { t } from "i18next";
 
 export default function Welcome() {
   const navigation = useNavigation<any>();
@@ -37,15 +38,14 @@ export default function Welcome() {
         >
           <View style={styles.content}>
             <Typography type="title" style={styles.title}>
-              Welcome to AniUp
+              {t("screens.welcome.title")}
             </Typography>
-            <Typography type="sub" style={styles.subtitle}>
-              The best streaming anime app of the{"\n"} century to entertain you
-              every day
+            <Typography type="regular" style={styles.subtitle}>
+              {t("screens.welcome.subtitle")}
             </Typography>
             <Button
               onPress={() => getStarted()}
-              title="Get Started"
+              title={t("buttons.getStarted")}
               style={{ marginBottom: 24 }}
             />
           </View>
@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
     lineHeight: 48,
     color: "#FFF",
     marginBottom: 24,
+    textAlign: "center",
   },
   subtitle: {
     fontSize: 18,
@@ -81,6 +82,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
     color: "#FFF",
     marginBottom: 24,
+    textAlign: "center",
   },
   content: {
     alignItems: "center",

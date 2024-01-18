@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Modal } from "../ui/Modal";
-import CircleProgress from "../ui/CircleProgress";
-import Typography from "../ui/Typography";
 import Input from "../ui/Input";
 import { TextInput } from "react-native-paper";
 import { EyeClose, EyeOpen, Lock } from "../../icons";
+import { useTranslation } from "react-i18next";
 
 export function EditPasswordModal({
   visible,
@@ -16,6 +15,7 @@ export function EditPasswordModal({
   setErrors,
 }: any) {
   const [showPassword, setShowPassword] = useState(false);
+  const { t } = useTranslation();
   return (
     <Modal
       visible={visible}
@@ -29,7 +29,7 @@ export function EditPasswordModal({
           <View style={styles.content}>
             <Input
               styleInput={styles.input}
-              label="Current Password"
+              label={t("screens.editProfile.labels.password.currPassword")}
               value={password.nowPass}
               onChangeText={(value: string) => {
                 setErrors(errors.filter((el: any) => el.param !== "password"));
@@ -53,7 +53,7 @@ export function EditPasswordModal({
             />
             <Input
               styleInput={styles.input}
-              label="New Password"
+              label={t("screens.editProfile.labels.password.newPassword")}
               value={password.onePass}
               onChangeText={(value: string) => {
                 setErrors(errors.filter((el: any) => el.param !== "password"));
@@ -77,7 +77,7 @@ export function EditPasswordModal({
             />
             <Input
               styleInput={styles.inputLast}
-              label="Repeat Password"
+              label={t("screens.editProfile.labels.password.repeatPassword")}
               value={password.twoPass}
               onChangeText={(value: string) => {
                 setErrors(errors.filter((el: any) => el.param !== "password"));

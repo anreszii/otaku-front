@@ -1,7 +1,6 @@
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import BadgeRating from "../ui/BadgeRating";
-import Typography from "../ui/Typography";
 import homeStyles from "../../style/homeStyles";
 import { ImageBackground } from "expo-image";
 

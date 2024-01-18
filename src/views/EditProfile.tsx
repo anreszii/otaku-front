@@ -14,10 +14,9 @@ import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import userService from "../api/user/userService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import TypographyError from "../components/ui/TypographyError";
-import CompleteModal from "../components/Modals/CompleteModal";
 import { CompleteBottomModal } from "../components/Modals/CompleteBottomModal";
 import { EditPasswordModal } from "../components/Modals/EditPasswordModal";
+import { useTranslation } from "react-i18next";
 
 interface IFavoriteList {
   poster: string;
@@ -31,7 +30,6 @@ interface IUser {
   email: string;
   favoriteList: IFavoriteList[];
   password: string;
-  phoneNumber: string;
   username: string;
 }
 
@@ -44,14 +42,10 @@ interface EditProps {
 }
 
 const EditProfile = ({ route }: EditProps) => {
-  console.log(route);
   const [avatar, setAvatar] = useState<string | null>(
     route.params.creature.avatar
   );
   const [username, setUsername] = useState(route.params.creature.username);
-  const [phoneNumber, setPhoneNumber] = useState(
-    route.params.creature.phoneNumber
-  );
   const [email, setEmail] = useState(route.params.creature.email);
   const [passwordC, setPasswordC] = useState({
     nowPass: "",
@@ -62,6 +56,8 @@ const EditProfile = ({ route }: EditProps) => {
   const [visible, setVisible] = useState(false);
   const [visiblePass, setVisiblePass] = useState(false);
 
+  const { t } = useTranslation();
+
   const changeProfileData = async () => {
     const id = await AsyncStorage.getItem("id");
     const passwordNow = passwordC.nowPass;
@@ -69,7 +65,6 @@ const EditProfile = ({ route }: EditProps) => {
 
     const commonData = {
       username,
-      phoneNumber,
       email,
     };
 
@@ -105,7 +100,7 @@ const EditProfile = ({ route }: EditProps) => {
   return (
     <>
       <SafeAreaView style={styles.container}>
-        <HeaderBack title="Edit Profile" />
+        <HeaderBack title={t("headerTitles.editProfile")} />
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={{ marginTop: 62 }}
@@ -114,7 +109,7 @@ const EditProfile = ({ route }: EditProps) => {
             <ChangeAvatar avatar={avatar} setAvatar={setAvatar} />
             <Input
               styleInput={styles.input}
-              label="Username"
+              label={t("screens.editProfile.labels.username")}
               value={username}
               onChangeText={(value: string) => {
                 setUsername(value);
@@ -125,22 +120,7 @@ const EditProfile = ({ route }: EditProps) => {
             />
             <Input
               styleInput={styles.input}
-              label="Phone Number"
-              value={phoneNumber}
-              onChangeText={(value: string) => {
-                setPhoneNumber(value);
-                setErrors(
-                  errors.filter((el: any) => el.param !== "phoneNumber")
-                );
-              }}
-              error={!!errors.find((el: any) => el.param === "phoneNumber")}
-              errorText={
-                errors.find((el: any) => el.param === "phoneNumber")?.msg
-              }
-            />
-            <Input
-              styleInput={styles.input}
-              label="Email"
+              label={t("screens.editProfile.labels.email")}
               value={email}
               onChangeText={(value: string) => {
                 setEmail(value);
@@ -151,7 +131,7 @@ const EditProfile = ({ route }: EditProps) => {
             />
             <Input
               styleInput={styles.input}
-              label="Password"
+              label={t("screens.editProfile.labels.password.title")}
               value={passwordC.onePass}
               error={!!errors.find((el: any) => el.param === "password")}
               errorText={errors.find((el: any) => el.param === "password")?.msg}
@@ -160,7 +140,7 @@ const EditProfile = ({ route }: EditProps) => {
             />
           </View>
           <View style={styles.buttonContent}>
-            <Button title="Update" onPress={() => changeProfileData()} />
+            <Button title={t("buttons.update")} onPress={() => changeProfileData()} />
           </View>
         </ScrollView>
       </SafeAreaView>

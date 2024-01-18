@@ -15,9 +15,35 @@ import NewReleases from "../components/Home/NewReleases";
 import { getNewReleases } from "../api/kodik/getNewReleases";
 import { ImageBackground } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
+import { getAnimeWithGenre } from "../api/kodik/getAnimeWithGenre";
+import Section from "../components/Home/Section";
+import data from "../data/interests.json";
+import { i18n } from "../plugins/i18n";
 
 interface HomeProps {
   route: any;
+}
+
+interface IFavoriteList {
+  poster: string;
+  rating: number;
+  title: string;
+}
+
+interface IInterestsList {
+  rating: number;
+  title: string;
+  ru_title: string;
+}
+
+interface IUser {
+  id: string;
+  avatar: string;
+  email: string;
+  favoriteList: IFavoriteList[];
+  password: string;
+  username: string;
+  interests: IInterestsList[];
 }
 
 const Home: React.FC<HomeProps> = ({ route }) => {
@@ -28,12 +54,52 @@ const Home: React.FC<HomeProps> = ({ route }) => {
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [isBackgroundImageLoading, setIsBackgroundImageLoading] =
     useState(true);
+  const [animeByInterests, setAnimeByInterests] = useState<any[]>([]);
+  const [lang, setLang] = useState("");
 
   useEffect(() => {
     (async () => {
       ScreenOrientation.lockAsync(
         ScreenOrientation.OrientationLock.PORTRAIT_UP
       );
+
+      const lang = i18n.language;
+
+      setLang(lang);
+
+      const getUniqueAnimeArray = (animeByInterest: any) => {
+        const uniqueAnimeArray: any = [];
+        const animeMap = new Map();
+
+        animeByInterest.forEach(([genre, animeList]: any) => {
+          const uniqueAnimeList: any = [];
+
+          animeList.forEach((anime: any) => {
+            const animePoster = anime.material_data.poster_url;
+
+            if (!animeMap.has(animePoster)) {
+              animeMap.set(animePoster, true);
+              uniqueAnimeList.push(anime);
+            }
+          });
+
+          uniqueAnimeArray.push([genre, uniqueAnimeList]);
+        });
+
+        return uniqueAnimeArray;
+      };
+
+      const getAnimeByInterests = async () => {
+        const id: any = await AsyncStorage.getItem("id");
+        const userData: IUser = (await userService.getUser(id)).data;
+        const interests = userData.interests.map((item) => item.ru_title);
+        const result = await getAnimeWithGenre(interests);
+        const uniqueAnimeArray = getUniqueAnimeArray(result);
+        setAnimeByInterests(uniqueAnimeArray);
+      };
+
+      await getAnimeByInterests();
+
       const fetchAnimeListHits = async () => {
         try {
           const { data } = await getAnimeList();
@@ -135,9 +201,17 @@ const Home: React.FC<HomeProps> = ({ route }) => {
   const middleIndex = Math.floor(filteredGenres.length / 2);
   const firstHalf = filteredGenres.slice(0, middleIndex);
 
-  const displayTitle = firstAnime?.title || "";
-  const title = animeListHits[0]?.title || "";
-  const subtitle = firstHalf
+  const displayTitle =
+    lang === "en" ? firstAnime?.title_en || "" : firstAnime?.title || "";
+  const title =
+    lang === "en"
+      ? animeListHits[0]?.material_data.title_en || ""
+      : animeListHits[0]?.material_data.title || "";
+  const objectGenres = firstHalf.map((item: any) => {
+    return data.find((el) => el.ru_title.toLowerCase() === item.toLowerCase());
+  });
+  const subtitle = objectGenres
+    .map((el: any) => (lang === "en" ? el.title : el.ru_title))
     .join(", ")
     .substring(0, firstHalf.join(", ").length);
   const poster = firstAnime?.poster_url;
@@ -185,7 +259,20 @@ const Home: React.FC<HomeProps> = ({ route }) => {
               navigation={navigation}
               navigateToAnimePage={navigateToAnimePage}
               setLoading={setIsImageLoading}
+              last={!!animeByInterests.length}
             />
+            {animeByInterests.map((el, index) => (
+              <Section
+                key={index}
+                animeList={el[1]}
+                navigateToAnimePage={navigateToAnimePage}
+                setLoading={setIsImageLoading}
+                title={el[0]}
+                lastElement={
+                  index + 1 === animeByInterests.length ? true : false
+                }
+              />
+            ))}
           </ScrollView>
         </>
       )}

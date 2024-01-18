@@ -4,9 +4,11 @@ import { Modal } from "../ui/Modal";
 import CircleProgress from "../ui/CircleProgress";
 import Typography from "../ui/Typography";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 
 export function CompleteBottomModal({ visible, setVisible }: any) {
   const navigation = useNavigation<any>();
+  const { t } = useTranslation();
 
   useEffect(() => {
     setTimeout(() => {
@@ -21,11 +23,10 @@ export function CompleteBottomModal({ visible, setVisible }: any) {
       <View style={styles.modal}>
         <View style={styles.content}>
           <Typography type="title" gradient={true} style={styles.title}>
-            Congratulations!
+            {t("modals.title.congratulations")}
           </Typography>
-          <Typography style={styles.subtitle}>
-            Ваши данные изменены, в течение нескольких секунд вы будете
-            перенаправлены на главную страницу
+          <Typography style={styles.subtitle} type="regular">
+            {t("modals.subtitle.complete")}
           </Typography>
           <View style={{ width: 60, height: 60 }}>
             <CircleProgress />

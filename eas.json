@@ -6,6 +6,24 @@
       "ios": {
         "simulator": true
       }
+    },
+    "development": {
+      "extends": "production",
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "extends": "production",
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
     }
   }
 }

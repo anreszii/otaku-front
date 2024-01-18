@@ -7,6 +7,8 @@ import Hr from "../ui/Hr";
 import { Image } from "expo-image";
 import * as FileSystem from "expo-file-system";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useTranslation } from "react-i18next";
+import { i18n } from "../../plugins/i18n";
 
 export function DeleteDownloadModal({
   visible,
@@ -16,6 +18,9 @@ export function DeleteDownloadModal({
   setFlag,
   setLoading,
 }: any) {
+  const { t } = useTranslation();
+  const lang = i18n.language;
+
   const handleVisible = () => {
     setVisible(!visible);
   };
@@ -23,7 +28,6 @@ export function DeleteDownloadModal({
   const handleDelete = async () => {
     handleVisible();
     setLoading(true);
-    console.log(deleteItem.video_url);
     await FileSystem.deleteAsync(deleteItem.video_url);
     const downloads: any = await AsyncStorage.getItem("downloadsArray");
     const downloadsWithoutDeleteItem = JSON.parse(downloads).filter(
@@ -47,11 +51,11 @@ export function DeleteDownloadModal({
       <View style={styles.modal}>
         <View style={styles.content}>
           <Typography style={styles.title} type="title">
-            Delete
+            {t("modals.title.delete")}
           </Typography>
           <Hr />
           <Typography type="title" style={styles.subtitle}>
-            Are you sure you want to delete this download?
+            {t("modals.subtitle.sureDelete")}
           </Typography>
           {deleteItem && (
             <View style={styles.deleteItem}>
@@ -61,14 +65,23 @@ export function DeleteDownloadModal({
               />
               <View style={styles.downloadContent}>
                 <Typography style={styles.downloadTitle} type="title">
-                  {deleteItem.title.substring(0, 25) + "..."}
+                  {lang === "en"
+                    ? deleteItem.title_en.substring(0, 25) +
+                      (deleteItem.title_en.length <= 25 ? "" : "...")
+                    : deleteItem.title.substring(0, 25) +
+                      (deleteItem.title.length <= 25 ? "" : "...")}
                 </Typography>
                 <View style={styles.downloadDataContent}>
                   <Typography
                     style={styles.episodeTitle}
+                    type="semibold"
                   >{`Episode ${deleteItem.episode}`}</Typography>
                   <View style={styles.voiceContent}>
-                    <Typography style={styles.voiceTitle} gradient={true}>
+                    <Typography
+                      style={styles.voiceTitle}
+                      gradient={true}
+                      type="semibold"
+                    >
                       {deleteItem.voice}
                     </Typography>
                   </View>
@@ -78,6 +91,7 @@ export function DeleteDownloadModal({
                     <Typography
                       style={styles.memoryTitle}
                       gradient={true}
+                      type="semibold"
                     >{`${deleteItem.memory} MB`}</Typography>
                   </View>
                 </View>
@@ -87,13 +101,13 @@ export function DeleteDownloadModal({
           <Hr />
           <View style={styles.buttonContent}>
             <Button
-              title="Cancel"
+              title={t("buttons.cancel")}
               gradient={false}
               style={styles.buttonCancel}
               onPress={() => handleVisible()}
             />
             <Button
-              title="Yes, Delete"
+              title={t("buttons.delete")}
               style={styles.buttonDelete}
               onPress={() => handleDelete()}
             />

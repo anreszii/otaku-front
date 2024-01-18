@@ -1,23 +1,20 @@
 import { View, Text, StyleSheet } from "react-native";
-import React from "react";
+import React, { FC } from "react";
 import Typography from "./Typography";
+import { TextStyle } from "react-native";
 
-export default function OutlineTypography(
-  { children }: any,
-  style: any,
-  type?: any
-) {
-  if (type === "button") {
-    return (
-      <View style={styles.outlinedText}>
-        <View style={styles.containerTitleOut}>
-          <Typography type="button" style={{ ...styles.titleOut, ...style }}>
-            {children}
-          </Typography>
-        </View>
-      </View>
-    );
-  } else if (type === "title") {
+interface OutlineTypographyProps {
+  children: React.ReactNode;
+  style: TextStyle;
+  type: string;
+}
+
+const OutlineTypography: FC<OutlineTypographyProps> = ({
+  children,
+  style,
+  type,
+}) => {
+  if (type === "title") {
     return (
       <View style={styles.outlinedText}>
         <View style={styles.containerTitleOut}>
@@ -27,18 +24,48 @@ export default function OutlineTypography(
         </View>
       </View>
     );
-  } else {
+  } else if (type === "regular") {
     return (
       <View style={styles.outlinedText}>
         <View style={styles.containerTitleOut}>
-          <Typography type="sub" style={{ ...styles.titleOut, ...style }}>
+          <Typography type="regular" style={{ ...styles.titleOut, ...style }}>
+            {children}
+          </Typography>
+        </View>
+      </View>
+    );
+  } else if (type === "bold") {
+    return (
+      <View style={styles.outlinedText}>
+        <View style={styles.containerTitleOut}>
+          <Typography type="bold" style={{ ...styles.titleOut, ...style }}>
+            {children}
+          </Typography>
+        </View>
+      </View>
+    );
+  } else if (type === "semibold") {
+    return (
+      <View style={styles.outlinedText}>
+        <View style={styles.containerTitleOut}>
+          <Typography type="semibold" style={{ ...styles.titleOut, ...style }}>
+            {children}
+          </Typography>
+        </View>
+      </View>
+    );
+  } else if (type === "medium") {
+    return (
+      <View style={styles.outlinedText}>
+        <View style={styles.containerTitleOut}>
+          <Typography type="medium" style={{ ...styles.titleOut, ...style }}>
             {children}
           </Typography>
         </View>
       </View>
     );
   }
-}
+};
 
 const styles = StyleSheet.create({
   containerTitleOut: {
@@ -52,8 +79,10 @@ const styles = StyleSheet.create({
   outlinedText: {
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 25,
+    borderRadius: 12,
     borderColor: "#7210FF",
     borderWidth: 2,
   },
 });
+
+export default OutlineTypography;

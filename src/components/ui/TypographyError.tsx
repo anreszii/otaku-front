@@ -5,7 +5,9 @@ import Typography from "./Typography";
 export default function TypographyError({ error, ...props }: any) {
   return (
     <View {...props}>
-      <Typography style={styles.text}>{error}</Typography>
+      <Typography style={styles.text} type="medium">
+        {error}
+      </Typography>
     </View>
   );
 }

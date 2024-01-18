@@ -1,0 +1,29 @@
+{
+  "build": {
+    "development-simulator": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
+      }
+    },
+    "development": {
+      "extends": "production",
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "extends": "production",
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL_AUTH": "",
+        "EXPO_PUBLIC_API_URL_USER": "",
+        "EXPO_PUBLIC_KODIK_PUBLIC_KEY": "",
+        "EXPO_PUBLIC_KODIK_PRIVATE_KEY": ""
+      }
+    }
+  }
+}

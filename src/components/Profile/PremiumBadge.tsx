@@ -3,9 +3,11 @@ import React from "react";
 import Typography from "../ui/Typography";
 import { ArrowGradient } from "../../icons";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 
 export default function PremiumBadge() {
   const navigation = useNavigation<any>();
+  const { t } = useTranslation();
 
   return (
     <TouchableOpacity
@@ -14,10 +16,10 @@ export default function PremiumBadge() {
     >
       <View style={styles.titleContent}>
         <Typography gradient={true} style={styles.title} type="title">
-          Join Premium!
+          {t("screens.profile.premium.premiumTitle")}
         </Typography>
-        <Typography style={styles.subtitle}>
-          Enjoy watching Full-HD animes, without restrictions and without ads
+        <Typography style={styles.subtitle} type="regular">
+          {t("screens.profile.premium.premiumSubtitle")}
         </Typography>
       </View>
       <ArrowGradient width={11} height={15} />
@@ -37,6 +39,7 @@ const styles = StyleSheet.create({
   },
   titleContent: {
     marginRight: 20,
+    width: "90%",
   },
   title: {
     fontSize: 24,

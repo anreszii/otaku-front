@@ -1,5 +1,5 @@
 [
-  { "title": "All", "focus": true },
-  { "title": "Episode", "focus": false },
-  { "title": "Movie", "focus": false }
+  { "title": "All", "ru_title": "Все", "focus": true },
+  { "title": "Episode", "ru_title": "Серии", "focus": false },
+  { "title": "Movie", "ru_title": "Фильмы", "focus": false }
 ]

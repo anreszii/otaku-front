@@ -2,7 +2,6 @@ import axios from "axios";
 
 export const searchAnimeWithEpisodes = async (title: string) => {
   const PUBLIC_KEY: string = process.env.EXPO_PUBLIC_KODIK_PUBLIC_KEY || "";
-  console.log(title);
   try {
     const response = await axios.get(
       `https://kodikapi.com/search?token=${PUBLIC_KEY}&title=${title}&with_material_data=true&sort=shikimori_rating&types=anime,anime-serial&with_episodes_data=true&full_match=true`

@@ -31,45 +31,71 @@ const Typography: FC<TypographyProps> = ({
   };
 
   if (gradient) {
-    if (type === "button") {
-      return (
-        <GradientText style={{ ...styles.textButton, ...style }}>
-          {children}
-        </GradientText>
-      );
-    } else if (type === "title") {
+    if (type === "title") {
       return (
         <GradientText style={{ ...styles.textTitle, ...style }}>
           {children}
         </GradientText>
       );
-    } else {
+    } else if (type === "regular") {
       return (
-        <GradientText style={{ ...styles.textSub, ...style }}>
+        <GradientText style={{ ...styles.textRegular, ...style }}>
+          {children}
+        </GradientText>
+      );
+    } else if (type === "bold") {
+      return (
+        <GradientText style={{ ...styles.textBold, ...style }}>
+          {children}
+        </GradientText>
+      );
+    } else if (type === "semibold") {
+      return (
+        <GradientText style={{ ...styles.textSemiBold, ...style }}>
+          {children}
+        </GradientText>
+      );
+    } else if (type === "medium") {
+      return (
+        <GradientText style={{ ...styles.textMedium, ...style }}>
           {children}
         </GradientText>
       );
     }
   } else {
-    if (type === "button") {
-      return <Text style={{ ...styles.textButton, ...style }}>{children}</Text>;
-    } else if (type === "title") {
+    if (type === "title") {
       return <Text style={{ ...styles.textTitle, ...style }}>{children}</Text>;
-    } else {
-      return <Text style={{ ...styles.textSub, ...style }}>{children}</Text>;
+    } else if (type === "regular") {
+      return (
+        <Text style={{ ...styles.textRegular, ...style }}>{children}</Text>
+      );
+    } else if (type === "bold") {
+      return <Text style={{ ...styles.textBold, ...style }}>{children}</Text>;
+    } else if (type === "semibold") {
+      return (
+        <Text style={{ ...styles.textSemiBold, ...style }}>{children}</Text>
+      );
+    } else if (type === "medium") {
+      return <Text style={{ ...styles.textMedium, ...style }}>{children}</Text>;
     }
   }
 };
 
 const styles = StyleSheet.create({
-  textButton: {
-    fontFamily: "UrbanistBold",
-  },
   textTitle: {
     fontFamily: "NeueHaasDisplay",
   },
-  textSub: {
+  textRegular: {
     fontFamily: "UrbanistRegular",
+  },
+  textBold: {
+    fontFamily: "UrbanistBold",
+  },
+  textSemiBold: {
+    fontFamily: "UrbanistSemiBold",
+  },
+  textMedium: {
+    fontFamily: "UrbanistMedium",
   },
 });
 

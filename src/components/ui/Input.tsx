@@ -25,7 +25,7 @@ const Input: React.FC<InputProps> = ({
 
   return (
     <Pressable style={[styles.inputView, styleInput]}>
-      <Typography type="button" style={styles.label}>
+      <Typography type="bold" style={styles.label}>
         {label}
       </Typography>
       <TextInput

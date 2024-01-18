@@ -9,6 +9,8 @@ import Loader from "../ui/Loader";
 import Skeleton from "../ui/Skeleton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import userService from "../../api/user/userService";
+import { useTranslation } from "react-i18next";
+import { i18n } from "../../plugins/i18n";
 
 interface ReleaseItemProps {
   seriesItem: OngoingData;
@@ -22,6 +24,7 @@ interface OngoingData {
   material_data: {
     anime_title: string;
     title: string;
+    title_en: string;
     poster_url: string;
     next_episode_at: string;
     screenshots?: string[];
@@ -37,6 +40,8 @@ const ReleaseItem: React.FC<ReleaseItemProps> = ({
   setFlag,
 }) => {
   const [_inFavoriteList, setInFavoriteList] = useState(seriesItem.isFavorite);
+  const lang = i18n.language;
+  const { t } = useTranslation();
 
   const handleChangeList = async (
     title: string,
@@ -65,7 +70,7 @@ const ReleaseItem: React.FC<ReleaseItemProps> = ({
     <View style={commonStyles.marginBottom16}>
       <View style={commonStyles.row}>
         <Qualifier style={commonStyles.marginRight8} />
-        <Typography>
+        <Typography type="medium">
           {new Date(seriesItem.material_data.next_episode_at).getHours() +
             ":" +
             String(
@@ -85,41 +90,35 @@ const ReleaseItem: React.FC<ReleaseItemProps> = ({
         />
 
         <View style={commonStyles.column}>
-          <Typography>
-            {seriesItem.material_data.anime_title.substring(0, 50) +
-              (seriesItem.material_data.anime_title.length <= 50 ? "" : "...")}
+          <Typography type="title">
+            {lang === "en"
+              ? seriesItem.material_data.title_en.substring(0, 50) +
+                (seriesItem.material_data.title_en.length <= 50 ? "" : "...")
+              : seriesItem.material_data.anime_title.substring(0, 50) +
+                (seriesItem.material_data.anime_title.length <= 50
+                  ? ""
+                  : "...")}
           </Typography>
-          <Typography>
+          <Typography type="semibold">
             {seriesItem.material_data.episodes_aired + 1} Episode
           </Typography>
-          {_inFavoriteList ? (
-            <Button
-              title="✓ My List"
-              gradient={false}
-              style={commonStyles.button}
-              styleText={commonStyles.buttonText}
-              onPress={() =>
-                handleChangeList(
-                  seriesItem.title,
-                  seriesItem.material_data.poster_url,
-                  seriesItem.material_data.shikimori_rating
-                )
-              }
-            />
-          ) : (
-            <Button
-              title="+ My List"
-              onPress={() =>
-                handleChangeList(
-                  seriesItem.title,
-                  seriesItem.material_data.poster_url,
-                  seriesItem.material_data.shikimori_rating
-                )
-              }
-              style={commonStyles.button}
-              styleText={commonStyles.buttonText}
-            />
-          )}
+          <Button
+            title={
+              _inFavoriteList
+                ? t("screens.release.releaseItem.releaseListComplete")
+                : t("screens.release.releaseItem.releaseListAdd")
+            }
+            gradient={_inFavoriteList ? false : true}
+            style={commonStyles.button}
+            styleText={commonStyles.buttonText}
+            onPress={() =>
+              handleChangeList(
+                seriesItem.title,
+                seriesItem.material_data.poster_url,
+                seriesItem.material_data.shikimori_rating
+              )
+            }
+          />
         </View>
       </View>
     </View>

@@ -29,7 +29,7 @@ const Bagde: FC<BadgeProps> = ({ title, gradient, style }: any) => {
           }}
         >
           <View style={{ margin: 2 }}>
-            <Typography type="button" style={styles.titleGradient}>
+            <Typography type="bold" style={styles.titleGradient}>
               {title}
             </Typography>
           </View>
@@ -58,7 +58,7 @@ const Bagde: FC<BadgeProps> = ({ title, gradient, style }: any) => {
               paddingRight: 14,
             }}
           >
-            <Typography type="button" gradient={true} style={styles.titleBasic}>
+            <Typography type="bold" gradient={true} style={styles.titleBasic}>
               {title}
             </Typography>
           </View>

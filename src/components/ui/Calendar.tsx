@@ -64,8 +64,8 @@ const Calendar: React.FC<CalendarProps> = ({
                         alignItems: "center",
                       }}
                     >
-                      <Typography type="sub" style={styles.titleGradient}>
-                        {item.dayOfWeek.substr(0, 3)}
+                      <Typography type="regular" style={styles.titleGradient}>
+                        {item.dayOfWeek}
                       </Typography>
                       <Typography type="title" style={styles.titleGradient}>
                         {item.date}
@@ -93,8 +93,8 @@ const Calendar: React.FC<CalendarProps> = ({
                       ...style,
                     }}
                   >
-                    <Typography type="sub" style={styles.titleBasic}>
-                      {item.dayOfWeek.substr(0, 3)}
+                    <Typography type="regular" style={styles.titleBasic}>
+                      {item.dayOfWeek}
                     </Typography>
                     <Typography type="title" style={styles.titleBasic}>
                       {item.date}
@@ -130,8 +130,8 @@ const Calendar: React.FC<CalendarProps> = ({
                         alignItems: "center",
                       }}
                     >
-                      <Typography type="sub" style={styles.titleGradient}>
-                        {item.dayOfWeek.substr(0, 3)}
+                      <Typography type="regular" style={styles.titleGradient}>
+                        {item.dayOfWeek}
                       </Typography>
                       <Typography type="title" style={styles.titleGradient}>
                         {item.date}
@@ -158,8 +158,8 @@ const Calendar: React.FC<CalendarProps> = ({
                       ...style,
                     }}
                   >
-                    <Typography type="sub" style={styles.titleBasic}>
-                      {item.dayOfWeek.substr(0, 3)}
+                    <Typography type="regular" style={styles.titleBasic}>
+                      {item.dayOfWeek}
                     </Typography>
                     <Typography type="title" style={styles.titleBasic}>
                       {item.date}

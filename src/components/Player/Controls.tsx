@@ -120,6 +120,7 @@ export default function Controls({
                 ? styles.timeTitleLeftFull
                 : styles.timeTitleLeft
             }
+            type="semibold"
           >
             {formatTime(position)}
           </Typography>
@@ -142,6 +143,7 @@ export default function Controls({
                 ? styles.timeTitleRightFull
                 : styles.timeTitleRight
             }
+            type="semibold"
           >
             {formatTime(duration)}
           </Typography>

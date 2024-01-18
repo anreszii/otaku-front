@@ -67,8 +67,6 @@ export const searchAnime = async ({
       ? { ...baseConfig, title: title }
       : { ...baseConfig, title: title, year: yearAnime };
 
-  console.log(requestConfig);
-
   const url =
     title?.replaceAll(" ", "") === ""
       ? "https://kodikapi.com/list"

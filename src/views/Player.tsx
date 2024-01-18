@@ -360,7 +360,7 @@ export default function Player({ route }: any) {
               setVisibleRightSpeed(false);
             }}
           >
-            <Typography type="button" style={styles.speedText}>
+            <Typography type="bold" style={styles.speedText}>
               0.5
             </Typography>
           </TouchableOpacity>
@@ -370,7 +370,7 @@ export default function Player({ route }: any) {
               setVisibleRightSpeed(false);
             }}
           >
-            <Typography type="button" style={styles.speedText}>
+            <Typography type="bold" style={styles.speedText}>
               1.0
             </Typography>
           </TouchableOpacity>
@@ -380,7 +380,7 @@ export default function Player({ route }: any) {
               setVisibleRightSpeed(false);
             }}
           >
-            <Typography type="button" style={styles.speedText}>
+            <Typography type="bold" style={styles.speedText}>
               1.5
             </Typography>
           </TouchableOpacity>
@@ -390,7 +390,7 @@ export default function Player({ route }: any) {
               setVisibleRightSpeed(false);
             }}
           >
-            <Typography type="button" style={styles.speedText}>
+            <Typography type="bold" style={styles.speedText}>
               2.0
             </Typography>
           </TouchableOpacity>

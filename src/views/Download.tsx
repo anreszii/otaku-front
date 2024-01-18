@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Animated,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Typography from "../components/ui/Typography";
@@ -15,6 +16,9 @@ import Loader from "../components/ui/Loader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DeleteDownloadModal } from "../components/Modals/DeleteDownloadModal";
 import { useNavigation } from "@react-navigation/native";
+import HeaderInput from "../components/Layouts/HeaderInput";
+import { useTranslation } from "react-i18next";
+import { i18n } from "../plugins/i18n";
 
 interface DownloadsProps {
   displayTitle: string;
@@ -24,6 +28,7 @@ interface DownloadsProps {
   title: string;
   video_url: string;
   voiceName: string;
+  title_en: string;
 }
 
 interface DeleteProps {
@@ -33,6 +38,7 @@ interface DeleteProps {
   voice: string;
   episode: string;
   video_url: string;
+  title_en: string;
 }
 
 export default function Download({ route }: any) {
@@ -41,8 +47,18 @@ export default function Download({ route }: any) {
   const [deleteItem, setDeleteItem] = useState<DeleteProps | null>(null);
   const [isDelete, setIsDelete] = useState(false);
   const [flag, setFlag] = useState(false);
+  const [isSearch, setIsSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const lang = i18n.language;
 
   const navigation = useNavigation<any>();
+  const { t } = useTranslation();
+
+  const filterData = () => {
+    return downloads.filter((item) =>
+      item.displayTitle.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  };
 
   useEffect(() => {
     (async () => {
@@ -59,6 +75,7 @@ export default function Download({ route }: any) {
     voice,
     memory,
     video_url,
+    title_en,
   }: DeleteProps) => {
     setDeleteItem({
       image: image,
@@ -67,6 +84,7 @@ export default function Download({ route }: any) {
       voice: voice,
       memory: memory,
       video_url: video_url,
+      title_en: title_en,
     });
     setIsDelete(true);
   };
@@ -75,19 +93,51 @@ export default function Download({ route }: any) {
     navigation.navigate("Player", { creature: { title: title } });
   };
 
+  const headerInputOpacity = new Animated.Value(0);
+
+  const animateHeaderInput = (show: boolean) => {
+    Animated.timing(headerInputOpacity, {
+      toValue: show ? 1 : 0,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+  };
+
+  useEffect(() => {
+    animateHeaderInput(isSearch);
+  }, [isSearch]);
+
   return (
     <>
       {isLoading ? (
         <Loader />
       ) : (
         <SafeAreaView style={styles.container}>
-          <Header title="Download" icon={<Search color="#000" />} />
+          {isSearch ? (
+            <HeaderInput
+              icon={<Search color="#000" />}
+              onPress={() => {
+                setIsSearch(false);
+                setSearchQuery("");
+              }}
+              value={searchQuery}
+              setValue={setSearchQuery}
+              opacity={headerInputOpacity}
+            />
+          ) : (
+            <Header
+              title={t("headerTitles.download")}
+              icon={<Search color="#000" />}
+              onPress={() => setIsSearch(true)}
+            />
+          )}
+
           {!!downloads ? (
             <ScrollView
-              style={styles.content}
+              style={{ ...styles.content, marginTop: isSearch ? 72 : 48 }}
               showsVerticalScrollIndicator={false}
             >
-              {downloads.map((item, index) => (
+              {filterData().map((item, index) => (
                 <TouchableOpacity
                   key={index}
                   style={styles.downloadItem}
@@ -99,15 +149,25 @@ export default function Download({ route }: any) {
                   />
                   <View style={styles.downloadContent}>
                     <Typography style={styles.downloadTitle} type="title">
-                      {item.displayTitle.substring(0, 25) +
-                        (item.displayTitle.length <= 25 ? "" : "...")}
+                      {lang === "en"
+                        ? item.title_en.substring(0, 25) +
+                          (item.title_en.length <= 25 ? "" : "...")
+                        : item.displayTitle.substring(0, 25) +
+                          (item.displayTitle.length <= 25 ? "" : "...")}
+                      {/* {item.displayTitle.substring(0, 25) +
+                        (item.displayTitle.length <= 25 ? "" : "...")} */}
                     </Typography>
                     <View style={styles.downloadDataContent}>
                       <Typography
                         style={styles.episodeTitle}
+                        type="semibold"
                       >{`Episode ${item.episodeNumber}`}</Typography>
                       <View style={styles.voiceContent}>
-                        <Typography style={styles.voiceTitle} gradient={true}>
+                        <Typography
+                          style={styles.voiceTitle}
+                          gradient={true}
+                          type="semibold"
+                        >
                           {item.voiceName}
                         </Typography>
                       </View>
@@ -117,6 +177,7 @@ export default function Download({ route }: any) {
                         <Typography
                           style={styles.memoryTitle}
                           gradient={true}
+                          type="semibold"
                         >{`${item.memory} MB`}</Typography>
                       </View>
                       <TouchableOpacity
@@ -128,6 +189,7 @@ export default function Download({ route }: any) {
                             voice: item.voiceName,
                             memory: item.memory,
                             video_url: item.video_url,
+                            title_en: item.title_en,
                           })
                         }
                       >
@@ -150,10 +212,10 @@ export default function Download({ route }: any) {
                   type="title"
                   style={styles.noneTitle}
                 >
-                  Your Download is Empty
+                  {t("screens.download.noneDownload.title")}
                 </Typography>
-                <Typography style={styles.noneSubtitle}>
-                  Looks like you haven't downloaded anime at all
+                <Typography style={styles.noneSubtitle} type="medium">
+                  {t("screens.download.noneDownload.subtitle")}
                 </Typography>
               </View>
             </View>
@@ -202,7 +264,6 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   content: {
-    marginTop: 48,
     marginBottom: 96,
     marginHorizontal: 24,
   },

@@ -8,8 +8,11 @@ import Button from "../ui/Button";
 import Hr from "../ui/Hr";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import authService from "../../api/auth/authService";
+import { useTranslation } from "react-i18next";
 
 export function LogOutModal({ visible, setVisible }: any) {
+  const { t } = useTranslation();
+
   const handleLogOut = async () => {
     await authService.logout();
     await AsyncStorage.removeItem("token");
@@ -31,21 +34,21 @@ export function LogOutModal({ visible, setVisible }: any) {
       <View style={styles.modal}>
         <View style={styles.content}>
           <Typography style={styles.title} type="title">
-            Logout
+            {t("modals.title.logout")}
           </Typography>
           <Hr />
           <Typography type="title" style={styles.subtitle}>
-            Are you sure you want to log out?
+            {t("modals.subtitle.sureLogout")}
           </Typography>
           <View style={styles.buttonContent}>
             <Button
-              title="Cancel"
+              title={t("buttons.cancel")}
               gradient={false}
               style={styles.buttonCancel}
               onPress={() => handleVisible()}
             />
             <Button
-              title="Yes, Logout"
+              title={t("buttons.logout")}
               style={styles.buttonLogout}
               onPress={() => handleLogOut()}
             />

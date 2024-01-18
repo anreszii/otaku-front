@@ -36,6 +36,7 @@ import Header from "../components/Layouts/Header";
 import CircleProgress from "../components/ui/CircleProgress";
 import Loader from "../components/ui/Loader";
 import { backgroundColors } from "../constants/colors";
+import { useTranslation } from "react-i18next";
 
 interface IFavoriteList {
   poster: string;
@@ -49,7 +50,6 @@ interface IUser {
   email: string;
   favoriteList: IFavoriteList[];
   password: string;
-  phoneNumber: string;
   username: string;
 }
 
@@ -63,19 +63,24 @@ const Profile = () => {
 
   const navigation = useNavigation<any>();
   const route = useRoute();
+  const { t } = useTranslation();
 
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const toggleSwitch = async () => {
+    await AsyncStorage.setItem("darkMode", String(!isEnabled));
+    setIsEnabled(!isEnabled);
+  };
 
   useFocusEffect(
     useCallback(() => {
       (async () => {
-        setIsLoading(true);
         const id: any = await AsyncStorage.getItem("id");
         const userData: IUser = (await userService.getUser(id)).data;
         setUser(userData);
         setAvatar(!!userData.avatar ? userData.avatar : null);
         const lang: any = await AsyncStorage.getItem("lang");
         setLang(lang?.charAt(0).toUpperCase() + lang?.slice(1));
+        const darkMode = await AsyncStorage.getItem("darkMode");
+        setIsEnabled(darkMode === "false" ? false : true);
         setIsLoading(false);
       })();
     }, [route])
@@ -87,7 +92,7 @@ const Profile = () => {
         <Loader />
       ) : (
         <SafeAreaView style={styles.container}>
-          <Header title="Profile" />
+          <Header title={t("headerTitles.profile")} />
           <ScrollView
             showsVerticalScrollIndicator={false}
             style={styles.content}
@@ -105,12 +110,14 @@ const Profile = () => {
                 <Typography style={styles.username} type="title">
                   {user?.username}
                 </Typography>
-                <Typography style={styles.email}>{user?.email}</Typography>
+                <Typography style={styles.email} type="medium">
+                  {user?.email}
+                </Typography>
               </View>
             </View>
-            <View style={styles.premiumContent}>
+            {/* <View style={styles.premiumContent}>
               <PremiumBadge />
-            </View>
+            </View> */}
             <View style={styles.settingsContent}>
               <TouchableOpacity
                 style={styles.settingsItem}
@@ -120,32 +127,32 @@ const Profile = () => {
               >
                 <View style={styles.settingsItemContent}>
                   <ProfileFull />
-                  <Typography style={styles.settingsItemTitle}>
-                    Edit Profile
+                  <Typography style={styles.settingsItemTitle} type="semibold">
+                    {t("screens.profile.labels.editProfile")}
                   </Typography>
                 </View>
                 <ArrowRight />
               </TouchableOpacity>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={styles.settingsItem}
                 onPress={() => navigation.navigate("NotificationSettings")}
               >
                 <View style={styles.settingsItemContent}>
                   <Notification color="#000" width={18} />
-                  <Typography style={styles.settingsItemTitle}>
+                  <Typography style={styles.settingsItemTitle} type="semibold">
                     Notification
                   </Typography>
                 </View>
                 <ArrowRight />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <TouchableOpacity
                 style={styles.settingsItem}
                 onPress={() => navigation.navigate("DownloadSettings")}
               >
                 <View style={styles.settingsItemContent}>
                   <Download style={{ marginBottom: 2 }} />
-                  <Typography style={styles.settingsItemTitle}>
-                    Download
+                  <Typography style={styles.settingsItemTitle} type="semibold">
+                    {t("screens.profile.labels.download")}
                   </Typography>
                 </View>
                 <ArrowRight />
@@ -168,20 +175,22 @@ const Profile = () => {
               >
                 <View style={styles.settingsItemContent}>
                   <Language />
-                  <Typography style={styles.settingsItemTitle}>
-                    Language
+                  <Typography style={styles.settingsItemTitle} type="semibold">
+                    {t("screens.profile.labels.language")}
                   </Typography>
                 </View>
                 <View style={styles.languageTitleContent}>
-                  <Typography style={styles.languageTitle}>{lang}</Typography>
+                  <Typography style={styles.languageTitle} type="semibold">
+                    {lang === "Russian" ? "Русский" : "English"}
+                  </Typography>
                   <ArrowRight />
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.settingsItem}>
+              {/* <TouchableOpacity style={styles.settingsItem}>
                 <View style={styles.settingsItemContent}>
                   <Eye />
-                  <Typography style={styles.settingsItemTitle}>
-                    Dark Mode
+                  <Typography style={styles.settingsItemTitle} type="semibold">
+                    {t("screens.profile.labels.darkMode")}
                   </Typography>
                 </View>
                 <Switch
@@ -190,15 +199,15 @@ const Profile = () => {
                   onValueChange={toggleSwitch}
                   value={isEnabled}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <TouchableOpacity
                 style={styles.settingsItem}
                 onPress={() => navigation.navigate("PrivacyPolicy")}
               >
                 <View style={styles.settingsItemContent}>
                   <PrivacyPolicy />
-                  <Typography style={styles.settingsItemTitle}>
-                    Privacy Policy
+                  <Typography style={styles.settingsItemTitle} type="semibold">
+                    {t("screens.profile.labels.privacyPolicy")}
                   </Typography>
                 </View>
                 <ArrowRight />
@@ -209,7 +218,9 @@ const Profile = () => {
               >
                 <View style={styles.settingsItemContent}>
                   <LogOut />
-                  <Typography style={styles.logOutTitle}>Logout</Typography>
+                  <Typography style={styles.logOutTitle} type="semibold">
+                    {t("screens.profile.labels.logout")}
+                  </Typography>
                 </View>
               </TouchableOpacity>
             </View>

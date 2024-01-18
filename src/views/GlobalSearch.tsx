@@ -22,19 +22,18 @@ import regionData from "../data/region.json";
 import genreData from "../data/interests.json";
 import { Image } from "expo-image";
 import CircleProgress from "../components/ui/CircleProgress";
+import { useTranslation } from "react-i18next";
+import { i18n } from "../plugins/i18n";
 
 interface SearchFilterProps {
   title: string;
   filter: string;
 }
 
-interface BadgePropsWithRu extends BadgeProps {
-  ru_title: string;
-}
-
 interface BadgeProps {
   title: string;
   focus: boolean;
+  ru_title: string;
 }
 
 export default function GlobalSearch({ route }: any) {
@@ -44,12 +43,15 @@ export default function GlobalSearch({ route }: any) {
   const [searchFilter, setSearchFilter] = useState<SearchFilterProps[]>([]);
   const [categories, setCategories] = useState<BadgeProps[]>(categoriesData);
   const [region, setRegion] = useState<BadgeProps[]>(regionData);
-  const [genre, setGenre] = useState<BadgePropsWithRu[]>(genreData);
+  const [genre, setGenre] = useState<BadgeProps[]>(genreData);
   const [releaseYear, setReleaseYear] = useState<BadgeProps[]>([]);
   const [search, setSearch] = useState<string>("");
   const [timeoutID, setTimeoutID] = useState<NodeJS.Timeout | null>(null);
   const [searchData, setSearchData] = useState<KodikDataProps[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const lang = i18n.language;
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     (async () => {
@@ -241,7 +243,7 @@ export default function GlobalSearch({ route }: any) {
               <Back color="#000" />
             </TouchableOpacity>
             <Typography type="title" style={styles.filterTitle}>
-              Sort & Filter
+              {t("headerTitles.sortAndFilter")}
             </Typography>
           </View>
         )}
@@ -292,7 +294,14 @@ export default function GlobalSearch({ route }: any) {
                               transition={1000}
                             />
                             <Typography type="title" style={styles.animeTitle}>
-                              {item?.material_data?.anime_title.length >= 100
+                              {lang === "en"
+                                ? item?.material_data?.title_en.length >= 100
+                                  ? item?.material_data?.title_en.substring(
+                                      0,
+                                      100
+                                    ) + "..."
+                                  : item?.material_data?.title_en
+                                : item?.material_data?.anime_title.length >= 100
                                 ? item?.material_data?.anime_title.substring(
                                     0,
                                     100
@@ -307,7 +316,7 @@ export default function GlobalSearch({ route }: any) {
                 ) : (
                   <>
                     <Typography type="title" style={styles.titleSearch}>
-                      New Animes
+                      {t("screens.globalSearch.labels.title")}
                     </Typography>
                     <ScrollView
                       showsVerticalScrollIndicator={false}
@@ -346,12 +355,20 @@ export default function GlobalSearch({ route }: any) {
                                 type="title"
                                 style={styles.animeTitle}
                               >
-                                {item.material_data.anime_title.length >= 100
-                                  ? item.material_data.anime_title.substring(
+                                {lang === "en"
+                                  ? item?.material_data?.title_en.length >= 100
+                                    ? item?.material_data?.title_en.substring(
+                                        0,
+                                        100
+                                      ) + "..."
+                                    : item?.material_data?.title_en
+                                  : item?.material_data?.anime_title.length >=
+                                    100
+                                  ? item?.material_data?.anime_title.substring(
                                       0,
                                       100
                                     ) + "..."
-                                  : item.material_data.anime_title}
+                                  : item?.material_data?.anime_title}
                               </Typography>
                             </TouchableOpacity>
                           ))}

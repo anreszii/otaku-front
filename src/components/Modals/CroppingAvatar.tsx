@@ -9,6 +9,7 @@ import {
 } from "expo-image-manipulator";
 import { Modal } from "../ui/Modal";
 import Button from "../ui/Button";
+import { t } from "i18next";
 
 export function CroppingAvatar({
   visible,
@@ -55,7 +56,7 @@ export function CroppingAvatar({
           resizeMode={"contain"}
         />
         <Button
-          title="Crop"
+          title={t("buttons.crop")}
           onPress={() => croppingImage()}
           style={{ marginTop: 10, marginBottom: 12 }}
         />

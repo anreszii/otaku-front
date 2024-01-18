@@ -72,6 +72,11 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     lineHeight: 28.8,
   },
+  smallTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    lineHeight: 28.8,
+  },
 });
 
 export default Header;

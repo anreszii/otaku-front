@@ -5,6 +5,7 @@ import Typography from "../ui/Typography";
 import Button from "../ui/Button";
 import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { useTranslation } from "react-i18next";
 
 interface ChoiceQualityModalProps {
   visible: boolean;
@@ -24,6 +25,7 @@ export default function ChoiceQualityModal({
   setVisiblePrepare,
 }: ChoiceQualityModalProps) {
   const [isFocus, setIsFocus] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <Modal
@@ -35,10 +37,10 @@ export default function ChoiceQualityModal({
     >
       <View style={styles.container}>
         <Typography type="title" gradient={true} style={styles.title}>
-          Choice
+          {t("modals.title.choice")}
         </Typography>
-        <Typography style={styles.subtitle}>
-          Select quality to download
+        <Typography style={styles.subtitle} type="regular">
+          {t("modals.subtitle.qualityDownload")}
         </Typography>
         <View style={{ width: "100%", marginBottom: 24 }}>
           <Dropdown
@@ -63,7 +65,7 @@ export default function ChoiceQualityModal({
         </View>
         <View style={{ width: 200, height: 60 }}>
           <Button
-            title="Продолжить"
+            title={t("buttons.сontinue")}
             gradient={false}
             onPress={() => {
               setVisible(false);

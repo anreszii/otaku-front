@@ -3,16 +3,18 @@ import React from "react";
 import { Modal } from "../ui/Modal";
 import Typography from "../ui/Typography";
 import Button from "../ui/Button";
+import { useTranslation } from "react-i18next";
 
 export default function DownloadErrorModal({ visible, setVisible }: any) {
+  const { t } = useTranslation();
   return (
     <Modal visible={visible} setVisible={setVisible} animationType="fade" full>
       <View style={styles.container}>
         <Typography type="title" gradient={true} style={styles.title}>
-          Произошла ошибка
+          {t("modals.title.error")}
         </Typography>
-        <Typography style={styles.subtitle}>
-          Попробуйте повторить попытку через несколько секунд
+        <Typography style={styles.subtitle} type="regular">
+          {t("modals.subtitle.tryAgain")}
         </Typography>
         <View style={{ width: 200, height: 60 }}>
           <Button title="Закрыть" onPress={() => setVisible(false)} />

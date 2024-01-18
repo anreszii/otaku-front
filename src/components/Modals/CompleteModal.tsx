@@ -4,9 +4,11 @@ import { Modal } from "../ui/Modal";
 import Typography from "../ui/Typography";
 import CircleProgress from "../ui/CircleProgress";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 
 export default function CompleteModal({ visible, setVisible, redirect }: any) {
   const navigation = useNavigation<any>();
+  const { t } = useTranslation();
 
   useEffect(() => {
     setTimeout(() => {
@@ -21,11 +23,10 @@ export default function CompleteModal({ visible, setVisible, redirect }: any) {
     <Modal visible={visible} setVisible={setVisible} animationType="fade" full>
       <View style={styles.container}>
         <Typography type="title" gradient={true} style={styles.title}>
-          Congratulations!
+          {t("modals.title.congratulations")}
         </Typography>
-        <Typography style={styles.subtitle}>
-          Your account is ready to use. You will be redirected to the Home page
-          in a few seconds..
+        <Typography style={styles.subtitle} type="regular">
+          {t("modals.subtitle.complete")}
         </Typography>
         <View style={{ width: 60, height: 60 }}>
           <CircleProgress />

@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "aniup",
-    "slug": "aniup",
+    "name": "AniUp",
+    "slug": "aniup-front",
     "version": "1.0.0",
-    "scheme": "aniup",
-    "icon": "./assets/icon.png",
+    "scheme": "AniUp",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -14,7 +14,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
+        "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.up.aniup"

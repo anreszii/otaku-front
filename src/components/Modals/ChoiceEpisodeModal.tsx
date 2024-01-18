@@ -5,6 +5,7 @@ import Typography from "../ui/Typography";
 import Button from "../ui/Button";
 import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { useTranslation } from "react-i18next";
 
 interface ChoiceEpisodeModalProps {
   visible: boolean;
@@ -24,6 +25,7 @@ export default function ChoiceEpisodeModal({
   setVisibleQuality,
 }: ChoiceEpisodeModalProps) {
   const [isFocus, setIsFocus] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <Modal
@@ -35,10 +37,10 @@ export default function ChoiceEpisodeModal({
     >
       <View style={styles.container}>
         <Typography type="title" gradient={true} style={styles.title}>
-          Choice
+          {t("modals.title.choice")}
         </Typography>
-        <Typography style={styles.subtitle}>
-          Select episode to download
+        <Typography style={styles.subtitle} type="regular">
+          {t("modals.subtitle.episodeDownload")}
         </Typography>
         <View style={{ width: "100%", marginBottom: 24 }}>
           <Dropdown
@@ -63,7 +65,7 @@ export default function ChoiceEpisodeModal({
         </View>
         <View style={{ width: 200, height: 60 }}>
           <Button
-            title="Продолжить"
+            title={t("buttons.сontinue")}
             gradient={false}
             onPress={() => {
               setVisible(false);

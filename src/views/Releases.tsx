@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, View } from "react-native";
 import { format, addDays } from "date-fns";
+import { ru, enUS } from "date-fns/locale";
 import Calendar from "../components/ui/Calendar";
 import Loader from "../components/ui/Loader";
 import ReleaseItem from "../components/Release/ReleaseItem";
@@ -10,6 +11,8 @@ import { commonStyles } from "../style/releaseStyle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import userService from "../api/user/userService";
 import Header from "../components/Layouts/Header";
+import { useTranslation } from "react-i18next";
+import { i18n } from "../plugins/i18n";
 
 interface SeriesData {
   date: number;
@@ -23,6 +26,7 @@ interface OngoingData {
   isFavorite: boolean;
   material_data: {
     title: string;
+    title_en: string;
     anime_title: string;
     poster_url: string;
     next_episode_at: string;
@@ -36,24 +40,27 @@ interface OngoingData {
 const Releases: React.FC = () => {
   const now = new Date();
 
-  const initialDateList: SeriesData[] = Array.from({ length: 7 }).map(
-    (_, index) => {
-      const currentDate = addDays(now, index);
-      const formattedDate = parseInt(format(currentDate, "d"), 10);
-      const dayOfWeek = format(currentDate, "EEEE");
+  const initialDateList: any = Array.from({ length: 7 }).map((_, index) => {
+    const lang = i18n.language;
+    const currentDate = addDays(now, index);
+    const formattedDate = parseInt(format(currentDate, "d"), 10);
+    const dayOfWeek =
+      lang === "en"
+        ? format(currentDate, "EEEE", {
+            locale: enUS,
+          }).substring(0, 3)
+        : format(currentDate, "EE", {
+            locale: ru,
+          }).substring(0, 2);
 
-      return {
-        date: formattedDate,
-        dayOfWeek,
-        focus: index === 0,
-        series: [],
-      };
-    }
-  );
+    return { date: formattedDate, dayOfWeek, focus: index === 0, series: [] };
+  });
 
   const [dateList, setDateList] = useState<SeriesData[]>(initialDateList);
   const [isLoading, setIsLoading] = useState(true);
   const [flag, setFlag] = useState(false);
+
+  const { t } = useTranslation();
 
   const getFavorite = async (title: string) => {
     try {
@@ -74,7 +81,7 @@ const Releases: React.FC = () => {
         const result = await getOngoingsList();
         const uniqueAnimeMap: Record<string, OngoingData[]> = {};
 
-        result.forEach((item: OngoingData) => {
+        result.forEach((item) => {
           const title = item.title;
           if (!uniqueAnimeMap[title]) {
             uniqueAnimeMap[title] = [];
@@ -135,7 +142,7 @@ const Releases: React.FC = () => {
         <Loader />
       ) : (
         <SafeAreaView style={commonStyles.container}>
-          <Header title="Release Calendar" />
+          <Header title={t("headerTitles.release")} />
           <View style={{ marginTop: 62 }}>
             <Calendar dateList={dateList} setDateList={setDateList} />
           </View>

@@ -38,7 +38,14 @@ const HeaderBack: FC<HeaderBackProps> = ({ title, style }) => {
       <TouchableOpacity onPress={() => navigation.goBack()}>
         <Back color="#000" />
       </TouchableOpacity>
-      <Typography type="title" style={styles.title}>
+      <Typography
+        type="title"
+        style={
+          title === "Политика конфиденциальности"
+            ? styles.smallTitle
+            : styles.title
+        }
+      >
         {title}
       </Typography>
     </View>
@@ -57,6 +64,12 @@ const styles = StyleSheet.create({
   title: {
     marginLeft: 16,
     fontSize: 24,
+    fontWeight: "600",
+    lineHeight: 28.8,
+  },
+  smallTitle: {
+    marginLeft: 16,
+    fontSize: 20,
     fontWeight: "600",
     lineHeight: 28.8,
   },
