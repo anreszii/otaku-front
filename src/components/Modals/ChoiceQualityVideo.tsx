@@ -53,7 +53,7 @@ export default function ChoiceQualityModal({
             labelField="label"
             valueField="value"
             showsVerticalScrollIndicator={false}
-            placeholder={!isFocus ? "Select Quality" : "..."}
+            placeholder={!isFocus ? t("modals.labels.choiceQuality") : "..."}
             value={value}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}

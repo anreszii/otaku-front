@@ -180,6 +180,11 @@
         },
         "sureDeleteAll": "Are you sure you want to delete all Downloads?",
         "sureDeleteCache": "Are you sure you want to delete the cache?"
+      },
+      "labels": {
+        "choiceEpisode": "Select Episode",
+        "choiceVoice": "Select Voice",
+        "choiceQuality": "Select Quality"
       }
     },
     "buttons": {

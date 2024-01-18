@@ -19,7 +19,7 @@
           "download": "Загрузки",
           "language": "Язык",
           "darkMode": "Темная тема",
-          "privacyPolicy": "Политика конфиденциальности",
+          "privacyPolicy": "Обработка данных",
           "logout": "Выход"
         }
       },
@@ -142,7 +142,7 @@
       "profile": "Профиль",
       "editProfile": "Редактирование профиля",
       "language": "Язык",
-      "privacyPolicy": "Политика конфиденциальности",
+      "privacyPolicy": "Обработка данных",
       "notification": "Уведомления",
       "forgotPassword": "Забыли пароль",
       "signUpFill": "Заполните профиль",
@@ -180,6 +180,11 @@
         },
         "sureDeleteAll": "Вы уверены, что хотите удалить все загрузки?",
         "sureDeleteCache": "Вы уверены, что хотите удалить кэш?"
+      },
+      "labels": {
+        "choiceEpisode": "Выберите эпизод",
+        "choiceVoice": "Выберите озвучку",
+        "choiceQuality": "Выберите качество"
       }
     },
     "buttons": {

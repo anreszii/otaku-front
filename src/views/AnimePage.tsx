@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import MarqueeText from "react-native-marquee";
+import NetInfo from "@react-native-community/netinfo";
 import { ArrowGradient, List, Play, Share, Star } from "../icons";
 import Typography from "../components/ui/Typography";
 import OutlineTypography from "../components/ui/OutlineTypography";
@@ -29,12 +30,12 @@ import { getAllVoiceAnime } from "../api/kodik/getAllVoiceAnime";
 import { searchAnimeWithVoice } from "../api/kodik/searchAnimeWithVoice";
 import PrepareDownload from "../components/Modals/PrepareDownload";
 import ChoiceQualityModal from "../components/Modals/ChoiceQualityVideo";
-import { useNetwork } from "../providers/NetworkContext";
 import DownloadInternet from "../components/Modals/DownloadInternet";
 import { i18n } from "../plugins/i18n";
 import { t } from "i18next";
 import data from "../data/interests.json";
 import dataRegion from "../data/region.json";
+import { NetInfoStateType } from "@react-native-community/netinfo";
 
 export default function AnimePage({ route }: any) {
   const [animeInfo, setAnimeInfo] = useState<any>(null);
@@ -54,7 +55,8 @@ export default function AnimePage({ route }: any) {
   const [valueEpisode, setValueEpisode] = useState<string>("");
   const [valueQuality, setValueQuality] = useState<string>("");
   const [flag, setFlag] = useState(false);
-  const { networkType } = useNetwork();
+  const [videoLink, setVideoLink] = useState<any>("");
+  const [completeDownload, setCompleteDownload] = useState(false);
   const navigation = useNavigation<any>();
   const lang = i18n.language;
 
@@ -172,6 +174,7 @@ export default function AnimePage({ route }: any) {
 
   const handlePreDownload = async () => {
     const settingWiFi = await AsyncStorage.getItem("downloadWiFi");
+    const networkType = (await NetInfo.fetch()).type;
     if (settingWiFi === "true" && networkType === "cellular") {
       setVisibleWiFi(true);
     } else {
@@ -185,17 +188,42 @@ export default function AnimePage({ route }: any) {
     let videoLink;
 
     if (!!animeInfo?.seasons) {
+      console.log(
+        Number(valueEpisode) - 1,
+        Object.values<any>(Object.values<any>(animeInfo?.seasons)[0]?.episodes)[
+          Number(valueEpisode) - 1
+        ],
+        !Object.values<any>(
+          Object.values<any>(animeInfo?.seasons)[0]?.episodes
+        )[Number(valueEpisode) - 1],
+        Object.values<any>(Object.values<any>(animeInfo?.seasons)[0]?.episodes)
+      );
+      if (
+        !Object.values<any>(
+          Object.values<any>(animeInfo?.seasons)[0]?.episodes
+        )[Number(valueEpisode) - 1]?.link ||
+        Object.values<any>(Object.values<any>(animeInfo?.seasons)[0]?.episodes)[
+          Number(valueEpisode) - 1
+        ]?.link === undefined
+      ) {
+        setVisiblePrepare(false);
+        setVisibleError(true);
+        return;
+      }
       videoLink = await getAnimeUrl(
         Object.values<any>(Object.values<any>(animeInfo.seasons)[0].episodes)[
           Number(valueEpisode) - 1
         ].link
       );
+      setVideoLink(videoLink);
     } else {
+      console.log("hello");
       videoLink = await getAnimeUrl(
         animeInfo.link.includes("https:")
           ? animeInfo.link
           : `https:${animeInfo.link}`
       );
+      setVideoLink(videoLink);
     }
 
     await downloadAndSaveVideo(
@@ -204,7 +232,7 @@ export default function AnimePage({ route }: any) {
         : `https:${videoLink.data.links[valueQuality].Src}`,
       animeInfo.title_orig.replaceAll(" ", "") +
         valueEpisode +
-        valueVoice +
+        valueVoice.replaceAll(" ", "") +
         ".mp4",
       setMB,
       setAllMB,
@@ -212,76 +240,84 @@ export default function AnimePage({ route }: any) {
       setVisiblePrepare,
       setVisible,
       flag,
-      setFlag
-    );
-
-    const downloadsArray: any = await AsyncStorage.getItem("downloadsArray");
-
-    const response = await fetch(
-      videoLink.data.links[valueQuality].Src.includes("https:")
-        ? videoLink.data.links[valueQuality].Src
-        : `https:${videoLink.data.links[valueQuality].Src}`,
-      { method: "HEAD" }
-    );
-    const fileSize: any = response.headers.get("content-length");
-    const initialFileSize = parseFloat(fileSize);
-
-    if (downloadsArray) {
-      await AsyncStorage.setItem(
-        "downloadsArray",
-        JSON.stringify([
-          ...JSON.parse(downloadsArray),
-          {
-            title: animeInfo?.title,
-            title_en: animeInfo?.material_data?.title_en,
-            displayTitle: animeInfo?.material_data?.anime_title,
-            image: animeInfo?.material_data?.screenshots?.length
-              ? animeInfo?.material_data?.screenshots[0]
-              : animeInfo?.material_data?.poster_url,
-            episodeNumber: valueEpisode,
-            voiceName: valueVoice,
-            memory: (initialFileSize / 1000000).toFixed(2),
-            video_url:
-              FileSystem.documentDirectory +
-              animeInfo.title_orig.replaceAll(" ", "") +
-              valueEpisode +
-              valueVoice +
-              ".mp4",
-          },
-        ])
-      );
-    } else {
-      await AsyncStorage.setItem(
-        "downloadsArray",
-        JSON.stringify([
-          {
-            title: animeInfo?.title,
-            title_en: animeInfo?.material_data?.title_en,
-            displayTitle: animeInfo?.material_data?.anime_title,
-            image: animeInfo?.material_data?.screenshots?.length
-              ? animeInfo?.material_data?.screenshots[0]
-              : animeInfo?.material_data?.poster_url,
-            episodeNumber: valueEpisode,
-            voiceName: valueVoice,
-            memory: allMB,
-            video_url:
-              FileSystem.documentDirectory +
-              animeInfo.title_orig.replaceAll(" ", "") +
-              valueEpisode +
-              valueVoice +
-              ".mp4",
-          },
-        ])
-      );
-    }
-    console.log(
-      FileSystem.documentDirectory +
-        animeInfo.title_orig.replaceAll(" ", "") +
-        valueEpisode +
-        valueVoice +
-        ".mp4"
+      setFlag,
+      setCompleteDownload
     );
   };
+
+  useEffect(() => {
+    (async () => {
+      if (completeDownload) {
+        const downloadsArray: any = await AsyncStorage.getItem(
+          "downloadsArray"
+        );
+
+        const response = await fetch(
+          videoLink.data.links[valueQuality].Src.includes("https:")
+            ? videoLink.data.links[valueQuality].Src
+            : `https:${videoLink.data.links[valueQuality].Src}`,
+          { method: "HEAD" }
+        );
+        const fileSize: any = response.headers.get("content-length");
+        const initialFileSize = parseFloat(fileSize);
+
+        if (downloadsArray) {
+          console.log(valueVoice);
+          await AsyncStorage.setItem(
+            "downloadsArray",
+            JSON.stringify([
+              ...JSON.parse(downloadsArray),
+              {
+                title: animeInfo?.title,
+                title_en: animeInfo?.material_data?.title_en,
+                displayTitle: animeInfo?.material_data?.anime_title,
+                image: !!Object.values<any>(
+                  Object.values<any>(animeInfo?.seasons)[0]?.episodes
+                )[Number(valueEpisode) - 1]?.screenshots?.length
+                  ? Object.values<any>(
+                      Object.values<any>(animeInfo?.seasons)[0]?.episodes
+                    )[Number(valueEpisode) - 1]?.screenshots[0]
+                  : animeInfo?.material_data?.poster_url,
+                episodeNumber: valueEpisode,
+                voiceName: valueVoice,
+                memory: (initialFileSize / 1000000).toFixed(2),
+                video_url:
+                  FileSystem.documentDirectory +
+                  animeInfo.title_orig.replaceAll(" ", "") +
+                  valueEpisode +
+                  valueVoice.replaceAll(" ", "") +
+                  ".mp4",
+              },
+            ])
+          );
+        } else {
+          await AsyncStorage.setItem(
+            "downloadsArray",
+            JSON.stringify([
+              {
+                title: animeInfo?.title,
+                title_en: animeInfo?.material_data?.title_en,
+                displayTitle: animeInfo?.material_data?.anime_title,
+                image: animeInfo?.material_data?.screenshots?.length
+                  ? animeInfo?.material_data?.screenshots[0]
+                  : animeInfo?.material_data?.poster_url,
+                episodeNumber: valueEpisode,
+                voiceName: valueVoice,
+                memory: allMB,
+                video_url:
+                  FileSystem.documentDirectory +
+                  animeInfo.title_orig.replaceAll(" ", "") +
+                  valueEpisode +
+                  valueVoice.replaceAll(" ", "") +
+                  ".mp4",
+              },
+            ])
+          );
+        }
+        setCompleteDownload(false);
+      }
+    })();
+  }, [completeDownload]);
 
   const handleShare = async () => {
     const result = await Sharing.share({

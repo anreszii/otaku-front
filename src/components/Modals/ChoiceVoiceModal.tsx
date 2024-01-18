@@ -53,7 +53,7 @@ export default function ChoiceVoiceModal({
             labelField="label"
             valueField="value"
             showsVerticalScrollIndicator={false}
-            placeholder={!isFocus ? "Select Voice" : "..."}
+            placeholder={!isFocus ? t("modals.labels.choiceVoice") : "..."}
             value={value}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}

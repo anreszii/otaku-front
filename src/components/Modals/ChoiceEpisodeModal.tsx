@@ -53,7 +53,7 @@ export default function ChoiceEpisodeModal({
             labelField="label"
             valueField="value"
             showsVerticalScrollIndicator={false}
-            placeholder={!isFocus ? "Select Episode" : "..."}
+            placeholder={!isFocus ? t("modals.labels.choiceEpisode") : "..."}
             value={value}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}

@@ -29,8 +29,8 @@ import Premium from "../views/Premium";
 import NotificationSettings from "../views/NotificationSettings";
 import DownloadSettings from "../views/DownloadSettings";
 import Language from "../views/Language";
-import { useNetwork } from "../providers/NetworkContext";
 import { t } from "i18next";
+import { createOfflineNavigator } from "./offlineNavigator";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -186,81 +186,59 @@ export const PublicStackNavigator = () => {
   );
 };
 
-export const PrivateStackNavigator = ({ route }: any) => {
-  const { networkType } = useNetwork();
-  console.log(networkType);
+const PrivateStackNavigator = ({ route }: any) => {
   return (
     <Stack.Navigator
       initialRouteName="Private"
       screenOptions={{ headerShown: false }}
     >
-      {networkType ? (
-        <>
-          <Stack.Screen name="Main" component={TabNavigator}></Stack.Screen>
-          <Stack.Screen
-            name="Player"
-            initialParams={route}
-            component={Player}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="Search"
-            component={GlobalSearch}
-            initialParams={route}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="AnimePage"
-            initialParams={route}
-            component={AnimePage}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="Notification"
-            component={Notification}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="EditProfile"
-            // @ts-ignore
-            component={EditProfile}
-            initialParams={route}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="NotificationSettings"
-            component={NotificationSettings}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="DownloadSettings"
-            component={DownloadSettings}
-            initialParams={route}
-          ></Stack.Screen>
-          <Stack.Screen name="Security" component={Security}></Stack.Screen>
-          <Stack.Screen
-            name="PrivacyPolicy"
-            component={PrivacyPolicy}
-          ></Stack.Screen>
-          <Stack.Screen name="Premium" component={Premium}></Stack.Screen>
-          <Stack.Screen
-            name="Language"
-            component={Language}
-            initialParams={route}
-          ></Stack.Screen>
-        </>
-      ) : (
-        <>
-          <Stack.Screen name="Download" component={Download}></Stack.Screen>
-          <Stack.Screen name="Player" component={Player}></Stack.Screen>
-        </>
-      )}
+      <Stack.Screen name="Main" component={TabNavigator}></Stack.Screen>
+      <Stack.Screen
+        name="Player"
+        initialParams={route}
+        component={Player}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="Search"
+        component={GlobalSearch}
+        initialParams={route}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="AnimePage"
+        initialParams={route}
+        component={AnimePage}
+      ></Stack.Screen>
+      <Stack.Screen name="Notification" component={Notification}></Stack.Screen>
+      <Stack.Screen
+        name="EditProfile"
+        // @ts-ignore
+        component={EditProfile}
+        initialParams={route}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="NotificationSettings"
+        component={NotificationSettings}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="DownloadSettings"
+        component={DownloadSettings}
+        initialParams={route}
+      ></Stack.Screen>
+      <Stack.Screen name="Security" component={Security}></Stack.Screen>
+      <Stack.Screen
+        name="PrivacyPolicy"
+        component={PrivacyPolicy}
+      ></Stack.Screen>
+      <Stack.Screen name="Premium" component={Premium}></Stack.Screen>
+      <Stack.Screen
+        name="Language"
+        component={Language}
+        initialParams={route}
+      ></Stack.Screen>
     </Stack.Navigator>
   );
 };
 
-export const NoInternetNavigator = ({ route }: any) => {
-  return (
-    <Stack.Navigator
-      initialRouteName="NoInternet"
-      screenOptions={{ headerShown: false }}
-    >
-      <Stack.Screen name="Download" component={Download}></Stack.Screen>
-      <Stack.Screen name="Player" component={Player}></Stack.Screen>
-    </Stack.Navigator>
-  );
-};
+export const OfflineAppNavigator = createOfflineNavigator(
+  PrivateStackNavigator
+);

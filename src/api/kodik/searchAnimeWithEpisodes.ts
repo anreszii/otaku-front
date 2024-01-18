@@ -34,7 +34,7 @@ const findAnimeWithMostEpisodes = (data: any) => {
 
   data.results.forEach((anime: any) => {
     const seasons = anime?.seasons;
-    animeWithMostEpisodes = anime;
+    if (!!!seasons) animeWithMostEpisodes = anime;
 
     if (seasons && Object.keys(seasons).length > 0) {
       const firstSeason = Object.values<any>(seasons)[0];
@@ -42,12 +42,11 @@ const findAnimeWithMostEpisodes = (data: any) => {
 
       if (episodes) {
         const episodesCount = Object.values<any>(episodes).length;
+        console.log(episodesCount, episodes_aired);
         if (
           episodesCount === episodes_aired ||
           episodesCount === episodes_aired + 1
         ) {
-          animeWithMostEpisodes = anime;
-        } else {
           animeWithMostEpisodes = anime;
         }
       }

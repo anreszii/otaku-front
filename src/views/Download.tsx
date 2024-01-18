@@ -19,12 +19,13 @@ import { useNavigation } from "@react-navigation/native";
 import HeaderInput from "../components/Layouts/HeaderInput";
 import { useTranslation } from "react-i18next";
 import { i18n } from "../plugins/i18n";
+import MarqueeText from "react-native-marquee";
 
 interface DownloadsProps {
   displayTitle: string;
   episodeNumber: string;
   image: string;
-  memory: number;
+  memory: string;
   title: string;
   video_url: string;
   voiceName: string;
@@ -43,7 +44,7 @@ interface DeleteProps {
 
 export default function Download({ route }: any) {
   const [isLoading, setIsLoading] = useState(true);
-  const [downloads, setDownloads] = useState<DownloadsProps[]>([]);
+  const [downloads, setDownloads] = useState<DownloadsProps[] | any>([]);
   const [deleteItem, setDeleteItem] = useState<DeleteProps | null>(null);
   const [isDelete, setIsDelete] = useState(false);
   const [flag, setFlag] = useState(false);
@@ -55,7 +56,7 @@ export default function Download({ route }: any) {
   const { t } = useTranslation();
 
   const filterData = () => {
-    return downloads.filter((item) =>
+    return downloads.filter((item: DownloadsProps) =>
       item.displayTitle.toLowerCase().includes(searchQuery.toLowerCase())
     );
   };
@@ -82,7 +83,7 @@ export default function Download({ route }: any) {
       title: title,
       episode: episode,
       voice: voice,
-      memory: memory,
+      memory: Number(memory.toFixed(2)),
       video_url: video_url,
       title_en: title_en,
     });
@@ -131,13 +132,12 @@ export default function Download({ route }: any) {
               onPress={() => setIsSearch(true)}
             />
           )}
-
-          {!!downloads ? (
+          {!!downloads?.length ? (
             <ScrollView
               style={{ ...styles.content, marginTop: isSearch ? 72 : 48 }}
               showsVerticalScrollIndicator={false}
             >
-              {filterData().map((item, index) => (
+              {filterData().map((item: DownloadsProps, index: number) => (
                 <TouchableOpacity
                   key={index}
                   style={styles.downloadItem}
@@ -163,22 +163,29 @@ export default function Download({ route }: any) {
                         type="semibold"
                       >{`Episode ${item.episodeNumber}`}</Typography>
                       <View style={styles.voiceContent}>
-                        <Typography
-                          style={styles.voiceTitle}
-                          gradient={true}
-                          type="semibold"
-                        >
-                          {item.voiceName}
-                        </Typography>
+                        {item.voiceName.length > 12 ? (
+                          <MarqueeText
+                            speed={0.3}
+                            style={{ ...styles.voiceTitle }}
+                            marqueeOnStart
+                            loop
+                            delay={3000}
+                          >
+                            {item.voiceName}
+                          </MarqueeText>
+                        ) : (
+                          <Typography style={styles.voiceTitle} type="semibold">
+                            {item.voiceName}
+                          </Typography>
+                        )}
                       </View>
                     </View>
                     <View style={styles.bottomContent}>
                       <View style={styles.memoryContent}>
                         <Typography
                           style={styles.memoryTitle}
-                          gradient={true}
                           type="semibold"
-                        >{`${item.memory} MB`}</Typography>
+                        >{`${Number(item.memory).toFixed(2)} MB`}</Typography>
                       </View>
                       <TouchableOpacity
                         onPress={() =>
@@ -187,7 +194,7 @@ export default function Download({ route }: any) {
                             title: item.displayTitle,
                             episode: item.episodeNumber,
                             voice: item.voiceName,
-                            memory: item.memory,
+                            memory: Number(item.memory),
                             video_url: item.video_url,
                             title_en: item.title_en,
                           })
@@ -299,14 +306,18 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
   },
   voiceTitle: {
+    fontFamily: "UrbanistSemiBold",
     fontSize: 15,
     fontWeight: "600",
     letterSpacing: 0.2,
     padding: 4,
+    textAlign: "center",
+    color: "#7210FF",
   },
   voiceContent: {
     backgroundColor: "rgba(114, 16, 255, 0.08)",
     borderRadius: 10,
+    width: "50%",
   },
   memoryTitle: {
     width: "100%",
@@ -314,6 +325,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 4,
     borderRadius: 10,
+    color: "#7210FF",
   },
   memoryContent: {
     width: "50%",

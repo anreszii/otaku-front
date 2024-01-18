@@ -5,10 +5,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DevSettings, LogBox } from "react-native";
 import authService from "./src/api/auth/authService";
 import Intro from "./src/views/Intro";
-import { PrivateStackNavigator, PublicStackNavigator } from "./src/navigation";
+import { OfflineAppNavigator, PublicStackNavigator } from "./src/navigation";
 import * as Linking from "expo-linking";
 import * as ScreenOrientation from "expo-screen-orientation";
-import { NetworkProvider } from "./src/providers/NetworkContext";
 import { I18nextProvider } from "react-i18next";
 import { i18n } from "./src/plugins/i18n";
 
@@ -84,11 +83,9 @@ export default function App() {
 
   return (
     <I18nextProvider i18n={i18n}>
-      <NetworkProvider>
-        <NavigationContainer linking={linking}>
-          {isToken ? <PrivateStackNavigator /> : <PublicStackNavigator />}
-        </NavigationContainer>
-      </NetworkProvider>
+      <NavigationContainer linking={linking}>
+        {isToken ? <OfflineAppNavigator /> : <PublicStackNavigator />}
+      </NavigationContainer>
     </I18nextProvider>
   );
 }

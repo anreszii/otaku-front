@@ -12,7 +12,8 @@ export const downloadAndSaveVideo = async (
   setVisiblePrepare: any,
   setVisible: any,
   flag: any,
-  setFlag: any
+  setFlag: any,
+  setCompleteDownload: any
 ) => {
   try {
     const response = await fetch(urlM3U8, { method: "HEAD" });
@@ -23,13 +24,29 @@ export const downloadAndSaveVideo = async (
     await FFmpegKit.executeAsync(
       `-i ${urlM3U8} -c copy ${FileSystem.documentDirectory + fileNameMP4}`,
       async (session) => {
-        await session.getReturnCode().then((status) => {
-          if (status.isValueCancel() || status.isValueError()) {
-            FileSystem.deleteAsync(FileSystem.documentDirectory + fileNameMP4);
+        await session.getReturnCode().then(async (status) => {
+          if (
+            status.isValueCancel() ||
+            status.isValueError() ||
+            !!status.getValue()
+          ) {
+            console.log(await session.getAllLogs());
+            console.log(
+              !!FileSystem.getInfoAsync(
+                FileSystem.documentDirectory + fileNameMP4
+              )
+            );
+            !!FileSystem.getInfoAsync(
+              FileSystem.documentDirectory + fileNameMP4
+            ) &&
+              FileSystem.deleteAsync(
+                FileSystem.documentDirectory + fileNameMP4
+              );
             setVisiblePrepare(false);
             setVisibleError(true);
           } else {
             setVisible(false);
+            setCompleteDownload(true);
           }
         });
       },

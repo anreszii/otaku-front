@@ -9,6 +9,7 @@ import * as FileSystem from "expo-file-system";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTranslation } from "react-i18next";
 import { i18n } from "../../plugins/i18n";
+import MarqueeText from "react-native-marquee";
 
 export function DeleteDownloadModal({
   visible,
@@ -82,7 +83,21 @@ export function DeleteDownloadModal({
                       gradient={true}
                       type="semibold"
                     >
-                      {deleteItem.voice}
+                      {deleteItem.voice.length > 12 ? (
+                        <MarqueeText
+                          speed={0.3}
+                          style={{ ...styles.voiceTitle }}
+                          marqueeOnStart
+                          loop
+                          delay={3000}
+                        >
+                          {deleteItem.voice}
+                        </MarqueeText>
+                      ) : (
+                        <Typography style={styles.voiceTitle} type="semibold">
+                          {deleteItem.voice}
+                        </Typography>
+                      )}
                     </Typography>
                   </View>
                 </View>
@@ -90,7 +105,6 @@ export function DeleteDownloadModal({
                   <View style={styles.memoryContent}>
                     <Typography
                       style={styles.memoryTitle}
-                      gradient={true}
                       type="semibold"
                     >{`${deleteItem.memory} MB`}</Typography>
                   </View>
@@ -195,14 +209,18 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
   },
   voiceTitle: {
+    fontFamily: "UrbanistSemiBold",
     fontSize: 15,
     fontWeight: "600",
     letterSpacing: 0.2,
     padding: 4,
+    textAlign: "center",
+    color: "#7210FF",
   },
   voiceContent: {
     backgroundColor: "rgba(114, 16, 255, 0.08)",
     borderRadius: 10,
+    width: "50%",
   },
   memoryTitle: {
     width: "100%",
@@ -210,6 +228,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 4,
     borderRadius: 10,
+    color: "#7210FF",
   },
   memoryContent: {
     width: "50%",
