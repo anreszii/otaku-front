@@ -31,11 +31,6 @@ export const downloadAndSaveVideo = async (
             !!status.getValue()
           ) {
             console.log(await session.getAllLogs());
-            console.log(
-              !!FileSystem.getInfoAsync(
-                FileSystem.documentDirectory + fileNameMP4
-              )
-            );
             !!FileSystem.getInfoAsync(
               FileSystem.documentDirectory + fileNameMP4
             ) &&

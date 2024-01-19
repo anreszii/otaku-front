@@ -25,7 +25,6 @@ const HeaderLang: React.FC<HeaderProps> = ({ style, lang, setLang }) => {
 
   const handleLang = async (lang: string) => {
     setLang(lang);
-    console.log(lang);
     i18n.changeLanguage(lang === "russian" ? "ru" : "en");
   };
 

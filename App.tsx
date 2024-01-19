@@ -10,6 +10,7 @@ import * as Linking from "expo-linking";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { I18nextProvider } from "react-i18next";
 import { i18n } from "./src/plugins/i18n";
+import { DeepLinkProvider } from "./src/providers/DeepLinkProvider";
 
 LogBox.ignoreLogs([
   "Sending `onAnimatedValueUpdate` with no listeners registered.",
@@ -19,15 +20,6 @@ export default function App() {
   const [appReady, setAppReady] = useState(false);
   const [isToken, setIsToken] = useState(false);
   const [data, setData] = useState<any>(null);
-  const prefix = Linking.createURL("");
-  const linking = {
-    prefixes: [prefix],
-    config: {
-      screens: {
-        AnimePage: "Anime",
-      },
-    },
-  };
 
   const prepareApp = async () => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
@@ -83,8 +75,10 @@ export default function App() {
 
   return (
     <I18nextProvider i18n={i18n}>
-      <NavigationContainer linking={linking}>
-        {isToken ? <OfflineAppNavigator /> : <PublicStackNavigator />}
+      <NavigationContainer>
+        <DeepLinkProvider>
+          {isToken ? <OfflineAppNavigator /> : <PublicStackNavigator />}
+        </DeepLinkProvider>
       </NavigationContainer>
     </I18nextProvider>
   );

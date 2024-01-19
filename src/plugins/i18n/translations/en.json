@@ -85,7 +85,10 @@
       },
       "player": {
         "settings": {
-          "speed": "Speed"
+          "speed": "Speed",
+          "voice": "Voice",
+          "episode": "Episode",
+          "quality": "Quality"
         }
       },
       "download": {

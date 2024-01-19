@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Download from "../views/Download";
 import Player from "../views/Player";
 import Typography from "../components/ui/Typography";
+import AnimePage from "../views/AnimePage";
 
 const Stack = createStackNavigator();
 

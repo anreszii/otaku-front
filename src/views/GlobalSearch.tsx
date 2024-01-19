@@ -132,13 +132,11 @@ export default function GlobalSearch({ route }: any) {
   const fetchAnimeList = async (params: any) => {
     try {
       const { data } = await searchAnime(params);
-      console.log(data);
       const uniqueAnimeList = Array.from(
         new Set(data.results.map((item: any) => item.material_data.title))
       ).map((title) =>
         data.results.find((item: any) => item.material_data.title === title)
       );
-      console.log(uniqueAnimeList, "unique");
       setSearchData(uniqueAnimeList);
       setIsLoading(false);
     } catch (e: any) {
@@ -335,7 +333,11 @@ export default function GlobalSearch({ route }: any) {
                           {newAnimesList.map((item, index) => (
                             <TouchableOpacity
                               key={index}
-                              style={styles.animeContent}
+                              style={
+                                index === newAnimesList.length - 1
+                                  ? { ...styles.animeContent, marginBottom: 48 }
+                                  : styles.animeContent
+                              }
                               onPress={() =>
                                 navigation.navigate("AnimePage", {
                                   title: item.title,

@@ -42,12 +42,26 @@ const findAnimeWithMostEpisodes = (data: any) => {
 
       if (episodes) {
         const episodesCount = Object.values<any>(episodes).length;
-        console.log(episodesCount, episodes_aired);
         if (
-          episodesCount === episodes_aired ||
-          episodesCount === episodes_aired + 1
+          (episodesCount === episodes_aired ||
+            episodesCount === episodes_aired + 1) &&
+          animeWithMostEpisodes !== null
         ) {
-          animeWithMostEpisodes = anime;
+          if (
+            episodes >
+            Object.values<any>(
+              Object.values<any>(animeWithMostEpisodes?.seasons)[0].episodes
+            ).length
+          ) {
+            animeWithMostEpisodes = anime;
+          }
+        } else {
+          if (
+            episodesCount === episodes_aired ||
+            episodesCount === episodes_aired + 1
+          ) {
+            animeWithMostEpisodes = anime;
+          }
         }
       }
     }

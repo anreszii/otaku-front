@@ -35,7 +35,9 @@ import { i18n } from "../plugins/i18n";
 import { t } from "i18next";
 import data from "../data/interests.json";
 import dataRegion from "../data/region.json";
-import { NetInfoStateType } from "@react-native-community/netinfo";
+import base64url from "base64url";
+import { sha256 } from "js-sha256";
+import axios from "axios";
 
 export default function AnimePage({ route }: any) {
   const [animeInfo, setAnimeInfo] = useState<any>(null);
@@ -75,17 +77,6 @@ export default function AnimePage({ route }: any) {
         : route.params.title;
       const res: any = await searchAnimeWithEpisodes(title);
       const id: any = await AsyncStorage.getItem("id");
-      // const { data } = await axios.get(
-      //   `https://shikimori.one/api/animes/${animeID}`
-      // );
-      // console.log(data);
-      // const editPosterAnime = {
-      //   ...res,
-      //   material_data: {
-      //     ...res.material_data,
-      //     poster_url: `https://shikimori.one${data.image.original}`,
-      //   },
-      // };
       const favoriteList = await userService.getFavoriteList(id);
       const inFavoriteList = favoriteList.data.find(
         (el: any) => el.title === titleFavorite
@@ -141,14 +132,7 @@ export default function AnimePage({ route }: any) {
     if (animeInfo.isFavorite) {
       setAnimeInfo({ ...animeInfo, isFavorite: false });
       const id: any = await AsyncStorage.getItem("id");
-      await userService
-        .delFavoriteList(id, animeInfo.favoriteItem)
-        .then((data) => {
-          console.log(data.data);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      await userService.delFavoriteList(id, animeInfo.favoriteItem);
     } else {
       const id: any = await AsyncStorage.getItem("id");
       const favoriteItem = {
@@ -156,14 +140,7 @@ export default function AnimePage({ route }: any) {
         rating: animeInfo.material_data.shikimori_rating,
         title: animeInfo.title,
       };
-      await userService
-        .addFavoriteList(id, favoriteItem)
-        .then((data: any) => {
-          console.log(data.data);
-        })
-        .catch((e: any) => {
-          console.log(e);
-        });
+      await userService.addFavoriteList(id, favoriteItem);
       setAnimeInfo({
         ...animeInfo,
         isFavorite: true,
@@ -188,16 +165,6 @@ export default function AnimePage({ route }: any) {
     let videoLink;
 
     if (!!animeInfo?.seasons) {
-      console.log(
-        Number(valueEpisode) - 1,
-        Object.values<any>(Object.values<any>(animeInfo?.seasons)[0]?.episodes)[
-          Number(valueEpisode) - 1
-        ],
-        !Object.values<any>(
-          Object.values<any>(animeInfo?.seasons)[0]?.episodes
-        )[Number(valueEpisode) - 1],
-        Object.values<any>(Object.values<any>(animeInfo?.seasons)[0]?.episodes)
-      );
       if (
         !Object.values<any>(
           Object.values<any>(animeInfo?.seasons)[0]?.episodes
@@ -217,7 +184,6 @@ export default function AnimePage({ route }: any) {
       );
       setVideoLink(videoLink);
     } else {
-      console.log("hello");
       videoLink = await getAnimeUrl(
         animeInfo.link.includes("https:")
           ? animeInfo.link
@@ -262,7 +228,6 @@ export default function AnimePage({ route }: any) {
         const initialFileSize = parseFloat(fileSize);
 
         if (downloadsArray) {
-          console.log(valueVoice);
           await AsyncStorage.setItem(
             "downloadsArray",
             JSON.stringify([
@@ -319,12 +284,17 @@ export default function AnimePage({ route }: any) {
     })();
   }, [completeDownload]);
 
+  const { Buffer } = require("buffer");
+
   const handleShare = async () => {
+    const encodedAuth = Buffer.from(animeInfo.title, "utf-8").toString(
+      "base64"
+    );
+
+    const url = `https://aniup.fun/anime?title=${encodedAuth}`;
     const result = await Sharing.share({
-      message: `Посмотри аниме ${animeInfo.title}`,
-      url: `aniup://AnimePage?title=${animeInfo.title}`,
+      message: `Посмотри аниме ${animeInfo.material_data.anime_title}\n${url}`,
     });
-    console.log(result);
   };
 
   const handleShowsDesc = () => {

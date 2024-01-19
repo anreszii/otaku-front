@@ -3,7 +3,7 @@
     "name": "AniUp",
     "slug": "aniup-front",
     "version": "1.0.0",
-    "scheme": "AniUp",
+    "scheme": "aniup",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "assetBundlePatterns": ["**/*"],

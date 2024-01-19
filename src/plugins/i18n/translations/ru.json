@@ -85,7 +85,10 @@
       },
       "player": {
         "settings": {
-          "speed": "Скорость"
+          "speed": "Скорость",
+          "voice": "Озвучка",
+          "episode": "Серии",
+          "quality": "Качество"
         }
       },
       "download": {

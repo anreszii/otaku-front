@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Dimensions,
   Animated,
+  ScrollView,
 } from "react-native";
 import Video from "react-native-video";
 import * as ScreenOrientation from "expo-screen-orientation";
@@ -17,6 +18,10 @@ import CircleProgress from "../components/ui/CircleProgress";
 import RightModal from "../components/Modals/RightModal";
 import Typography from "../components/ui/Typography";
 import { Back } from "../icons";
+import { getAllVoiceAnime } from "../api/kodik/getAllVoiceAnime";
+import { searchAnimeWithVoice } from "../api/kodik/searchAnimeWithVoice";
+import { ProgressBar } from "react-native-paper";
+import { t } from "i18next";
 
 export default function Player({ route }: any) {
   const video = useRef<any>(null);
@@ -28,6 +33,7 @@ export default function Player({ route }: any) {
   const [visibleRightSpeed, setVisibleRightSpeed] = useState(false);
   const [visibleRightVoice, setVisibleRightVoice] = useState(false);
   const [visibleRightEpisode, setVisibleRightEpisode] = useState(false);
+  const [visibleRightQuality, setVisibleRightQuality] = useState(false);
   const [isPlaying, setIsPlaying] = React.useState(false);
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const [showSkipText, setShowSkipText] = useState(false);
@@ -37,6 +43,9 @@ export default function Player({ route }: any) {
   const [videoLink, setVideoLink] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [speed, setSpeed] = useState(1);
+  const [quality, setQuality] = useState("720");
+  const [episode, setEpisode] = useState<any>([]);
+  const [voice, setVoice] = useState<any>([]);
   const skipTextOpacity = useRef(new Animated.Value(0)).current;
   const backgroundColor = useRef(new Animated.Value(0)).current;
 
@@ -123,7 +132,6 @@ export default function Player({ route }: any) {
   };
 
   const handleLoad = (meta: any) => {
-    console.log(meta, "hello");
     setDuration(meta.duration / 60);
     setIsLoading(false);
   };
@@ -162,32 +170,127 @@ export default function Player({ route }: any) {
       }
     });
 
+  const handleChangeVoice = async (title: string) => {
+    voice[voice.findIndex((el: any) => el.focus === true)].focus = false;
+    voice[voice.findIndex((el: any) => el.title === title)].focus = true;
+    setVoice([...voice]);
+    await getEpisodeWithVoiceWithoutChangeEpisodeFocus(title);
+  };
+
+  const handleChangeEpisode = async (value: number) => {
+    episode[episode.findIndex((el: any) => el.focus === true)].focus = false;
+    episode[episode.findIndex((el: any) => el.value === value)].focus = true;
+    setEpisode([...episode]);
+    await getVideoLink(quality, [...episode], voice);
+  };
+
+  const getEpisodeWithVoiceWithoutChangeEpisodeFocus = async (
+    voice: string
+  ) => {
+    const title = route.params.creature.title;
+    const data = await searchAnimeWithVoice(title, voice);
+    const episodeFocus =
+      episode.findIndex((el: any) => el.focus === true) !== -1
+        ? episode.findIndex((el: any) => el.focus === true)
+        : 0;
+    const tempEpisodeArray: any[] = [];
+    Array.from(
+      data.type === "anime"
+        ? { length: 1 }
+        : {
+            length: Object.values<any>(
+              Object.values<any>(data.seasons)[0].episodes
+            ).length,
+          }
+    ).map((item, index) => {
+      tempEpisodeArray.push({
+        title: `Episode ${index + 1}`,
+        value: index + 1,
+        focus: index === episodeFocus ? true : false,
+      });
+    });
+    setEpisode(tempEpisodeArray);
+  };
+
+  const getEpisodeWithVoice = async (voice: string) => {
+    const title = route.params.creature.title;
+    const data = await searchAnimeWithVoice(title, voice);
+    const tempEpisodeArray: any[] = [];
+    Array.from(
+      data.type === "anime"
+        ? { length: 1 }
+        : {
+            length: Object.values<any>(
+              Object.values<any>(data.seasons)[0].episodes
+            ).length,
+          }
+    ).map((item, index) => {
+      tempEpisodeArray.push({
+        title: `Episode ${index + 1}`,
+        value: index + 1,
+        focus: index === 0 ? true : false,
+      });
+    });
+    setEpisode(tempEpisodeArray);
+    return tempEpisodeArray;
+  };
+
+  const getVideoLink = async (quality: string, episode: any, voice: any) => {
+    setIsPlaying(false);
+    const title = route.params.creature.title;
+    const voiceFocus = voice.find((el: any) => el.focus === true).title;
+    const res = await searchAnimeWithVoice(title, voiceFocus);
+    const episodeFocus = episode.find((el: any) => el.focus === true).value - 1;
+
+    if (res.type === "anime") {
+      const videoLink = await getAnimeUrl(res.link);
+      setVideoLink(
+        videoLink.data.links[quality].Src.includes("https:")
+          ? videoLink.data.links[quality].Src
+          : `https:${videoLink.data.links[quality].Src}`
+      );
+    } else {
+      const videoLink = await getAnimeUrl(
+        Object.values<any>(Object.values<any>(res.seasons)[0].episodes)[
+          episodeFocus
+        ].link
+      );
+      setVideoLink(
+        videoLink.data.links[quality].Src.includes("https:")
+          ? videoLink.data.links[quality].Src
+          : `https:${videoLink.data.links[quality].Src}`
+      );
+    }
+    setPosition(0);
+  };
+
+  useEffect(() => {
+    (async () => {
+      if (!isLoading) {
+        setIsLoading(true);
+        await getVideoLink(quality, episode, voice);
+      }
+    })();
+  }, [quality, episode, voice]);
+
   useEffect(() => {
     (async () => {
       ScreenOrientation.unlockAsync();
       const title = route.params.creature.title;
-      const res = await searchAnimeWithEpisodes(title);
 
-      if (res.type === "anime") {
-        const videoLink = await getAnimeUrl(res.link);
+      const allVoice: any[] = await getAllVoiceAnime(title);
+      const tempVoiceArray: any[] = [];
+      Array.from({ length: allVoice.length }).map((item, index) =>
+        tempVoiceArray.push({
+          title: allVoice[index],
+          focus: index === 0 ? true : false,
+        })
+      );
+      setVoice(tempVoiceArray);
 
-        setVideoLink(
-          videoLink.data.links["720"].Src.includes("https:")
-            ? videoLink.data.links["720"].Src
-            : `https:${videoLink.data.links["720"].Src}`
-        );
-      } else {
-        const videoLink = await getAnimeUrl(
-          Object.values<any>(Object.values<any>(res.seasons)[0].episodes)[0]
-            .link
-        );
+      const episodes = await getEpisodeWithVoice(tempVoiceArray[0].title);
 
-        setVideoLink(
-          videoLink.data.links["720"].Src.includes("https:")
-            ? videoLink.data.links["720"].Src
-            : `https:${videoLink.data.links["720"].Src}`
-        );
-      }
+      await getVideoLink(quality, episodes, tempVoiceArray);
 
       const subscription =
         ScreenOrientation.addOrientationChangeListener(changeOrientation);
@@ -197,6 +300,10 @@ export default function Player({ route }: any) {
       };
     })();
   }, []);
+
+  useEffect(() => {
+    console.log("Video Link Updated:", videoLink);
+  }, [videoLink]);
 
   return (
     <>
@@ -272,6 +379,7 @@ export default function Player({ route }: any) {
         >
           <View style={styles.content}>
             <Video
+              key={videoLink}
               ref={video}
               source={{
                 uri: videoLink,
@@ -314,6 +422,8 @@ export default function Player({ route }: any) {
                       setVisibleSpeed={setVisibleRightSpeed}
                       setVisibleVoice={setVisibleRightVoice}
                       setVisibleEpisode={setVisibleRightEpisode}
+                      quality={quality}
+                      setVisibleQuality={setVisibleRightQuality}
                       url={videoLink}
                     />
                   </Animated.View>
@@ -351,7 +461,7 @@ export default function Player({ route }: any) {
               <Back color="#FFF" />
             </TouchableOpacity>
             <Typography type="title" style={styles.rightTitle}>
-              Speed
+              {t("screens.player.settings.speed")}
             </Typography>
           </View>
           <TouchableOpacity
@@ -359,8 +469,14 @@ export default function Player({ route }: any) {
               setSpeed(0.5);
               setVisibleRightSpeed(false);
             }}
+            disabled={speed === 0.5}
           >
-            <Typography type="bold" style={styles.speedText}>
+            <Typography
+              type="bold"
+              style={
+                speed === 0.5 ? styles.speedText : styles.speedTextNoneActive
+              }
+            >
               0.5
             </Typography>
           </TouchableOpacity>
@@ -369,8 +485,14 @@ export default function Player({ route }: any) {
               setSpeed(1);
               setVisibleRightSpeed(false);
             }}
+            disabled={speed === 1.0}
           >
-            <Typography type="bold" style={styles.speedText}>
+            <Typography
+              type="bold"
+              style={
+                speed === 1.0 ? styles.speedText : styles.speedTextNoneActive
+              }
+            >
               1.0
             </Typography>
           </TouchableOpacity>
@@ -379,8 +501,14 @@ export default function Player({ route }: any) {
               setSpeed(1.5);
               setVisibleRightSpeed(false);
             }}
+            disabled={speed === 1.5}
           >
-            <Typography type="bold" style={styles.speedText}>
+            <Typography
+              type="bold"
+              style={
+                speed === 1.5 ? styles.speedText : styles.speedTextNoneActive
+              }
+            >
               1.5
             </Typography>
           </TouchableOpacity>
@@ -389,8 +517,14 @@ export default function Player({ route }: any) {
               setSpeed(2.0);
               setVisibleRightSpeed(false);
             }}
+            disabled={speed === 2.0}
           >
-            <Typography type="bold" style={styles.speedText}>
+            <Typography
+              type="bold"
+              style={
+                speed === 2.0 ? styles.speedText : styles.speedTextNoneActive
+              }
+            >
               2.0
             </Typography>
           </TouchableOpacity>
@@ -401,14 +535,167 @@ export default function Player({ route }: any) {
         visible={visibleRightVoice}
         setVisible={setVisibleRightVoice}
       >
-        <Typography>Hi</Typography>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={
+            full
+              ? { padding: 32 }
+              : { paddingTop: 16, paddingHorizontal: 32, paddingBottom: 32 }
+          }
+        >
+          <View style={styles.headerRight}>
+            <TouchableOpacity onPress={() => setVisibleRightVoice(false)}>
+              <Back color="#FFF" />
+            </TouchableOpacity>
+            <Typography type="title" style={styles.rightTitle}>
+              {t("screens.player.settings.voice")}
+            </Typography>
+          </View>
+          {voice.map((item: any) => (
+            <TouchableOpacity
+              onPress={() => {
+                handleChangeVoice(item.title);
+                setVisibleRightVoice(false);
+              }}
+              disabled={item.focus}
+            >
+              <Typography
+                type="bold"
+                style={
+                  item.focus ? styles.voiceText : styles.voiceTextNoneActive
+                }
+              >
+                {item.title}
+              </Typography>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
       </RightModal>
       <RightModal
         fullScreen={full}
         visible={visibleRightEpisode}
         setVisible={setVisibleRightEpisode}
       >
-        <Typography>Hi</Typography>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={
+            full
+              ? { padding: 32 }
+              : { paddingTop: 16, paddingHorizontal: 32, paddingBottom: 32 }
+          }
+        >
+          <View style={styles.headerRight}>
+            <TouchableOpacity onPress={() => setVisibleRightVoice(false)}>
+              <Back color="#FFF" />
+            </TouchableOpacity>
+            <Typography type="title" style={styles.rightTitle}>
+              {t("screens.player.settings.episode")}
+            </Typography>
+          </View>
+          {episode.map((item: any) => (
+            <TouchableOpacity
+              onPress={() => {
+                handleChangeEpisode(item.value);
+                setVisibleRightEpisode(false);
+              }}
+              disabled={item.focus}
+            >
+              <Typography
+                type="bold"
+                style={
+                  item.focus ? styles.episodeText : styles.episodeTextNoneActive
+                }
+              >
+                {item.title}
+              </Typography>
+              <ProgressBar
+                color="#7210FF"
+                style={{
+                  marginBottom: 32,
+                  backgroundColor: "#35383F",
+                  borderRadius: 4,
+                }}
+                progress={0}
+              />
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </RightModal>
+      <RightModal
+        fullScreen={full}
+        visible={visibleRightQuality}
+        setVisible={setVisibleRightQuality}
+      >
+        <View
+          style={
+            full
+              ? { padding: 32 }
+              : { paddingTop: 16, paddingHorizontal: 32, paddingBottom: 32 }
+          }
+        >
+          <View style={styles.headerRight}>
+            <TouchableOpacity onPress={() => setVisibleRightSpeed(false)}>
+              <Back color="#FFF" />
+            </TouchableOpacity>
+            <Typography type="title" style={styles.rightTitle}>
+              {t("screens.player.settings.quality")}
+            </Typography>
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              setQuality("360");
+              setVisibleRightQuality(false);
+            }}
+            disabled={quality === "360"}
+          >
+            <Typography
+              type="bold"
+              style={
+                quality === "360"
+                  ? styles.qualityText
+                  : styles.qualityTextNoneActive
+              }
+            >
+              360
+            </Typography>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setQuality("480");
+              setVisibleRightQuality(false);
+            }}
+            disabled={quality === "480"}
+          >
+            <Typography
+              type="bold"
+              style={
+                quality === "480"
+                  ? styles.qualityText
+                  : styles.qualityTextNoneActive
+              }
+            >
+              480
+            </Typography>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setQuality("720");
+              setVisibleRightQuality(false);
+            }}
+            disabled={quality === "720"}
+          >
+            <Typography
+              type="bold"
+              style={
+                quality === "720"
+                  ? styles.qualityText
+                  : styles.qualityTextNoneActive
+              }
+            >
+              720
+            </Typography>
+          </TouchableOpacity>
+        </View>
       </RightModal>
     </>
   );
@@ -476,9 +763,68 @@ const styles = StyleSheet.create({
     marginLeft: 16,
   },
   speedText: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "700",
     color: "#FFF",
+    lineHeight: 19.6,
+    letterSpacing: 0.2,
+    textAlign: "center",
+    marginBottom: 32,
+  },
+  speedTextNoneActive: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: "rgba(255, 255, 255, 0.5)",
+    lineHeight: 19.6,
+    letterSpacing: 0.2,
+    textAlign: "center",
+    marginBottom: 32,
+  },
+  voiceText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#FFF",
+    lineHeight: 19.6,
+    letterSpacing: 0.2,
+    marginBottom: 32,
+  },
+  voiceTextNoneActive: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: "rgba(255, 255, 255, 0.5)",
+    lineHeight: 19.6,
+    letterSpacing: 0.2,
+    marginBottom: 32,
+  },
+  episodeText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#FFF",
+    lineHeight: 19.6,
+    letterSpacing: 0.2,
+    marginBottom: 8,
+  },
+  episodeTextNoneActive: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: "rgba(255, 255, 255, 0.5)",
+    lineHeight: 19.6,
+    letterSpacing: 0.2,
+    marginBottom: 8,
+  },
+  qualityText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#FFF",
+    lineHeight: 19.6,
+    letterSpacing: 0.2,
+    textAlign: "center",
+    marginBottom: 32,
+  },
+  qualityTextNoneActive: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: "rgba(255, 255, 255, 0.5)",
     lineHeight: 19.6,
     letterSpacing: 0.2,
     textAlign: "center",

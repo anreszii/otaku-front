@@ -31,11 +31,9 @@ export default function SignIn() {
   const navigation = useNavigation<any>();
 
   const setToken = async () => {
-    console.log("hu");
     await authService
       .login(user.username, user.password)
       .then(async (data) => {
-        console.log(data, "huy");
         await AsyncStorage.setItem("id", data.data.user.id);
         await AsyncStorage.setItem("token", data.data.tokens.accessToken);
         DevSettings.reload();

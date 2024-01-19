@@ -29,6 +29,8 @@ export default function Controls({
   setVisibleSpeed,
   setVisibleVoice,
   setVisibleEpisode,
+  quality,
+  setVisibleQuality,
   url,
 }: any) {
   const navigation = useNavigation<any>();
@@ -101,6 +103,14 @@ export default function Controls({
             onPress={() => setVisibleEpisode(true)}
           >
             <Episodes />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={full ? styles.iconsItemFull : styles.iconsItem}
+            onPress={() => setVisibleQuality(true)}
+          >
+            <Typography type="semibold" style={{ color: "#fff" }}>
+              {quality}
+            </Typography>
           </TouchableOpacity>
         </View>
       </View>
