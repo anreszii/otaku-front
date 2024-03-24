@@ -1,27 +1,93 @@
-import { SafeAreaView, StyleSheet, Animated, Easing } from "react-native";
-import React, { useEffect } from "react";
-import CircleProgress from "../components/ui/CircleProgress";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Image } from "expo-image";
+import { IIntro } from "@/interfaces/Intro";
+import React, { useEffect, useRef } from "react";
+import { Animated, Easing, StyleSheet } from "react-native";
 
-export default function Intro() {
+const Intro: React.FC<IIntro> = ({ setIsAppReady }) => {
+  const firstLetterAnim = useRef(new Animated.Value(-250)).current;
+  const secondLetterAnim = useRef(new Animated.Value(250)).current;
+  const lettersAnim = useRef(new Animated.Value(1)).current;
+  const screenOpacity = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(firstLetterAnim, {
+        toValue: 0,
+        duration: 1400,
+        easing: Easing.inOut(Easing.exp),
+        useNativeDriver: true,
+      }),
+      Animated.timing(secondLetterAnim, {
+        toValue: 0,
+        duration: 1400,
+        easing: Easing.inOut(Easing.exp),
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setTimeout(() => {
+        Animated.parallel([
+          Animated.timing(lettersAnim, {
+            toValue: 10,
+            duration: 900,
+            easing: Easing.inOut(Easing.exp),
+            useNativeDriver: true,
+          }),
+          Animated.timing(screenOpacity, {
+            toValue: 0,
+            duration: 900,
+            easing: Easing.inOut(Easing.exp),
+            useNativeDriver: true,
+          }),
+        ]).start(() => setIsAppReady(true));
+      }, 150);
+    });
+  }, []);
+
   return (
-    <SafeAreaView style={styles.container}>
-      <Image
-        source={require("../../assets/icon.png")}
-        style={{ width: 113, height: 67 }}
-        contentFit="contain"
+    <Animated.View
+      style={[
+        styles.container,
+        {
+          transform: [{ scale: lettersAnim }],
+          opacity: screenOpacity,
+        },
+      ]}
+    >
+      <Animated.Image
+        source={require("assets/a.png")}
+        style={[
+          styles.letter,
+          {
+            transform: [{ translateX: firstLetterAnim }],
+          },
+        ]}
+        resizeMode="contain"
       />
-      <CircleProgress />
-    </SafeAreaView>
+      <Animated.Image
+        source={require("assets/u.png")}
+        style={[
+          styles.letter,
+          {
+            transform: [{ translateX: secondLetterAnim }],
+          },
+        ]}
+        resizeMode="contain"
+      />
+    </Animated.View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    justifyContent: "center",
     alignItems: "center",
-    justifyContent: "space-around",
+    backgroundColor: "#0B1218",
+  },
+  letter: {
+    position: "absolute",
+    width: 200,
+    height: 125,
   },
 });
+
+export default Intro;

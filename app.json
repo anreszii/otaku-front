@@ -1,29 +1,30 @@
 {
   "expo": {
-    "name": "AniUp",
+    "name": "aniup-front",
     "slug": "aniup-front",
     "version": "1.0.0",
-    "scheme": "aniup",
-    "icon": "./assets/logo.png",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "assetBundlePatterns": ["**/*"],
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true,
-      "requireFullScreen": true,
-      "bundleIdentifier": "com.up.aniup"
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "package": "com.up.aniup"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "65272881-f08e-4ed4-a33e-abaa0588ff33"
       }
     },
-    "plugins": ["@config-plugins/react-native-google-cast"]
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
   }
 }
