@@ -9,11 +9,14 @@ import { InstructionItem, RenderItemProps } from "@/types/views/onboarding";
 import Button from "@/components/ui/Button";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { TypeRootStackParamList } from "@/navigation/navigation.types";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import useAsyncStorage from "@/hooks/useAsyncStorage";
 
 const Onboarding = () => {
   const [activeSlide, setActiveSlide] = useState(0);
   const carouselRef = useRef<Carousel<InstructionItem> | null>(null);
   const [dotWidth, dotHeight] = [68, 6];
+  const { setValue } = useAsyncStorage("seeOnboarding");
 
   const navigation = useNavigation<NavigationProp<TypeRootStackParamList>>();
 
@@ -104,6 +107,7 @@ const Onboarding = () => {
             onPress={() => {
               setActiveSlide(activeSlide + 1);
               if (isLast) {
+                setValue(true);
                 navigation.navigate("Welcome");
                 navigation.reset({
                   index: 0,
@@ -185,13 +189,13 @@ const Onboarding = () => {
           ref={carouselRef}
           data={instructions}
           renderItem={renderItem}
-          sliderWidth={300}
+          sliderWidth={320}
           style={[styles.spacing]}
           itemWidth={300}
           sliderHeight={100}
           itemHeight={100}
           onSnapToItem={(index) => setActiveSlide(index)}
-          containerCustomStyle={{ flexGrow: 0, marginBottom: 50 }}
+          containerCustomStyle={styles.carousel}
         />
       </View>
     </ImageBackground>
@@ -202,6 +206,10 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
     justifyContent: "flex-end",
+  },
+  carousel: {
+    flexGrow: 0,
+    marginBottom: 35,
   },
   backgroundContainerWrapper: {
     width: "100%",

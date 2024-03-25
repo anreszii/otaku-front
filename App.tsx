@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import * as Font from "expo-font";
 import "@/helpers/ignoreWarnings";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const App: React.FC = () => {
   const [isAuth, setIsAuth] = useState(false);
@@ -33,7 +34,9 @@ const App: React.FC = () => {
         <Intro setIsAppReady={setIsAppReady} />
       </View>
       <AuthProvider>
-        <Navigation />
+        <SafeAreaProvider>
+          <Navigation />
+        </SafeAreaProvider>
       </AuthProvider>
     </>
   );
