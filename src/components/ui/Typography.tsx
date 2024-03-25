@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet } from "react-native";
-import { FC } from "react";
+import { View, Text, StyleSheet, TextProps } from "react-native";
+import { Component, FC } from "react";
 import { ITypography } from "@/types/ui";
 
 const Typography: FC<ITypography> = ({ children, ...props }) => {
@@ -9,6 +9,15 @@ const Typography: FC<ITypography> = ({ children, ...props }) => {
     </Text>
   );
 };
+
+export class TypographyComponent extends Component {
+  constructor(props: TextProps) {
+    super(props);
+  }
+  render() {
+    return <Typography {...this.props} />;
+  }
+}
 
 const styles = StyleSheet.create({
   text: {

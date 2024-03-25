@@ -1,8 +1,8 @@
-import { IIntro } from "@/types/views";
+import { IntroProps } from "@/types/views/intro";
 import { FC, useEffect, useRef } from "react";
 import { Animated, Easing, StyleSheet } from "react-native";
 
-const Intro: FC<IIntro> = ({ setIsAppReady }) => {
+const Intro: FC<IntroProps> = ({ setIsAppReady }) => {
   const firstLetterAnim = useRef(new Animated.Value(-250)).current;
   const secondLetterAnim = useRef(new Animated.Value(250)).current;
   const lettersAnim = useRef(new Animated.Value(1)).current;

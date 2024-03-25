@@ -11,15 +11,11 @@ import useAsyncStorage from "@/hooks/useAsyncStorage";
 
 const AuthContext = createContext({} as IAuthContext);
 
-const AuthProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
+const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const { storedValue: user, setValue: setUser } =
     useAsyncStorage<TypeUserState>("user");
 
-  useEffect(() => {
-    (async () => {
-      setUser({} as TypeUserState);
-    })();
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>

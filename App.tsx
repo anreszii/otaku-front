@@ -5,6 +5,7 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import * as Font from "expo-font";
+import "@/helpers/ignoreWarnings";
 
 const App: React.FC = () => {
   const [isAuth, setIsAuth] = useState(false);
