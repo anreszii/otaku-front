@@ -1,8 +1,8 @@
-import { IIntro } from "@/interfaces/Intro";
-import React, { useEffect, useRef } from "react";
+import { IIntro } from "@/types/views";
+import { FC, useEffect, useRef } from "react";
 import { Animated, Easing, StyleSheet } from "react-native";
 
-const Intro: React.FC<IIntro> = ({ setIsAppReady }) => {
+const Intro: FC<IIntro> = ({ setIsAppReady }) => {
   const firstLetterAnim = useRef(new Animated.Value(-250)).current;
   const secondLetterAnim = useRef(new Animated.Value(250)).current;
   const lettersAnim = useRef(new Animated.Value(1)).current;
@@ -37,7 +37,9 @@ const Intro: React.FC<IIntro> = ({ setIsAppReady }) => {
             easing: Easing.inOut(Easing.exp),
             useNativeDriver: true,
           }),
-        ]).start(() => setIsAppReady(true));
+        ]).start(() => {
+          setIsAppReady(true);
+        });
       }, 150);
     });
   }, []);

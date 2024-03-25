@@ -1,23 +1,39 @@
+import Navigation from "@/navigation/Navigation";
+import AuthProvider from "@/providers/AuthProvider";
 import Intro from "@/views/Intro";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import * as Font from "expo-font";
 
 const App: React.FC = () => {
   const [isAuth, setIsAuth] = useState(false);
   const [isAppReady, setIsAppReady] = useState(false);
 
+  useEffect(() => {
+    (async () => {
+      await Font.loadAsync({
+        NotoSansJPRegular: require("./assets/fonts/NotoSansJP-Regular.ttf"),
+        NotoSansJPBold: require("./assets/fonts/NotoSansJP-Bold.ttf"),
+        NotoSansJPSemiBold: require("./assets/fonts/NotoSansJP-SemiBold.ttf"),
+        NotoSansJPMedium: require("./assets/fonts/NotoSansJP-Medium.ttf"),
+        UrbanistRegular: require("./assets/fonts/Urbanist-Regular.ttf"),
+        UrbanistBold: require("./assets/fonts/Urbanist-Bold.ttf"),
+        UrbanistSemiBold: require("./assets/fonts/Urbanist-SemiBold.ttf"),
+        UrbanistMedium: require("./assets/fonts/Urbanist-Medium.ttf"),
+      });
+    })();
+  }, []);
+
   return (
     <>
       <StatusBar style="light" />
-      <View style={styles.intro}>
+      <View style={{ ...styles.intro, ...(isAppReady && { display: "none" }) }}>
         <Intro setIsAppReady={setIsAppReady} />
       </View>
-      <View style={styles.container}>
-        <Text style={{ color: "white" }}>
-          Open up App.tsx to start working on your app!
-        </Text>
-      </View>
+      <AuthProvider>
+        <Navigation />
+      </AuthProvider>
     </>
   );
 };
