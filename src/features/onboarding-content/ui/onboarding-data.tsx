@@ -1,4 +1,4 @@
-import { View, Text, Animated, StyleSheet } from "react-native";
+import { View, Animated, StyleSheet } from "react-native";
 import React from "react";
 import { TypographyComponent } from "shared/index";
 

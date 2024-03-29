@@ -1,17 +1,18 @@
 import { View, Animated, Easing, StyleSheet } from "react-native";
 import React, { useRef, useState } from "react";
 import Carousel, { Pagination } from "react-native-snap-carousel";
-import {
-  InstructionItem,
-  RenderItemProps,
-} from "shared/types/views/onboarding";
 import Button from "shared/ui/button";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import useAsyncStorage from "shared/hooks/useAsyncStorage";
 import { RootStackParamList } from "shared/routes";
 import { OnboardingData, OnboardingDots } from "features/onboarding-content";
-import { instructions } from "features/onboarding-content/onboarding-card.data";
 import { PosterBackground } from "features/poster-background";
+import { InstructionItem, instructions } from "entities/instruction-item";
+
+type RenderItemProps = {
+  item: InstructionItem;
+  index: number;
+};
 
 export const Onboarding = () => {
   const [activeSlide, setActiveSlide] = useState(0);

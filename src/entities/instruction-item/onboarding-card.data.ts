@@ -1,4 +1,4 @@
-import { InstructionItem } from "shared/types/views/onboarding";
+import { InstructionItem } from "./type";
 
 export const instructions: InstructionItem[] = [
   {
