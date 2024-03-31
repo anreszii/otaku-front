@@ -1,8 +1,14 @@
-import { Pressable, StyleSheet } from "react-native";
+import { Pressable, StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { useState } from "react";
 import Typography from "./typography";
-import { TextInput } from "react-native-paper";
-import { IField } from "..";
+import { TextInput, TextInputProps } from "react-native-paper";
+
+export interface IField extends TextInputProps {
+  styleInput?: StyleProp<ViewStyle>;
+  onPress?: () => void;
+  error?: boolean;
+  errorText?: string;
+}
 
 export const Field = ({
   styleInput = {},

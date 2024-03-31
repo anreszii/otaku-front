@@ -1,19 +1,19 @@
 import { StyleSheet, View } from "react-native";
-import {
-  SignInFooter,
-  SignInHeader,
-  SignInRow,
-} from "features/sign-in-content";
 import { Content } from "shared/index";
+import {
+  SignUpFooter,
+  SignUpHeader,
+  SignUpRow,
+} from "features/sign-up-content";
 
-export const SignInCard = () => {
+export const SignUpCard = () => {
   return (
     <View style={styles.container}>
       <Content>
-        <SignInHeader />
-        <SignInRow />
+        <SignUpHeader />
+        <SignUpRow />
       </Content>
-      <SignInFooter />
+      <SignUpFooter />
     </View>
   );
 };

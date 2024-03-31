@@ -1,8 +1,16 @@
 import { FC } from "react";
-import { IButton } from "shared/types/ui";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  TouchableOpacityProps,
+} from "react-native";
 import Typography from "./typography";
 import { LinearGradient } from "expo-linear-gradient";
+
+export interface IButton extends TouchableOpacityProps {
+  variant: "contain" | "gradient";
+  title: string;
+}
 
 const Button: FC<IButton> = ({ variant, title, style, ...props }) => {
   switch (variant) {

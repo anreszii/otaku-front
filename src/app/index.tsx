@@ -10,9 +10,13 @@ import AuthProvider from "shared/providers/AuthProvider";
 
 const App: React.FC = () => {
   const [isAppReady, setIsAppReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fontLoader();
+    (async () => {
+      await fontLoader();
+      setIsLoading(false);
+    })();
   }, []);
 
   return (
@@ -21,11 +25,13 @@ const App: React.FC = () => {
       <View style={{ ...styles.intro, ...(isAppReady && { display: "none" }) }}>
         <Intro setIsAppReady={setIsAppReady} />
       </View>
-      <AuthProvider>
-        <SafeAreaProvider>
-          <Routing />
-        </SafeAreaProvider>
-      </AuthProvider>
+      {!isLoading && (
+        <AuthProvider>
+          <SafeAreaProvider>
+            <Routing />
+          </SafeAreaProvider>
+        </AuthProvider>
+      )}
     </>
   );
 };

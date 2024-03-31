@@ -7,7 +7,6 @@ export * from "./ui/field";
 // types
 export * from "./types/menu";
 export * from "./types/providers";
-export * from "./types/ui";
 export * from "./types/user";
 
 // hooks

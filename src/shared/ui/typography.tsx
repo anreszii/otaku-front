@@ -1,6 +1,18 @@
 import { Text, StyleSheet, TextProps } from "react-native";
 import { Component, FC } from "react";
-import { ITypography } from "shared/types/ui";
+
+export interface ITypography extends TextProps {
+  variant:
+    | "sub-regular"
+    | "sub-medium"
+    | "sub-semi-bold"
+    | "sub-bold"
+    | "title-regular"
+    | "title-medium"
+    | "title-semi-bold"
+    | "title-bold"
+    | "error";
+}
 
 const Typography: FC<ITypography> = ({
   children,
