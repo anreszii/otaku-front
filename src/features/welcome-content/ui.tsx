@@ -10,10 +10,10 @@ export const WelcomeContent = () => {
 
   return (
     <View style={styles.content}>
-      <Typography style={styles.welcomeTitle}>
+      <Typography style={styles.welcomeTitle} variant="title-bold">
         Добро пожаловать в AniUp
       </Typography>
-      <Typography style={styles.welcomeSubtitle}>
+      <Typography style={styles.welcomeSubtitle} variant="sub-medium">
         Лучшее потоковое аниме-приложение века, которое будет развлекать вас
         каждый день
       </Typography>

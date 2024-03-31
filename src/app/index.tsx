@@ -1,4 +1,3 @@
-import AuthProvider from "shared/providers/AuthProvider";
 import { Intro } from "pages/intro";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
@@ -7,15 +6,13 @@ import "shared/lib/ignoreWarnings";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { fontLoader } from "shared/lib/fontLoader";
 import Routing from "./routes";
+import AuthProvider from "shared/providers/AuthProvider";
 
 const App: React.FC = () => {
-  const [isAuth, setIsAuth] = useState(false);
   const [isAppReady, setIsAppReady] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      await fontLoader();
-    })();
+    fontLoader();
   }, []);
 
   return (

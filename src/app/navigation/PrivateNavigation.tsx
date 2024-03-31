@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { FC } from "react";
-import { privateRoutes, RootStackParamList } from "../../shared/routes";
+import { privateRoutes, RootStackParamList } from "shared/routes";
 import useAsyncStorage from "shared/hooks/useAsyncStorage";
 import { Onboarding } from "pages/onboarding";
 

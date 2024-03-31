@@ -1,9 +1,8 @@
-import { TypeRootStackParamList } from "shared/types/navigation.types";
-import { ReactNode } from "react";
+import { RootStackParamList } from "shared/routes";
 
 export interface IMenuItem {
   icon: (focus?: boolean) => React.JSX.Element;
-  path: keyof TypeRootStackParamList;
+  path: keyof RootStackParamList;
 }
 
-export type TypeNav = (name: keyof TypeRootStackParamList) => void;
+export type TypeNav = (name: keyof RootStackParamList) => void;

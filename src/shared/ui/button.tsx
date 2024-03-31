@@ -9,7 +9,9 @@ const Button: FC<IButton> = ({ variant, title, style, ...props }) => {
     case "contain":
       return (
         <TouchableOpacity style={[styles.containButton, style]} {...props}>
-          <Typography style={styles.containTextButton}>{title}</Typography>
+          <Typography style={styles.containTextButton} variant="sub-bold">
+            {title}
+          </Typography>
         </TouchableOpacity>
       );
     case "gradient":
@@ -24,7 +26,9 @@ const Button: FC<IButton> = ({ variant, title, style, ...props }) => {
             colors={["rgba(0, 0, 139, 1)", "#0B1218"]}
             style={styles.gradientButton}
           >
-            <Typography style={styles.gradientTextButton}>{title}</Typography>
+            <Typography style={styles.gradientTextButton} variant="sub-bold">
+              {title}
+            </Typography>
           </LinearGradient>
         </TouchableOpacity>
       );

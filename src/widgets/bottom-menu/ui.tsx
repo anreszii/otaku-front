@@ -42,6 +42,7 @@ export const TabBar = (props: BottomTabBarProps) => {
               )}
 
               <Typography
+                variant="sub-bold"
                 style={{
                   ...(descriptor.route.name === "Home"
                     ? styles.tabTypographyHome

@@ -3,9 +3,5 @@ import React from "react";
 import Typography from "shared/ui/typography";
 
 export const Home = () => {
-  return (
-    <SafeAreaView>
-      <Typography>Home</Typography>
-    </SafeAreaView>
-  );
+  return <SafeAreaView></SafeAreaView>;
 };
