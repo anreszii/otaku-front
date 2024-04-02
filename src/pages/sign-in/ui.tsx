@@ -5,7 +5,7 @@ import { SignInCard } from "widgets/sign-in-card";
 export const SignIn = () => {
   return (
     <>
-      <Header />
+      <Header back />
       <Container style={styles.container}>
         <SignInCard />
       </Container>
@@ -16,5 +16,6 @@ export const SignIn = () => {
 const styles = StyleSheet.create({
   container: {
     justifyContent: "flex-end",
+    marginBottom: 24,
   },
 });

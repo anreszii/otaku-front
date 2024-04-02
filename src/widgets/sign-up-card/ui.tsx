@@ -1,10 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import { Content } from "shared/index";
-import {
-  SignUpFooter,
-  SignUpHeader,
-  SignUpRow,
-} from "features/sign-up-content";
+import { SignUpHeader, SignUpRow } from "features/sign-up-content";
 
 export const SignUpCard = () => {
   return (
@@ -13,15 +9,14 @@ export const SignUpCard = () => {
         <SignUpHeader />
         <SignUpRow />
       </Content>
-      <SignUpFooter />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "space-between",
     alignItems: "center",
-    height: "75%",
+    marginTop: "auto",
+    marginBottom: "auto",
   },
 });

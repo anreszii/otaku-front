@@ -1,9 +1,16 @@
-import { Pressable, StyleProp, StyleSheet, ViewStyle } from "react-native";
-import { useState } from "react";
+import {
+  Keyboard,
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  ViewStyle,
+} from "react-native";
+import { RefObject, useRef, useState } from "react";
 import Typography from "./typography";
 import { TextInput, TextInputProps } from "react-native-paper";
 
-export interface IField extends TextInputProps {
+export interface FieldProps extends TextInputProps {
   styleInput?: StyleProp<ViewStyle>;
   onPress?: () => void;
   error?: boolean;
@@ -16,8 +23,13 @@ export const Field = ({
   error,
   errorText,
   ...props
-}: IField) => {
+}: FieldProps) => {
   const [isFocus, setIsFocus] = useState(false);
+
+  const unFocus = () => {
+    setIsFocus(false);
+    Keyboard.dismiss();
+  };
 
   return (
     <Pressable style={[styles.inputView, styleInput]}>
@@ -29,6 +41,7 @@ export const Field = ({
         textColor="#FFF"
         selectionColor="#FFF"
         placeholderTextColor="rgba(255, 255, 255, 0.5)"
+        onSubmitEditing={unFocus}
         style={
           isFocus
             ? {
@@ -53,12 +66,12 @@ export const Field = ({
               }
         }
         onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
+        onBlur={unFocus}
         theme={{
           roundness: 24,
           colors: {
             primary: "#fff",
-            error: "#FF5A47",
+            error: "transparent",
             background: "#fff",
             text: "#fff",
           },
@@ -68,7 +81,9 @@ export const Field = ({
         {...props}
       />
       {error && errorText && (
-        <Typography variant="error">{errorText}</Typography>
+        <Typography variant="error" style={styles.error}>
+          {errorText}
+        </Typography>
       )}
     </Pressable>
   );
@@ -84,5 +99,11 @@ const styles = StyleSheet.create({
     lineHeight: 22.4,
     letterSpacing: 0.2,
     marginLeft: 16,
+  },
+  error: {
+    marginLeft: 16,
+    marginTop: 8,
+    color: "#FF3333",
+    fontSize: 16,
   },
 });

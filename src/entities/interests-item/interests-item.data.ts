@@ -1,0 +1,25 @@
+import { interestsType } from "./type";
+
+export const interestsItem: interestsType[] = [
+  { title: "Action", ru_title: "Боевик", focus: false },
+  { title: "Drama", ru_title: "Драма", focus: false },
+  { title: "Comedy", ru_title: "Комедия", focus: false },
+  { title: "Ecchi", ru_title: "Этти", focus: false },
+  { title: "Adventure", ru_title: "Приключения", focus: false },
+  { title: "Mecha", ru_title: "Меха", focus: false },
+  { title: "Romance", ru_title: "Романтика", focus: false },
+  { title: "Science", ru_title: "Фантастика", focus: false },
+  { title: "Music", ru_title: "Музыка", focus: false },
+  { title: "School", ru_title: "Школа", focus: false },
+  { title: "Seinen", ru_title: "Сэйнэн", focus: false },
+  { title: "Mystery", ru_title: "Сверхъестественное", focus: false },
+  { title: "Shoujo", ru_title: "Сёдзё", focus: false },
+  { title: "Fantasy", ru_title: "Фэнтези", focus: false },
+  { title: "Vampire", ru_title: "Вампиры", focus: false },
+  { title: "Police", ru_title: "Полиция", focus: false },
+  { title: "Superheroes", ru_title: "Супер сила", focus: false },
+  { title: "Game", ru_title: "Игры", focus: false },
+  { title: "Everyday life", ru_title: "Повседневность", focus: false },
+  { title: "Psychological", ru_title: "Психологическое", focus: false },
+  { title: "Space", ru_title: "Космос", focus: false },
+];

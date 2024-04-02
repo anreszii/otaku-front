@@ -16,9 +16,10 @@ import Typography from "shared/ui/typography";
 interface Props {
   back?: boolean;
   title?: string;
+  onPress?: (() => void) | false;
 }
 
-export const Header = ({ back, title }: Props) => {
+export const Header = ({ back, title, onPress }: Props) => {
   const insets = useSafeAreaInsets();
 
   const { goBack } = useNavigation<NavigationProp<RootStackParamList>>();
@@ -27,24 +28,38 @@ export const Header = ({ back, title }: Props) => {
     <View
       style={
         back
-          ? {
-              paddingTop: insets.top,
-              backgroundColor: "#0B1218",
-              paddingHorizontal: 24,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }
+          ? title
+            ? {
+                paddingTop: insets.top,
+                backgroundColor: "#0B1218",
+                paddingHorizontal: 24,
+                flexDirection: "row",
+                alignItems: "center",
+                paddingBottom: 12,
+              }
+            : {
+                paddingTop: insets.top,
+                backgroundColor: "#0B1218",
+                paddingHorizontal: 24,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                paddingBottom: 12,
+              }
           : {
               paddingTop: insets.top,
               backgroundColor: "#0B1218",
               paddingHorizontal: 24,
               alignItems: "center",
+              paddingBottom: 12,
             }
       }
     >
       {back && (
-        <TouchableOpacity style={{ marginRight: -22 }} onPress={goBack}>
+        <TouchableOpacity
+          style={title ? { marginRight: 24 } : { marginRight: -22 }}
+          onPress={onPress ? onPress : goBack}
+        >
           <BackIcon />
         </TouchableOpacity>
       )}
@@ -59,7 +74,14 @@ export const Header = ({ back, title }: Props) => {
           }}
         />
       )}
-      <Typography variant="title-bold">{title}</Typography>
+      {title && (
+        <Typography
+          variant="title-bold"
+          style={{ color: "#fff", fontSize: 18, letterSpacing: 0.2 }}
+        >
+          {title}
+        </Typography>
+      )}
     </View>
   );
 };
