@@ -1,7 +1,7 @@
 import { View, StyleSheet } from "react-native";
 import React from "react";
 import Typography from "shared/ui/typography";
-import Button from "shared/ui/button";
+import { Button } from "shared/index";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "shared/routes";
 

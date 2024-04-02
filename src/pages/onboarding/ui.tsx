@@ -1,7 +1,7 @@
 import { View, Animated, Easing, StyleSheet } from "react-native";
 import React, { useRef, useState } from "react";
 import Carousel, { Pagination } from "react-native-snap-carousel";
-import Button from "shared/ui/button";
+import { Button } from "shared/index";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import useAsyncStorage from "shared/hooks/useAsyncStorage";
 import { RootStackParamList } from "shared/routes";

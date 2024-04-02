@@ -3,6 +3,7 @@ export * from "./ui/button";
 export * from "./ui/overlay";
 export * from "./ui/typography";
 export * from "./ui/field";
+export * from "./ui/modal";
 
 // types
 export * from "./types/menu";

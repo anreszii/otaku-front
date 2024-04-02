@@ -4,6 +4,7 @@ import { Container, Header, Section } from "shared/index";
 import { SignUpCard } from "widgets/sign-up-card";
 import { SignUpFooter } from "features/sign-up-content";
 import { InterestsCard } from "widgets/interests-card";
+import { FillProfileCard } from "widgets/fill-profile-card";
 
 export const SignUp = () => {
   const [stage, setStage] = useState(1);
@@ -33,6 +34,12 @@ export const SignUp = () => {
             <InterestsCard />
             <SignUpFooter stage={stage} setStage={setStage} />
           </Section>
+        )}
+        {stage === 3 && (
+          <>
+            <FillProfileCard />
+            <SignUpFooter stage={stage} setStage={setStage} />
+          </>
         )}
       </Container>
     </>

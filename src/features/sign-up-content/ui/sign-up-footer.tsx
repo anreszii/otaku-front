@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { StyleSheet } from "react-native";
-import Button from "shared/ui/button";
+import { Button } from "shared/index";
 
 interface Props {
   stage: number;

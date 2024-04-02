@@ -7,6 +7,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { fontLoader } from "shared/lib/fontLoader";
 import Routing from "./routes";
 import AuthProvider from "shared/providers/AuthProvider";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const App: React.FC = () => {
   const [isAppReady, setIsAppReady] = useState(false);
@@ -26,11 +27,13 @@ const App: React.FC = () => {
         <Intro setIsAppReady={setIsAppReady} />
       </View>
       {!isLoading && (
-        <AuthProvider>
-          <SafeAreaProvider>
-            <Routing />
-          </SafeAreaProvider>
-        </AuthProvider>
+        <GestureHandlerRootView>
+          <AuthProvider>
+            <SafeAreaProvider>
+              <Routing />
+            </SafeAreaProvider>
+          </AuthProvider>
+        </GestureHandlerRootView>
       )}
     </>
   );

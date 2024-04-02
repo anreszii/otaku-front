@@ -30,7 +30,7 @@ export const Header = ({ back, title, onPress }: Props) => {
         back
           ? title
             ? {
-                paddingTop: insets.top,
+                paddingTop: insets.top + 12,
                 backgroundColor: "#0B1218",
                 paddingHorizontal: 24,
                 flexDirection: "row",
@@ -77,7 +77,11 @@ export const Header = ({ back, title, onPress }: Props) => {
       {title && (
         <Typography
           variant="title-bold"
-          style={{ color: "#fff", fontSize: 18, letterSpacing: 0.2 }}
+          style={{
+            color: "#fff",
+            fontSize: 18,
+            letterSpacing: 0.2,
+          }}
         >
           {title}
         </Typography>

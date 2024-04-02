@@ -12,7 +12,7 @@ export interface IButton extends TouchableOpacityProps {
   title: string;
 }
 
-const Button: FC<IButton> = ({ variant, title, style, ...props }) => {
+export const Button: FC<IButton> = ({ variant, title, style, ...props }) => {
   switch (variant) {
     case "contain":
       return (
@@ -77,5 +77,3 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 });
-
-export default Button;
