@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { FC } from "react";
-import { publicRoutes, RootStackParamList } from "shared/routes";
+import { publicRoutes, RootStackParamList } from "src/lib/routes";
 import TabNavigation from "./TabNavigation";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();

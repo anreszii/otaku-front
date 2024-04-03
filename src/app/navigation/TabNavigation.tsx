@@ -1,6 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { TabBar } from "widgets/bottom-menu";
+import { TabBar } from "src/modules/bottom-menu";
 import { Home } from "pages/home";
 import { Chat } from "pages/chat";
 import { Rooms } from "pages/rooms";
