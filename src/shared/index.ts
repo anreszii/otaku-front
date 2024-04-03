@@ -11,20 +11,20 @@ export * from "./types/providers";
 export * from "./types/user";
 
 // hooks
-export * from "./hooks/useAsyncStorage";
+export * from "./lib/hooks/use-async-storage";
 
 // icons
 export * from "./icons";
 
-// lib
-export * from "./lib/fontLoader";
-export * from "./lib/ignoreWarnings";
+// helpers
+export * from "./lib/utils/font-loader";
+export * from "./lib/utils/ignore-warnings";
 
 // providers
-export * from "./providers/AuthProvider";
+export * from "./providers/auth-provider";
 
 // layout
-export * from "./layout/container";
-export * from "./layout/section";
-export * from "./layout/header";
-export * from "./layout/content";
+export * from "./layouts/container";
+export * from "./layouts/section";
+export * from "./layouts/header";
+export * from "./layouts/content";

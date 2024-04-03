@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "aniup-front",
-    "slug": "aniup-front",
+    "name": "AniUp",
+    "slug": "aniup",
     "version": "1.0.0",
+    "scheme": "aniup",
     "orientation": "portrait",
     "icon": "./assets/aniyp.png",
     "userInterfaceStyle": "light",

@@ -3,10 +3,10 @@ import React, { useRef, useState } from "react";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import { Button } from "shared/index";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import useAsyncStorage from "shared/hooks/useAsyncStorage";
+import useAsyncStorage from "shared/lib/hooks/use-async-storage";
 import { RootStackParamList } from "shared/routes";
 import { OnboardingData, OnboardingDots } from "features/onboarding-content";
-import { PosterBackground } from "features/poster-background";
+import { PosterBackground } from "features/common/poster-background";
 import { InstructionItem, instructions } from "entities/instruction-item";
 
 type RenderItemProps = {

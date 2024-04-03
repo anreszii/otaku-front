@@ -3,8 +3,8 @@ import { StyleSheet } from "react-native";
 import { Button } from "shared/index";
 
 interface Props {
-  stage: number;
-  setStage: Dispatch<SetStateAction<number>>;
+  stage?: number;
+  setStage?: Dispatch<SetStateAction<number>>;
 }
 
 export const SignUpFooter = ({ stage, setStage }: Props) => {
@@ -13,7 +13,7 @@ export const SignUpFooter = ({ stage, setStage }: Props) => {
       variant="contain"
       title={stage === 1 ? "Создать аккаунт" : "Продолжить"}
       style={styles.button}
-      onPress={() => setStage((prev) => prev + 1)}
+      onPress={setStage && (() => setStage((prev) => prev + 1))}
     />
   );
 };

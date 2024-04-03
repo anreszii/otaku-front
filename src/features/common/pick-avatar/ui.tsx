@@ -1,7 +1,7 @@
 import { View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
 import { useState } from "react";
 import { Image } from "expo-image";
-import { CroppingAvatar } from "features/modals";
+import { CroppingAvatar } from "features/index";
 import { launchImageLibraryAsync, MediaTypeOptions } from "expo-image-picker";
 
 interface PickAvatarProps {

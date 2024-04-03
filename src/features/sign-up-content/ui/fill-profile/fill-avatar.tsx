@@ -1,6 +1,6 @@
 import { View, StyleSheet } from "react-native";
 import { useState } from "react";
-import { PickAvatar } from "shared/ui/pick-avatar";
+import { PickAvatar } from "features/common/pick-avatar";
 
 export const FillAvatar = () => {
   const [avatar, setAvatar] = useState<string | null>(null);

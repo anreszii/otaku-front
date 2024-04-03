@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { IAuthContext } from "shared/types/providers";
 import { TypeUserState } from "shared/types/user";
-import useAsyncStorage from "shared/hooks/useAsyncStorage";
+import useAsyncStorage from "shared/lib/hooks/use-async-storage";
 
 const AuthContext = createContext({} as IAuthContext);
 

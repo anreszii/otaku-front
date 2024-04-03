@@ -2,12 +2,13 @@ import { Intro } from "pages/intro";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import "shared/lib/ignoreWarnings";
+import "shared/lib/utils/ignore-warnings";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { fontLoader } from "shared/lib/fontLoader";
+import { fontLoader } from "shared/lib/utils/font-loader";
 import Routing from "./routes";
-import AuthProvider from "shared/providers/AuthProvider";
+import AuthProvider from "shared/providers/auth-provider";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { DeepLinkProvider } from "shared/providers/deep-link-provider";
 
 const App: React.FC = () => {
   const [isAppReady, setIsAppReady] = useState(false);

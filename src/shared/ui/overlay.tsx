@@ -1,7 +1,6 @@
 import { View } from "react-native";
-import { FC } from "react";
 
-const Overlay: FC = () => {
+const Overlay: React.FC = () => {
   return (
     <View
       style={{

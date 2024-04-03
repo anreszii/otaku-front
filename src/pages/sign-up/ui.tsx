@@ -38,7 +38,7 @@ export const SignUp = () => {
         {stage === 3 && (
           <>
             <FillProfileCard />
-            <SignUpFooter stage={stage} setStage={setStage} />
+            <SignUpFooter />
           </>
         )}
       </Container>
