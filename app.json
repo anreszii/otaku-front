@@ -1,16 +1,16 @@
 {
   "expo": {
-    "name": "otaku-front",
-    "slug": "otaku-front",
+    "name": "Otaku",
+    "slug": "Otaku",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/otakuLogo.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/images/otakuLogo.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#0B1218"
     },
     "ios": {
       "supportsTablet": true,
@@ -18,9 +18,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/images/otakuLogo.png",
+        "backgroundColor": "#0B1218"
+      },
+      "package": "com.foru.otaku"
     },
     "plugins": [],
     "experiments": {

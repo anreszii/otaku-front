@@ -27,10 +27,6 @@ const App = () => {
     }
   }, [loaded]);
 
-  if (!loaded) {
-    return null;
-  }
-
   return (
     <SafeAreaProvider>
       <GestureHandlerRootView>

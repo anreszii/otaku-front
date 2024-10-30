@@ -45,6 +45,7 @@ const Intro: React.FC<IntroProps> = ({ setIsIntro }) => {
       <Image
         source={require("../../../assets/images/otakuLogo.png")}
         style={styles.letter}
+        contentFit="contain"
       />
     </Animated.View>
   );
@@ -58,8 +59,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#0B1218",
   },
   letter: {
-    width: Dimensions.get("window").width * 0.6,
-    height: Dimensions.get("window").height * 0.25,
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
 });
 
