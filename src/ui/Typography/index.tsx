@@ -39,17 +39,19 @@ const Typography: React.FC<PropsWithChildren<TypographyProps>> = ({
   switch (type) {
     case "default":
       return (
-        <Text style={[style, { fontFamily }]} {...props}>
+        <Text style={[{ color: "#fff" }, style, { fontFamily }]} {...props}>
           {children}
         </Text>
       );
     case "gradient":
       return (
-        <GradientText style={[style, { fontFamily }]}>{children}</GradientText>
+        <GradientText style={[{ color: "#fff" }, style, { fontFamily }]}>
+          {children}
+        </GradientText>
       );
     default:
       return (
-        <Text style={[style, { fontFamily }]} {...props}>
+        <Text style={[{ color: "#fff" }, style, { fontFamily }]} {...props}>
           {children}
         </Text>
       );

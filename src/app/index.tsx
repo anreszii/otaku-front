@@ -10,6 +10,7 @@ import Intro from "pages/Intro";
 import { StyleSheet, View } from "react-native";
 import "shared/utils/ignoreWarnings";
 import "react-native-reanimated";
+import { Asset } from "expo-asset";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -22,9 +23,21 @@ const App = () => {
   const isAuth = false;
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
+    const prepare = async () => {
+      if (loaded) {
+        try {
+          await Asset.loadAsync([
+            require("../../assets/images/otakuLogo.png"),
+            require("../../assets/images/backgroundOnboarding.png"),
+          ]);
+          await SplashScreen.hideAsync();
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+
+    prepare();
   }, [loaded]);
 
   return (

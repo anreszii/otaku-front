@@ -9,19 +9,20 @@
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/otakuLogo.png",
-      "resizeMode": "cover",
       "backgroundColor": "#0B1218"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.foru.otaku"
+      "bundleIdentifier": "com.foru.otaku",
+      "backgroundColor": "#0B1218"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/otakuLogo.png",
         "backgroundColor": "#0B1218"
       },
-      "package": "com.foru.otaku"
+      "package": "com.foru.otaku",
+      "backgroundColor": "#0B1218"
     },
     "plugins": [],
     "experiments": {

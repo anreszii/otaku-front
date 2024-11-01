@@ -43,6 +43,8 @@
       <key>NSAllowsLocalNetworking</key>
       <true/>
     </dict>
+    <key>RCTRootViewBackgroundColor</key>
+    <integer>4278915608</integer>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>
