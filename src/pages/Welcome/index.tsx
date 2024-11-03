@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   },
   welcomeContainer: {
     width: "90%",
-    backgroundColor: "#2B3033",
+    backgroundColor: "#2E2F3A",
     borderRadius: 12,
     borderWidth: 3,
     borderColor: "rgba(238, 238, 238, 0.1)",

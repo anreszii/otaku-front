@@ -2,9 +2,11 @@ import {
   Keyboard,
   SafeAreaView,
   ScrollView,
+  StyleProp,
   StyleSheet,
   TouchableWithoutFeedback,
   View,
+  ViewStyle,
 } from "react-native";
 import React from "react";
 
@@ -12,6 +14,7 @@ interface LayoutProps {
   scroll?: boolean;
   noMargin?: boolean;
   noSafe?: boolean;
+  style?: StyleProp<ViewStyle>;
 }
 
 const Layout: React.FC<React.PropsWithChildren<LayoutProps>> = ({
@@ -19,10 +22,12 @@ const Layout: React.FC<React.PropsWithChildren<LayoutProps>> = ({
   scroll = false,
   noMargin = false,
   noSafe = false,
+  style,
 }) => {
   const Container = noSafe ? View : SafeAreaView;
   const containerStyle = [
     styles.container,
+    ...(Array.isArray(style) ? style : [style]),
     noMargin && { marginHorizontal: 0 },
   ];
 

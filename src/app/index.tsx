@@ -11,6 +11,7 @@ import { StyleSheet, View } from "react-native";
 import "shared/utils/ignoreWarnings";
 import "react-native-reanimated";
 import { Asset } from "expo-asset";
+import useInterestsStore from "shared/stores/interestsStore";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -19,7 +20,10 @@ const App = () => {
     Montserrat: require("../../assets/fonts/Montserrat.ttf"),
     Urbanist: require("../../assets/fonts/Urbanist.ttf"),
   });
+
   const [isIntro, setIsIntro] = useState(true);
+  const { fetchInterests } = useInterestsStore();
+
   const isAuth = false;
 
   useEffect(() => {
@@ -30,6 +34,7 @@ const App = () => {
             require("../../assets/images/otakuLogo.png"),
             require("../../assets/images/backgroundOnboarding.png"),
           ]);
+          await fetchInterests();
           await SplashScreen.hideAsync();
         } catch (error) {
           console.log(error);

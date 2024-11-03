@@ -58,3 +58,14 @@ export const HomeIcon = ({ focus }: { focus?: boolean }) => {
     </>
   );
 };
+
+export const BackIcon: React.FC<SvgProps> = ({ ...props }) => {
+  return (
+    <Svg width={14} height={19} viewBox="0 0 14 19" fill="none" {...props}>
+      <Path
+        d="M9.5 0L0 9.5 9.5 19l3.563-3.563L7.125 9.5l5.938-5.938L9.5 0z"
+        fill="#fff"
+      />
+    </Svg>
+  );
+};

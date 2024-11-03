@@ -1,17 +1,32 @@
 import React from "react";
-import { Button, Field, Typography } from "ui";
+import { Button, Field, Typography, BackButton } from "ui";
 import { Layout } from "components";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
 
 const SignIn = () => {
+  const navigation = useTypedNavigation();
+
+  const handleNavigateSignUp = () => {
+    navigation.navigate("SignUp");
+  };
+
+  const handleNavigateForgot = () => {
+    navigation.navigate("Forgot");
+  };
+
   return (
     <Layout>
+      <BackButton />
       <Typography style={styles.title} fontFamily="Montserrat">
         Вход в аккаунт
       </Typography>
       <Field style={styles.field} placeholder="Имя пользователя" />
-      <Field style={styles.field} placeholder="Пароль" />
-      <TouchableOpacity style={styles.forgotPassword}>
+      <Field style={styles.field} placeholder="Пароль" isPassword />
+      <TouchableOpacity
+        style={styles.forgotPassword}
+        onPress={handleNavigateForgot}
+      >
         <Typography style={styles.forgotPasswordText} fontFamily="Urbanist">
           Забыли пароль?
         </Typography>
@@ -20,7 +35,7 @@ const SignIn = () => {
         <Typography style={styles.signUpText} fontFamily="Urbanist">
           Еще нет аккаунта?
         </Typography>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleNavigateSignUp}>
           <Typography style={styles.signUpButtonText} fontFamily="Urbanist">
             Зарегистрируйтесь
           </Typography>
@@ -35,6 +50,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: "500",
+    marginTop: 25,
   },
   field: {
     marginTop: 25,
