@@ -1,7 +1,6 @@
 import { View, StyleSheet } from "react-native";
 import React from "react";
-import { Button, Typography } from "ui";
-import { PosterBackground } from "pages/Onboarding/components";
+import { Button, Typography, PosterBackground } from "ui";
 import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
 
 const Welcome = () => {

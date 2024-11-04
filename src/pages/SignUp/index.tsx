@@ -1,11 +1,16 @@
 import React, { useState } from "react";
-import { BackButton } from "ui";
 import { Layout } from "components";
-import { Button, Field, Typography } from "ui";
+import { Button, Field, Typography, BackButton, Loader, Modal } from "ui";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
 import useInterestsStore from "shared/stores/interestsStore";
 import { IInterests } from "shared/types";
+import Animated, {
+  FadeIn,
+  FadeOut,
+  SlideInRight,
+  SlideOutLeft,
+} from "react-native-reanimated";
 
 const SignUp = () => {
   const navigation = useTypedNavigation();
@@ -13,7 +18,6 @@ const SignUp = () => {
   const { interests } = useInterestsStore();
 
   const [step, setStep] = useState<number>(0);
-
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
 
   const handleNavigateSignIn = () => {
@@ -35,9 +39,9 @@ const SignUp = () => {
   const handleSignUp = async () => {};
 
   return (
-    <Layout scroll>
+    <Layout scroll={step === 1}>
       {step === 0 && (
-        <>
+        <Animated.View exiting={SlideOutLeft.duration(300)}>
           <BackButton />
           <Typography style={styles.title} fontFamily="Montserrat">
             Создать аккаунт
@@ -61,10 +65,13 @@ const SignUp = () => {
             style={styles.button}
             onPress={handleNextStep}
           />
-        </>
+        </Animated.View>
       )}
       {step === 1 && (
-        <View style={styles.containerInterests}>
+        <Animated.View
+          style={styles.containerInterests}
+          entering={SlideInRight.duration(300)}
+        >
           <Typography fontFamily="Montserrat" style={styles.subtitle}>
             Выберите свои интересы и получите лучшие рекомендации по аниме
           </Typography>
@@ -94,7 +101,7 @@ const SignUp = () => {
             style={styles.button}
             onPress={handleSignUp}
           />
-        </View>
+        </Animated.View>
       )}
     </Layout>
   );
@@ -162,6 +169,21 @@ const styles = StyleSheet.create({
   interestTitle: {
     fontSize: 18,
     fontWeight: "600",
+  },
+  modal: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: "500",
+    marginBottom: 10,
+  },
+  modalSubtitle: {
+    fontSize: 16,
+    fontWeight: "500",
+    textAlign: "center",
+    marginBottom: 25,
   },
 });
 

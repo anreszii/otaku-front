@@ -9,8 +9,9 @@ import {
   ViewStyle,
 } from "react-native";
 import React from "react";
+import Animated, { AnimatedProps } from "react-native-reanimated";
 
-interface LayoutProps {
+interface LayoutProps extends Partial<AnimatedProps<View>> {
   scroll?: boolean;
   noMargin?: boolean;
   noSafe?: boolean;
@@ -23,6 +24,7 @@ const Layout: React.FC<React.PropsWithChildren<LayoutProps>> = ({
   noMargin = false,
   noSafe = false,
   style,
+  ...props
 }) => {
   const Container = noSafe ? View : SafeAreaView;
   const containerStyle = [
@@ -33,7 +35,7 @@ const Layout: React.FC<React.PropsWithChildren<LayoutProps>> = ({
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={styles.wrapper}>
+      <Animated.View style={styles.wrapper} {...props}>
         <Container style={containerStyle}>
           {scroll ? (
             <ScrollView
@@ -46,7 +48,7 @@ const Layout: React.FC<React.PropsWithChildren<LayoutProps>> = ({
             children
           )}
         </Container>
-      </View>
+      </Animated.View>
     </TouchableWithoutFeedback>
   );
 };

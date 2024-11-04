@@ -12,6 +12,12 @@ import "shared/utils/ignoreWarnings";
 import "react-native-reanimated";
 import { Asset } from "expo-asset";
 import useInterestsStore from "shared/stores/interestsStore";
+import Animated, {
+  FadeInLeft,
+  FadeInRight,
+  SlideInRight,
+  SlideOutLeft,
+} from "react-native-reanimated";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -22,6 +28,7 @@ const App = () => {
   });
 
   const [isIntro, setIsIntro] = useState(true);
+
   const { fetchInterests } = useInterestsStore();
 
   const isAuth = false;
@@ -54,7 +61,24 @@ const App = () => {
               <Intro setIsIntro={setIsIntro} />
             </View>
           )}
-          {isAuth ? <PrivateNavigation /> : <PublicNavigation />}
+          {isAuth && (
+            <Animated.View
+              style={{ flex: 1 }}
+              entering={FadeInRight.duration(200)}
+              exiting={SlideOutLeft.duration(300)}
+            >
+              <PrivateNavigation />
+            </Animated.View>
+          )}
+          {!isAuth && (
+            <Animated.View
+              style={{ flex: 1 }}
+              entering={FadeInRight.duration(200)}
+              exiting={SlideOutLeft.duration(300)}
+            >
+              <PublicNavigation />
+            </Animated.View>
+          )}
         </NavigationContainer>
       </GestureHandlerRootView>
     </SafeAreaProvider>

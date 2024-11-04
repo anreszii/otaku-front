@@ -3,10 +3,12 @@ import React, { PropsWithChildren } from "react";
 import { ImageBackground } from "expo-image";
 import { Overlay } from "ui";
 
-export const PosterBackground = ({ children }: PropsWithChildren<unknown>) => {
+const PosterBackground: React.FC<PropsWithChildren<unknown>> = ({
+  children,
+}) => {
   return (
     <ImageBackground
-      source={require("../../../../../assets/images/backgroundOnboarding.png")}
+      source={require("../../../assets/images/backgroundOnboarding.png")}
       style={styles.container}
       cachePolicy="memory-disk"
     >
@@ -24,3 +26,5 @@ const styles = StyleSheet.create({
     height: "100%",
   },
 });
+
+export default PosterBackground;

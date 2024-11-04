@@ -1,61 +1,27 @@
 import { View, StyleSheet } from "react-native";
 import React, { useRef, useState } from "react";
-import Carousel, { Pagination } from "react-native-snap-carousel";
-import { Button } from "ui";
-import { OnboardingData, OnboardingDots, PosterBackground } from "./components";
+import { Pagination } from "react-native-snap-carousel";
+import { Button, PosterBackground } from "ui";
+import { OnboardingData, OnboardingDots } from "./components";
 import { instructions } from "./data";
 import { InstructionItem } from "./types";
 import useStorage from "shared/hooks/useStorage";
 import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
-import {
-  withSequence,
-  withTiming,
-  withSpring,
-  useSharedValue,
-} from "react-native-reanimated";
+import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
 
 interface RenderItemProps {
   item: InstructionItem;
   index: number;
 }
 
-const ANIMATION_CONFIG = {
-  POSITION_DURATION: 300,
-  OPACITY_DURATION: 200,
-  SPRING_DAMPING: 10,
-  INITIAL_POSITION: 40,
-  ANIMATION_POSITION: -20,
-};
-
 const Onboarding: React.FC = () => {
   const [activeSlide, setActiveSlide] = useState(0);
-  const carouselRef = useRef<Carousel<InstructionItem> | null>(null);
+
+  const carouselRef = useRef<ICarouselInstance>(null);
+
   const { setValue } = useStorage("seeOnboarding", false);
+
   const navigation = useTypedNavigation();
-
-  const animations = Array(3)
-    .fill(null)
-    .map(() => ({
-      position: useSharedValue(ANIMATION_CONFIG.INITIAL_POSITION),
-      opacity: useSharedValue(0),
-    }));
-
-  const handleAnimation = (index: number) => {
-    const { position, opacity } = animations[index];
-    position.value = ANIMATION_CONFIG.INITIAL_POSITION;
-    opacity.value = 0;
-
-    position.value = withSequence(
-      withTiming(ANIMATION_CONFIG.ANIMATION_POSITION, {
-        duration: ANIMATION_CONFIG.POSITION_DURATION,
-      }),
-      withSpring(0, { damping: ANIMATION_CONFIG.SPRING_DAMPING })
-    );
-
-    opacity.value = withTiming(index === 1 ? 0.6 : 1, {
-      duration: ANIMATION_CONFIG.OPACITY_DURATION,
-    });
-  };
 
   const handleNavigation = () => {
     setValue(true);
@@ -65,18 +31,18 @@ const Onboarding: React.FC = () => {
     });
   };
 
-  const handleButtonPress = (isLast: boolean) => {
-    setActiveSlide(activeSlide + 1);
+  const handleButtonPress = async (isLast: boolean) => {
     if (isLast) {
       handleNavigation();
     } else {
-      carouselRef.current?.snapToNext();
+      const nextIndex = activeSlide + 1;
+      setActiveSlide(nextIndex);
+      carouselRef.current?.scrollTo({ index: nextIndex, animated: true });
     }
   };
 
   const renderItem = ({ item, index }: RenderItemProps) => {
     const isLast = index === instructions.length - 1;
-    animations.forEach((_, i) => handleAnimation(i));
 
     return (
       <View style={styles.itemContent}>
@@ -104,14 +70,15 @@ const Onboarding: React.FC = () => {
         />
         <Carousel
           ref={carouselRef}
+          loop={false}
+          width={320}
+          height={340}
           data={instructions}
           renderItem={renderItem}
-          sliderWidth={320}
-          itemWidth={300}
-          sliderHeight={120}
-          itemHeight={100}
-          onSnapToItem={setActiveSlide}
-          containerCustomStyle={styles.carousel}
+          onSnapToItem={(index) => {
+            setActiveSlide(index);
+          }}
+          autoPlay={false}
         />
       </View>
     </PosterBackground>
@@ -142,6 +109,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 30,
     justifyContent: "space-between",
+    height: 340,
   },
   itemContent: {
     justifyContent: "space-between",

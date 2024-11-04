@@ -6,20 +6,35 @@ import {
 } from "react-native";
 import Typography from "../Typography";
 import { LinearGradient } from "react-native-linear-gradient";
+import { Loader } from "ui";
 
 interface ButtonProps extends TouchableOpacityProps {
   variant: "contain" | "gradient";
   title: string;
+  isLoading?: boolean;
 }
 
-const Button: FC<ButtonProps> = ({ variant, title, style, ...props }) => {
+const Button: FC<ButtonProps> = ({
+  variant,
+  title,
+  style,
+  isLoading,
+  ...props
+}) => {
   switch (variant) {
     case "contain":
       return (
         <TouchableOpacity style={[styles.containButton, style]} {...props}>
-          <Typography style={styles.containTextButton} fontFamily="Montserrat">
-            {title}
-          </Typography>
+          {!isLoading ? (
+            <Typography
+              style={styles.containTextButton}
+              fontFamily="Montserrat"
+            >
+              {title}
+            </Typography>
+          ) : (
+            <Loader color="#fff" width={25} height={25} />
+          )}
         </TouchableOpacity>
       );
     case "gradient":

@@ -69,3 +69,16 @@ export const BackIcon: React.FC<SvgProps> = ({ ...props }) => {
     </Svg>
   );
 };
+
+export const LoaderIcon: React.FC<SvgProps> = ({ color, ...props }) => {
+  return (
+    <Svg width={40} height={40} viewBox="0 0 40 40" fill="none" {...props}>
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M20 4C11.163 4 4 11.163 4 20a2 2 0 11-4 0C0 8.954 8.954 0 20 0s20 8.954 20 20a2 2 0 11-4 0c0-8.837-7.163-16-16-16z"
+        fill={color || "#4169E1"}
+      />
+    </Svg>
+  );
+};

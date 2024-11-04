@@ -3,5 +3,18 @@ import Button from "./Button";
 import Overlay from "./Overlay";
 import Field from "./Field";
 import BackButton from "./BackButton";
+import Modal from "./Modal";
+import Loader from "./Loader";
+import PosterBackground from "./PosterBackground";
 
-export { Typography, Button, TypographyComponent, Overlay, Field, BackButton };
+export {
+  Typography,
+  Button,
+  TypographyComponent,
+  Overlay,
+  Field,
+  BackButton,
+  Modal,
+  Loader,
+  PosterBackground,
+};
