@@ -9,6 +9,12 @@ export type RootStackParamList = {
   Forgot: undefined;
 
   Tabs: undefined;
+
+  Home: undefined;
+  Calendar: undefined;
+  Favorite: undefined;
+  Rooms: undefined;
+  Profile: undefined;
 };
 
 export interface IRoute {

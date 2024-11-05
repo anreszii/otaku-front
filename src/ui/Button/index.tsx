@@ -6,7 +6,7 @@ import {
 } from "react-native";
 import Typography from "../Typography";
 import { LinearGradient } from "react-native-linear-gradient";
-import { Loader } from "ui";
+import Loader from "../Loader";
 
 interface ButtonProps extends TouchableOpacityProps {
   variant: "contain" | "gradient";

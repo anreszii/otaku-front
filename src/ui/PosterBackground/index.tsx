@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import React, { PropsWithChildren } from "react";
 import { ImageBackground } from "expo-image";
-import { Overlay } from "ui";
+import Overlay from "../Overlay";
 
 const PosterBackground: React.FC<PropsWithChildren<unknown>> = ({
   children,
