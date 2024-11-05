@@ -10,12 +10,13 @@ import { reloadApp } from "../utils";
 
 const storage = new MMKV();
 
-const getToken = () => {
-  const tokenString = storage.getString("token");
-  return tokenString ? JSON.parse(tokenString) : null;
-};
+let accessToken = storage.getString("token");
 
-let accessToken = getToken();
+storage.addOnValueChangedListener((key) => {
+  if (key === "token") {
+    accessToken = storage.getString(key);
+  }
+});
 
 const $api = axios.create({
   baseURL: "http://127.0.0.1:3005/api",

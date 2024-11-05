@@ -5,27 +5,27 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
 import useInterestsStore from "shared/stores/interestsStore";
 import { IInterests } from "shared/types";
-import Animated, {
-  FadeIn,
-  FadeOut,
-  SlideInRight,
-  SlideOutLeft,
-} from "react-native-reanimated";
+import Animated, { SlideInRight, SlideOutLeft } from "react-native-reanimated";
+import { authApi } from "shared/api";
+import DeviceInfo from "react-native-device-info";
+import { useAuthStore } from "shared/stores";
 
 const SignUp = () => {
   const navigation = useTypedNavigation();
 
   const { interests } = useInterestsStore();
+  const { register } = useAuthStore();
 
   const [step, setStep] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const [error, setError] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   const handleNavigateSignIn = () => {
     navigation.navigate("SignIn");
-  };
-
-  const handleNextStep = async () => {
-    setStep((prev) => prev + 1);
   };
 
   const handleSelectInterest = (interest: IInterests) => {
@@ -36,7 +36,33 @@ const SignUp = () => {
     }
   };
 
-  const handleSignUp = async () => {};
+  const handleSignUp = async () => {
+    setIsLoading(true);
+    setError("");
+
+    const deviceId = await DeviceInfo.getUniqueId();
+
+    const error = await register(
+      {
+        username,
+        email,
+        password,
+        deviceId,
+      },
+      selectedInterests,
+      step
+    );
+    if (error) {
+      setError(error);
+      setIsLoading(false);
+      return;
+    }
+
+    if (step === 0) {
+      setStep((prev) => prev + 1);
+    }
+    setIsLoading(false);
+  };
 
   return (
     <Layout scroll={step === 1}>
@@ -46,9 +72,26 @@ const SignUp = () => {
           <Typography style={styles.title} fontFamily="Montserrat">
             Создать аккаунт
           </Typography>
-          <Field style={styles.field} placeholder="Имя пользователя" />
-          <Field style={styles.field} placeholder="Электронная почта" />
-          <Field style={styles.field} placeholder="Пароль" isPassword />
+          <Field
+            style={styles.field}
+            placeholder="Имя пользователя"
+            value={username}
+            onChangeText={setUsername}
+          />
+          <Field
+            style={styles.field}
+            placeholder="Электронная почта"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <Field
+            style={styles.field}
+            placeholder="Пароль"
+            isPassword
+            value={password}
+            onChangeText={setPassword}
+            errorText={error}
+          />
           <View style={styles.signIn}>
             <Typography style={styles.signInText} fontFamily="Urbanist">
               Уже есть аккаунт?
@@ -63,7 +106,8 @@ const SignUp = () => {
             variant="contain"
             title="Создать аккаунт"
             style={styles.button}
-            onPress={handleNextStep}
+            onPress={handleSignUp}
+            isLoading={isLoading}
           />
         </Animated.View>
       )}
@@ -100,6 +144,7 @@ const SignUp = () => {
             title="Продолжить"
             style={styles.button}
             onPress={handleSignUp}
+            isLoading={isLoading}
           />
         </Animated.View>
       )}

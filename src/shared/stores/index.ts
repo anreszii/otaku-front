@@ -1,3 +1,4 @@
-import authStore from "./authStore";
+import useAuthStore from "./authStore";
+import useInterestsStore from "./interestsStore";
 
-export { authStore };
+export { useAuthStore, useInterestsStore };

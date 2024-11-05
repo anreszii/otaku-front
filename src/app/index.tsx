@@ -11,7 +11,7 @@ import { StyleSheet, View } from "react-native";
 import "shared/utils/ignoreWarnings";
 import "react-native-reanimated";
 import { Asset } from "expo-asset";
-import useInterestsStore from "shared/stores/interestsStore";
+import { useAuthStore, useInterestsStore } from "shared/stores";
 import Animated, {
   FadeInLeft,
   FadeInRight,
@@ -30,8 +30,7 @@ const App = () => {
   const [isIntro, setIsIntro] = useState(true);
 
   const { fetchInterests } = useInterestsStore();
-
-  const isAuth = false;
+  const { isAuth } = useAuthStore();
 
   useEffect(() => {
     const prepare = async () => {
