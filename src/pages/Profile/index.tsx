@@ -3,7 +3,6 @@ import { Layout } from "components";
 import { Button, Typography } from "ui";
 import { useUserStore } from "shared/stores";
 import { Image } from "expo-image";
-import { StatusBar } from "expo-status-bar";
 import LinearGradient from "react-native-linear-gradient";
 import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -39,8 +38,6 @@ const Profile = () => {
         />
       </View>
       <Layout noSafe noMargin scroll>
-        <StatusBar style="auto" />
-
         <View style={styles.container}>
           <View style={styles.header}>
             <Typography fontFamily="Urbanist" style={styles.username}>

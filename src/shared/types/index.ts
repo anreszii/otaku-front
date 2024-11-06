@@ -10,6 +10,7 @@ import {
   IVerifyResetCodeData,
 } from "./auth";
 import { IUser } from "./user";
+import { IAnime } from "./kodik";
 
 export {
   IRoute,
@@ -23,4 +24,5 @@ export {
   IRegisterResponse,
   IResetPasswordData,
   IVerifyResetCodeData,
+  IAnime,
 };

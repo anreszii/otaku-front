@@ -19,19 +19,23 @@ const TabNavigation = () => {
       <Tab.Screen
         name="Calendar"
         component={Calendar}
-        options={{ title: "Calendar" }}
+        options={{ title: "Календарь" }}
       />
       <Tab.Screen
         name="Favorite"
         component={Favorite}
-        options={{ title: "Favorite" }}
+        options={{ title: "Избранное" }}
       />
-      <Tab.Screen name="Home" component={Home} options={{ title: "Home" }} />
-      <Tab.Screen name="Rooms" component={Rooms} options={{ title: "Rooms" }} />
+      <Tab.Screen name="Home" component={Home} options={{ title: "Главная" }} />
+      <Tab.Screen
+        name="Rooms"
+        component={Rooms}
+        options={{ title: "Комнаты" }}
+      />
       <Tab.Screen
         name="Profile"
         component={Profile}
-        options={{ title: "Profile" }}
+        options={{ title: "Профиль" }}
       />
     </Tab.Navigator>
   );

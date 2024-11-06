@@ -18,6 +18,7 @@ import Animated, {
   SlideInRight,
   SlideOutLeft,
 } from "react-native-reanimated";
+import useOngoingsStore from "shared/stores/ongoingsStore";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -32,16 +33,19 @@ const App = () => {
   const { fetchInterests } = useInterestsStore();
   const { isAuth } = useAuthStore();
   const { fetchUser } = useUserStore();
+  const { fetchOngoings } = useOngoingsStore();
 
   useEffect(() => {
     const prepare = async () => {
       if (loaded) {
         try {
-          await Asset.loadAsync([
-            require("../../assets/images/otakuLogo.png"),
-            require("../../assets/images/backgroundOnboarding.png"),
+          await Promise.all([
+            Asset.loadAsync([
+              require("../../assets/images/otakuLogo.png"),
+              require("../../assets/images/backgroundOnboarding.png"),
+            ]),
+            fetchInterests(),
           ]);
-          await fetchInterests();
           await SplashScreen.hideAsync();
         } catch (error) {
           console.log(error);
@@ -53,8 +57,11 @@ const App = () => {
   }, [loaded]);
 
   useEffect(() => {
+    const fetchData = async () => {
+      await Promise.all([fetchOngoings(), fetchUser()]);
+    };
     if (isAuth) {
-      fetchUser();
+      fetchData();
     }
   }, [isAuth]);
 

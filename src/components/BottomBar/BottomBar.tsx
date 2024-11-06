@@ -1,7 +1,6 @@
 import { View, Pressable, StyleSheet } from "react-native";
 import React from "react";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { Typography } from "ui";
 import { bottomBarData } from "./data";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import LinearGradient from "react-native-linear-gradient";
@@ -20,7 +19,6 @@ export const BottomBar = (props: BottomTabBarProps) => {
       <View style={styles.tabBar}>
         {descriptors.map(([descriptorName, descriptor], index) => {
           const isFocused = descriptor.navigation.isFocused();
-          const options = descriptor.options;
 
           return (
             <Pressable
@@ -46,15 +44,6 @@ export const BottomBar = (props: BottomTabBarProps) => {
                     ?.icon({ focus: isFocused })}
                 </View>
               )}
-              <Typography
-                style={[
-                  styles.tabTypography,
-                  isFocused && styles.tabTypographyFocused,
-                  descriptor.route.name === "Home" && styles.tabTypographyHome,
-                ]}
-              >
-                {options.title}
-              </Typography>
             </Pressable>
           );
         })}
@@ -92,7 +81,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     padding: 12.5,
     position: "absolute",
-    bottom: 20,
+    bottom: 5,
   },
   tabTypography: {
     fontSize: 12,

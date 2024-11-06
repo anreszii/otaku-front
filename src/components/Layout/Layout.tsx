@@ -37,25 +37,33 @@ const Layout: React.FC<React.PropsWithChildren<LayoutProps>> = ({
   const { bottom } = useSafeAreaInsets();
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <Animated.View style={styles.wrapper} {...props}>
-        <Container style={containerStyle}>
-          {scroll ? (
-            <ScrollView
-              contentContainerStyle={[
-                styles.content,
-                { paddingBottom: (bottom > 0 ? bottom : 25) + 100 },
-              ]}
-              showsVerticalScrollIndicator={false}
+    <Animated.View style={styles.wrapper} {...props}>
+      <Container style={containerStyle}>
+        {scroll ? (
+          <ScrollView
+            contentContainerStyle={[
+              styles.content,
+              { paddingBottom: Math.max(bottom + 65, 90) },
+            ]}
+            showsVerticalScrollIndicator={false}
+          >
+            <TouchableWithoutFeedback
+              onPress={Keyboard.dismiss}
+              accessible={false}
             >
-              {children}
-            </ScrollView>
-          ) : (
-            children
-          )}
-        </Container>
-      </Animated.View>
-    </TouchableWithoutFeedback>
+              <View style={{ flex: 1 }}>{children}</View>
+            </TouchableWithoutFeedback>
+          </ScrollView>
+        ) : (
+          <TouchableWithoutFeedback
+            onPress={Keyboard.dismiss}
+            accessible={false}
+          >
+            <View style={{ flex: 1 }}>{children}</View>
+          </TouchableWithoutFeedback>
+        )}
+      </Container>
+    </Animated.View>
   );
 };
 
