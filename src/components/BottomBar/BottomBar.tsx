@@ -1,4 +1,4 @@
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import { View, Pressable, StyleSheet } from "react-native";
 import React from "react";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { Typography } from "ui";
@@ -66,6 +66,8 @@ export const BottomBar = (props: BottomTabBarProps) => {
 const styles = StyleSheet.create({
   tabBarContainer: {
     width: "100%",
+    position: "absolute",
+    bottom: 0,
   },
   tabBar: {
     flexDirection: "row",

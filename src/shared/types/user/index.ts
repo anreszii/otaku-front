@@ -4,6 +4,7 @@ export interface IUser {
   email: string;
   roles: string[];
   avatar: string | null;
+  background: string | null;
   interests: string[];
   viewed: string[];
   level: number;

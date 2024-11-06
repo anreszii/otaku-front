@@ -1,11 +1,12 @@
-import { View, Text } from "react-native";
 import React from "react";
+import { Layout } from "components";
+import { Typography } from "ui";
 
 const Rooms = () => {
   return (
-    <View>
-      <Text>Rooms</Text>
-    </View>
+    <Layout>
+      <Typography>Rooms</Typography>
+    </Layout>
   );
 };
 

@@ -1,5 +1,5 @@
 import $api from "shared/http";
-import { IInterests } from "shared/types";
+import { IInterests, IUser } from "shared/types";
 
 class UserApi {
   getInterests = async () => {
@@ -8,6 +8,10 @@ class UserApi {
 
   addInterests = async (userId: string, interests: string[]) => {
     return $api.post(`/user/interests/${userId}`, { interests });
+  };
+
+  getUser = async (userId: string) => {
+    return $api.get<{ user: IUser }>(`/user/${userId}`);
   };
 }
 

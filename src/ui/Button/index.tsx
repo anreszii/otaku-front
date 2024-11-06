@@ -12,6 +12,7 @@ interface ButtonProps extends TouchableOpacityProps {
   variant: "contain" | "gradient";
   title: string;
   isLoading?: boolean;
+  color?: string;
 }
 
 const Button: FC<ButtonProps> = ({
@@ -19,12 +20,16 @@ const Button: FC<ButtonProps> = ({
   title,
   style,
   isLoading,
+  color,
   ...props
 }) => {
   switch (variant) {
     case "contain":
       return (
-        <TouchableOpacity style={[styles.containButton, style]} {...props}>
+        <TouchableOpacity
+          style={[styles.containButton, style, { backgroundColor: color }]}
+          {...props}
+        >
           {!isLoading ? (
             <Typography
               style={styles.containTextButton}

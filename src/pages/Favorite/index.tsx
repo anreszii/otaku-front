@@ -1,11 +1,12 @@
-import { View, Text } from "react-native";
 import React from "react";
+import { Layout } from "components";
+import { Typography } from "ui";
 
 const Favorite = () => {
   return (
-    <View>
-      <Text>Favorite</Text>
-    </View>
+    <Layout>
+      <Typography>Favorite</Typography>
+    </Layout>
   );
 };
 

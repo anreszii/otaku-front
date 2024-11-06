@@ -1,11 +1,12 @@
-import { View, Text } from "react-native";
 import React from "react";
+import { Layout } from "components";
+import { Typography } from "ui";
 
 const Calendar = () => {
   return (
-    <View>
-      <Text>Calendar</Text>
-    </View>
+    <Layout>
+      <Typography>Calendar</Typography>
+    </Layout>
   );
 };
 
