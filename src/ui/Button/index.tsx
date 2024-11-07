@@ -13,6 +13,7 @@ interface ButtonProps extends TouchableOpacityProps {
   title: string;
   isLoading?: boolean;
   color?: string;
+  height?: number;
 }
 
 const Button: FC<ButtonProps> = ({
@@ -21,13 +22,19 @@ const Button: FC<ButtonProps> = ({
   style,
   isLoading,
   color,
+  height,
   ...props
 }) => {
   switch (variant) {
     case "contain":
       return (
         <TouchableOpacity
-          style={[styles.containButton, style, { backgroundColor: color }]}
+          style={[
+            styles.containButton,
+            style,
+            { backgroundColor: color ? color : "#4169E1" },
+            { height: height ? height : 52.5 },
+          ]}
           {...props}
         >
           {!isLoading ? (
@@ -45,14 +52,18 @@ const Button: FC<ButtonProps> = ({
     case "gradient":
       return (
         <TouchableOpacity
-          style={[styles.gradientButtonContainer, style]}
+          style={[
+            styles.gradientButtonContainer,
+            style,
+            { height: height ? height : 52.5 },
+          ]}
           {...props}
         >
           <LinearGradient
             start={{ x: 1, y: 1 }}
             end={{ x: 0, y: 0 }}
             colors={["rgba(0, 0, 139, 1)", "#0B1218"]}
-            style={styles.gradientButton}
+            style={[styles.gradientButton, { height: height ? height : 52.5 }]}
           >
             <Typography
               style={styles.gradientTextButton}

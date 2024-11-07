@@ -6,6 +6,7 @@ import BackButton from "./BackButton";
 import Modal from "./Modal";
 import Loader from "./Loader";
 import PosterBackground from "./PosterBackground";
+import { Skeleton } from "./Skeleton";
 
 export {
   Typography,
@@ -17,4 +18,5 @@ export {
   Modal,
   Loader,
   PosterBackground,
+  Skeleton,
 };

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { IAnime } from "shared/types";
-import { kodikApi } from "shared/api/kodikApi";
+import { kodikApi } from "shared/api";
 
 interface IOngoingsStore {
   ongoings: IAnime[];

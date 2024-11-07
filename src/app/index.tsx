@@ -22,6 +22,30 @@ import useOngoingsStore from "shared/stores/ongoingsStore";
 
 SplashScreen.preventAutoHideAsync();
 
+const ANIMATION_DURATION = {
+  ENTER: 200,
+  EXIT: 300,
+};
+
+const ASSETS = [
+  require("../../assets/images/otakuLogo.png"),
+  require("../../assets/images/backgroundOnboarding.png"),
+];
+
+const AnimatedNavigationContainer: React.FC<React.PropsWithChildren> = ({
+  children,
+  ...props
+}) => (
+  <Animated.View
+    style={{ flex: 1 }}
+    entering={FadeInRight.duration(ANIMATION_DURATION.ENTER)}
+    exiting={SlideOutLeft.duration(ANIMATION_DURATION.EXIT)}
+    {...props}
+  >
+    {children}
+  </Animated.View>
+);
+
 const App = () => {
   const [loaded] = useFonts({
     Montserrat: require("../../assets/fonts/Montserrat.ttf"),
@@ -35,35 +59,24 @@ const App = () => {
   const { fetchUser } = useUserStore();
   const { fetchOngoings } = useOngoingsStore();
 
-  useEffect(() => {
-    const prepare = async () => {
-      if (loaded) {
-        try {
-          await Promise.all([
-            Asset.loadAsync([
-              require("../../assets/images/otakuLogo.png"),
-              require("../../assets/images/backgroundOnboarding.png"),
-            ]),
-            fetchInterests(),
-          ]);
-          await SplashScreen.hideAsync();
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    };
+  const loadInitialResources = async () => {
+    const commonTasks = [Asset.loadAsync(ASSETS), fetchInterests()];
 
-    prepare();
-  }, [loaded]);
+    const authTasks = isAuth ? [fetchOngoings(), fetchUser()] : [];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await Promise.all([fetchOngoings(), fetchUser()]);
-    };
-    if (isAuth) {
-      fetchData();
+    try {
+      await Promise.all([...commonTasks, ...authTasks]);
+      await SplashScreen.hideAsync();
+    } catch (error) {
+      console.log(error);
     }
-  }, [isAuth]);
+  };
+
+  useEffect(() => {
+    if (loaded) {
+      loadInitialResources();
+    }
+  }, [loaded, isAuth]);
 
   return (
     <SafeAreaProvider>
@@ -74,23 +87,14 @@ const App = () => {
               <Intro setIsIntro={setIsIntro} />
             </View>
           )}
-          {isAuth && (
-            <Animated.View
-              style={{ flex: 1 }}
-              entering={FadeInRight.duration(200)}
-              exiting={SlideOutLeft.duration(300)}
-            >
+          {isAuth ? (
+            <AnimatedNavigationContainer>
               <PrivateNavigation />
-            </Animated.View>
-          )}
-          {!isAuth && (
-            <Animated.View
-              style={{ flex: 1 }}
-              entering={FadeInRight.duration(200)}
-              exiting={SlideOutLeft.duration(300)}
-            >
+            </AnimatedNavigationContainer>
+          ) : (
+            <AnimatedNavigationContainer>
               <PublicNavigation />
-            </Animated.View>
+            </AnimatedNavigationContainer>
           )}
         </NavigationContainer>
       </GestureHandlerRootView>

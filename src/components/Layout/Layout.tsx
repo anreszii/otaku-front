@@ -8,7 +8,7 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import Animated, { AnimatedProps } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -17,6 +17,7 @@ interface LayoutProps extends Partial<AnimatedProps<View>> {
   noMargin?: boolean;
   noSafe?: boolean;
   style?: StyleProp<ViewStyle>;
+  scrollRef?: React.RefObject<ScrollView>;
 }
 
 const Layout: React.FC<React.PropsWithChildren<LayoutProps>> = ({
@@ -25,6 +26,7 @@ const Layout: React.FC<React.PropsWithChildren<LayoutProps>> = ({
   noMargin = false,
   noSafe = false,
   style,
+  scrollRef,
   ...props
 }) => {
   const Container = noSafe ? View : SafeAreaView;
@@ -34,6 +36,14 @@ const Layout: React.FC<React.PropsWithChildren<LayoutProps>> = ({
     noMargin && { marginHorizontal: 0, marginVertical: 0 },
   ];
 
+  useEffect(() => {
+    return () => {
+      if (scrollRef?.current) {
+        scrollRef.current.scrollTo({ x: 0, y: 0, animated: false });
+      }
+    };
+  }, []);
+
   const { bottom } = useSafeAreaInsets();
 
   return (
@@ -41,6 +51,7 @@ const Layout: React.FC<React.PropsWithChildren<LayoutProps>> = ({
       <Container style={containerStyle}>
         {scroll ? (
           <ScrollView
+            ref={scrollRef}
             contentContainerStyle={[
               styles.content,
               { paddingBottom: Math.max(bottom + 65, 90) },

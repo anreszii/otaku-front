@@ -19,6 +19,7 @@ const Calendar = () => {
 
   const currentWeekDaysRef = useRef<WeekDay[]>([]);
   const scrollViewRef = useRef<ScrollView>(null);
+  const layoutRef = useRef<ScrollView>(null);
 
   const { ongoings } = useOngoingsStore();
 
@@ -86,11 +87,17 @@ const Calendar = () => {
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        const { dx, dy } = gestureState;
+        return Math.abs(dx) > Math.abs(dy) * 2 && Math.abs(dx) > 20;
+      },
       onPanResponderRelease: (_, gestureState) => {
         const { dx } = gestureState;
-
         const SWIPE_THRESHOLD = 50;
+
+        if (scrollViewRef.current) {
+          scrollViewRef.current.setNativeProps({ scrollEnabled: true });
+        }
 
         if (Math.abs(dx) > SWIPE_THRESHOLD) {
           const currentIndex = currentWeekDaysRef.current.findIndex(
@@ -125,13 +132,35 @@ const Calendar = () => {
 
   const scrollToDay = (index: number) => {
     scrollViewRef.current?.scrollTo({
-      x: index * 85,
+      x: index * 80,
+      animated: true,
+    });
+    layoutRef.current?.scrollTo({
+      y: 0,
       animated: true,
     });
   };
 
+  const cleanTitle = (title: string) => {
+    return title
+      .replace(
+        /\[(ТВ|TB)[-\s]?(\d+)?(?:,\s*[чЧ]асть\s*(\d+))?\]/g,
+        (match, _, season, part) => {
+          if (season && part) {
+            return `${season}, часть ${part}`;
+          } else if (season) {
+            return `${season}`;
+          } else if (part) {
+            return `часть ${part}`;
+          }
+          return "";
+        }
+      )
+      .trim();
+  };
+
   return (
-    <Layout noMargin scroll>
+    <Layout noMargin scroll scrollRef={layoutRef} {...panResponder.panHandlers}>
       <View style={styles.container}>
         <ScrollView
           ref={scrollViewRef}
@@ -158,7 +187,7 @@ const Calendar = () => {
             </TouchableOpacity>
           ))}
         </ScrollView>
-        <View style={styles.content} {...panResponder.panHandlers}>
+        <View style={styles.content}>
           {currentWeekDays.map(
             (day) =>
               day.focus &&
@@ -173,7 +202,15 @@ const Calendar = () => {
                       fontFamily="Montserrat"
                       style={styles.ongoingTitle}
                     >
-                      {ongoing.title}
+                      {cleanTitle(ongoing.title).length > 50
+                        ? cleanTitle(ongoing.title).slice(0, 50) + "..."
+                        : cleanTitle(ongoing.title)}
+                    </Typography>
+                    <Typography
+                      fontFamily="Urbanist"
+                      style={styles.ongoingTime}
+                    >
+                      {ongoing.material_data.episodes_aired + 1} серия
                     </Typography>
                     <Typography
                       fontFamily="Urbanist"
@@ -224,7 +261,7 @@ const styles = StyleSheet.create({
   content: {
     marginHorizontal: 20,
     marginTop: 25,
-    gap: 10,
+    gap: 15,
     flex: 1,
   },
   ongoing: {

@@ -44,6 +44,12 @@ interface IMaterialData {
   operators?: string[];
 }
 
+interface Episode {
+  link: string;
+  screenshots: string[];
+  number: number;
+}
+
 export interface IAnime {
   id: string;
   type: string;
@@ -67,6 +73,7 @@ export interface IAnime {
   blocked_seasons: Record<string, unknown>;
   created_at: string;
   updated_at: string;
+  seasons: Episode[];
   material_data: IMaterialData;
   screenshots: string[];
 }

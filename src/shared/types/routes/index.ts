@@ -15,6 +15,8 @@ export type RootStackParamList = {
   Favorite: undefined;
   Rooms: undefined;
   Profile: undefined;
+
+  Anime: { title: string };
 };
 
 export interface IRoute {

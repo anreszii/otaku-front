@@ -131,3 +131,125 @@ export const LoaderIcon: React.FC<SvgProps> = ({ color, ...props }) => {
     </Svg>
   );
 };
+
+export const SavedIcon = ({ focus }: { focus?: boolean }) => {
+  return (
+    <Svg
+      width={20}
+      height={20}
+      viewBox="0 0 17 22"
+      fill={focus ? "#fff" : "none"}
+    >
+      <Path
+        clipRule="evenodd"
+        d="M15.546 20.267l-7.273-5.195L1 20.267V3.643c0-1.147.93-2.078 2.078-2.078h10.39c1.148 0 2.078.93 2.078 2.078v16.624z"
+        stroke="#fff"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+};
+
+export const ShareIcon: React.FC<SvgProps> = ({ ...props }) => {
+  return (
+    <Svg width={18} height={17} viewBox="0 0 18 17" fill="none" {...props}>
+      <Path
+        clipRule="evenodd"
+        d="M8.578 8.865s-9.98-2.064-6.513-4.067C4.992 3.11 15.08.204 16.488.955c.75 1.409-2.154 11.496-3.844 14.422-2.002 3.469-4.066-6.512-4.066-6.512z"
+        stroke="#fff"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <Path
+        d="M8.578 8.865l7.91-7.91"
+        stroke="#fff"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+};
+
+export const StarIcon: React.FC<SvgProps> = ({ ...props }) => {
+  return (
+    <Svg width={18} height={16} viewBox="0 0 18 16" fill="none" {...props}>
+      <Path
+        opacity={0.4}
+        d="M9.814.595l1.855 3.728c.137.27.398.458.698.5l4.168.607a.934.934 0 01.614.358c.147.194.21.439.175.68a.927.927 0 01-.268.527l-3.02 2.927a.88.88 0 00-.267.803l.743 4.115a.93.93 0 01-.743 1.06.974.974 0 01-.595-.095l-3.718-1.937a.975.975 0 00-.878 0l-3.717 1.937a.952.952 0 01-1.277-.373.943.943 0 01-.097-.582l.744-4.117a.884.884 0 00-.268-.804L.943 7.004A.904.904 0 01.92 5.726l.024-.024a.898.898 0 01.536-.262l4.167-.608a.928.928 0 00.699-.5L8.133.595c.16-.32.49-.52.848-.511h.112a.93.93 0 01.72.51"
+        fill="url(#paint0_linear_65_5091)"
+      />
+      <Path
+        d="M8.993 13.764a1.023 1.023 0 00-.46.126l-3.699 1.933a.965.965 0 01-1.248-.385.922.922 0 01-.097-.578l.74-4.107a.92.92 0 00-.268-.813L.94 7.015A.91.91 0 01.926 5.73l.014-.014a.945.945 0 01.527-.264l4.17-.614a.902.902 0 00.698-.5L8.148.553A.921.921 0 019 .085c-.007.247-.007 13.51-.007 13.68"
+        fill="url(#paint1_linear_65_5091)"
+      />
+      <Defs>
+        <LinearGradient
+          id="paint0_linear_65_5091"
+          x1={17.3334}
+          y1={15.9167}
+          x2={-2.33366}
+          y2={9.9143}
+          gradientUnits="userSpaceOnUse"
+        >
+          <Stop stopColor="#4169E1" />
+          <Stop offset={1} stopColor="#4169E1" />
+        </LinearGradient>
+        <LinearGradient
+          id="paint1_linear_65_5091"
+          x1={9.00008}
+          y1={15.9167}
+          x2={-1.5048}
+          y2={14.3137}
+          gradientUnits="userSpaceOnUse"
+        >
+          <Stop stopColor="#4169E1" />
+          <Stop offset={1} stopColor="#4169E1" />
+        </LinearGradient>
+      </Defs>
+    </Svg>
+  );
+};
+
+export const ArrowRightIcon: React.FC<SvgProps> = ({ ...props }) => {
+  return (
+    <Svg width={8} height={12} viewBox="0 0 8 12" fill="none" {...props}>
+      <Path
+        d="M1.667 1.333L6.333 6l-4.666 4.667"
+        stroke="url(#paint0_linear_65_6578)"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <Defs>
+        <LinearGradient
+          id="paint0_linear_65_6578"
+          x1={6.33341}
+          y1={1.33329}
+          x2={1.1088}
+          y2={10.3431}
+          gradientUnits="userSpaceOnUse"
+        >
+          <Stop stopColor="#4169E1" />
+          <Stop offset={1} stopColor="#4169E1" />
+        </LinearGradient>
+      </Defs>
+    </Svg>
+  );
+};
+
+export const PlayIcon: React.FC<SvgProps> = ({ ...props }) => {
+  return (
+    <Svg width={28} height={25} viewBox="0 0 20 21" fill="none" {...props}>
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M0 10.255C0 4.71 4.488.205 10 .205s10 4.506 10 10.05c0 5.532-4.488 10.038-10 10.038S0 15.787 0 10.255zm13.668 1.016c.106-.106.241-.271.27-.31a1.17 1.17 0 00.232-.706c0-.282-.087-.544-.251-.757a3.681 3.681 0 01-.074-.08c-.064-.07-.157-.171-.245-.26-.791-.852-2.857-2.248-3.938-2.674-.164-.067-.579-.213-.801-.223-.212 0-.415.049-.608.145a1.255 1.255 0 00-.54.601c-.068.175-.174.698-.174.708-.107.571-.164 1.502-.164 2.529 0 .98.057 1.87.144 2.452.003.002.011.044.024.108.04.197.12.606.208.774.212.407.627.659 1.071.659h.039c.29-.01.898-.262.898-.272 1.023-.426 3.04-1.754 3.851-2.636l.058-.058z"
+        fill="#fff"
+      />
+    </Svg>
+  );
+};

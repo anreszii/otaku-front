@@ -31,7 +31,6 @@ $api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 
 $api.interceptors.response.use(
   (response: AxiosResponse) => {
-    console.log(response.data);
     return response;
   },
   async (error: AxiosError) => {
