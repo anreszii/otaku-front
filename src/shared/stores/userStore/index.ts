@@ -12,7 +12,7 @@ interface UserStore {
   setSearchUsers: (users: ISearchUser[]) => void;
   setUser: (user: IUser | null) => void;
   fetchUser: () => Promise<void>;
-  fetchSearchUsers: (query: string) => Promise<void>;
+  fetchSearchUsers: (query: string) => Promise<number>;
 }
 
 const useUserStore = create<UserStore>((set) => ({
@@ -30,10 +30,11 @@ const useUserStore = create<UserStore>((set) => ({
     set({ user: userData.user });
     useFavoriteStore.getState().setFavorite(userData.user.animeList);
   },
-  
+
   fetchSearchUsers: async (query: string) => {
     const { data: users } = await userApi.searchUsers(query);
     set({ searchUsers: users });
+    return users.length;
   },
 }));
 

@@ -61,11 +61,11 @@ export const Select = ({
   const handleOpen = () => {
     if (selectRef.current) {
       selectRef.current.measureInWindow((x, y, width, height) => {
-        const dropdownHeight = height * options.length;
+        const dropdownHeight = height * options.length + 16;
         const shouldShowBelow = y < dropdownHeight;
 
         setDropdownPosition({
-          top: shouldShowBelow ? y + height + 8 : y - dropdownHeight - 8,
+          top: shouldShowBelow ? y + height + 8 : y - dropdownHeight + 8,
           left: x,
           width: width,
         });
@@ -112,7 +112,7 @@ export const Select = ({
           <TouchableOpacity
             style={StyleSheet.absoluteFill}
             onPress={handleClose}
-            activeOpacity={1}
+            activeOpacity={0.7}
           >
             <Animated.View
               style={[StyleSheet.absoluteFill, styles.overlay, overlayStyle]}
@@ -130,6 +130,7 @@ export const Select = ({
             >
               {options.map((option) => (
                 <TouchableOpacity
+                  activeOpacity={0.7}
                   key={option.value}
                   style={styles.option}
                   onPress={() => handleSelect(option.value)}

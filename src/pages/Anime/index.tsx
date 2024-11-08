@@ -188,7 +188,7 @@ const Anime = () => {
               <Typography fontFamily="Urbanist" style={styles.title}>
                 {cleanTitle(currentAnime.title)}
               </Typography>
-              <TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.7}>
                 <ShareIcon />
               </TouchableOpacity>
             </View>
@@ -200,7 +200,7 @@ const Anime = () => {
               style={styles.statusSelect}
             />
             <View style={styles.infoContainer}>
-              <TouchableOpacity style={styles.ratingItem}>
+              <TouchableOpacity activeOpacity={0.7} style={styles.ratingItem}>
                 <StarIcon />
                 <Typography fontFamily="Urbanist" style={styles.infoText}>
                   {currentAnime?.material_data.shikimori_rating}
@@ -249,7 +249,7 @@ const Anime = () => {
                     >
                       {episode.number}
                     </Typography>
-                    <TouchableOpacity style={styles.episodePlay}>
+                    <TouchableOpacity activeOpacity={0.7} style={styles.episodePlay}>
                       <PlayIcon />
                     </TouchableOpacity>
                   </View>

@@ -28,6 +28,10 @@ class AuthApi {
   async verifyResetCode(data: IVerifyResetCodeData) {
     return $api.post("/auth/verifyResetCode", data);
   }
+
+  async logout() {
+    return $api.get("/auth/logout");
+  }
 }
 
 export const authApi = new AuthApi();

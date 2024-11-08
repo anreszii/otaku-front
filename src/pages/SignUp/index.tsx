@@ -96,7 +96,10 @@ const SignUp = () => {
             <Typography style={styles.signInText} fontFamily="Urbanist">
               Уже есть аккаунт?
             </Typography>
-            <TouchableOpacity onPress={handleNavigateSignIn}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={handleNavigateSignIn}
+            >
               <Typography style={styles.signInButtonText} fontFamily="Urbanist">
                 Войти
               </Typography>
@@ -122,6 +125,7 @@ const SignUp = () => {
           <View style={styles.interests}>
             {interests.map((interest) => (
               <TouchableOpacity
+                activeOpacity={0.7}
                 key={interest._id}
                 style={[
                   styles.interest,

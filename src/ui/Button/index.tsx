@@ -35,6 +35,7 @@ const Button: FC<ButtonProps> = ({
             { backgroundColor: color ? color : "#4169E1" },
             { height: height ? height : 52.5 },
           ]}
+          activeOpacity={0.7}
           {...props}
         >
           {!isLoading ? (
@@ -57,6 +58,7 @@ const Button: FC<ButtonProps> = ({
             style,
             { height: height ? height : 52.5 },
           ]}
+          activeOpacity={0.7}
           {...props}
         >
           <LinearGradient

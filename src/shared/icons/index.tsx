@@ -254,7 +254,7 @@ export const PlayIcon: React.FC<SvgProps> = ({ ...props }) => {
   );
 };
 
-export const Qualifier = ({ ...props }) => {
+export const Qualifier: React.FC<SvgProps> = ({ ...props }) => {
   return (
     <Svg width={16} height={6} viewBox="0 0 16 6" fill="none" {...props}>
       <Rect width={16} height={6} rx={3} fill="url(#paint0_linear_1_3512)" />
@@ -271,6 +271,45 @@ export const Qualifier = ({ ...props }) => {
           <Stop offset={1} stopColor="#4169E1" />
         </LinearGradient>
       </Defs>
+    </Svg>
+  );
+};
+
+export const LogoutIcon: React.FC<SvgProps> = ({ ...props }) => {
+  return (
+    <Svg width={18} height={25} viewBox="0 0 26 24" fill="none" {...props}>
+      <Path
+        d="M24.423 12.14H10.375M21.008 8.739l3.416 3.402-3.416 3.402M18.086 6.901c-.385-4.176-1.948-5.693-8.166-5.693-8.285 0-8.285 2.695-8.285 10.792 0 8.096 0 10.791 8.285 10.791 6.218 0 7.781-1.516 8.166-5.693"
+        stroke="#4169E1"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+};
+
+export const PlusIcon: React.FC<SvgProps> = ({ ...props }) => {
+  return (
+    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none" {...props}>
+      <Path
+        d="M4 12h16m-8-8v16"
+        stroke="#fff"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+};
+
+export const CrossIcon: React.FC<SvgProps> = ({ ...props }) => {
+  return (
+    <Svg width={24} height={24} viewBox="0 -0.5 25 25" fill="none" {...props}>
+      <Path
+        d="M6.97 16.47a.75.75 0 101.06 1.06l-1.06-1.06zm6.06-3.94a.75.75 0 10-1.06-1.06l1.06 1.06zm-1.06-1.06a.75.75 0 101.06 1.06l-1.06-1.06zm6.06-3.94a.75.75 0 00-1.06-1.06l1.06 1.06zm-5 3.94a.75.75 0 10-1.06 1.06l1.06-1.06zm3.94 6.06a.75.75 0 101.06-1.06l-1.06 1.06zm-5-5a.75.75 0 101.06-1.06l-1.06 1.06zM8.03 6.47a.75.75 0 00-1.06 1.06l1.06-1.06zm0 11.06l5-5-1.06-1.06-5 5 1.06 1.06zm5-5l5-5-1.06-1.06-5 5 1.06 1.06zm-1.06 0l5 5 1.06-1.06-5-5-1.06 1.06zm1.06-1.06l-5-5-1.06 1.06 5 5 1.06-1.06z"
+        fill="#fff"
+      />
     </Svg>
   );
 };

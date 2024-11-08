@@ -58,6 +58,7 @@ const SignIn = () => {
       <TouchableOpacity
         style={styles.forgotPassword}
         onPress={handleNavigateForgot}
+        activeOpacity={0.7}
       >
         <Typography style={styles.forgotPasswordText} fontFamily="Urbanist">
           Забыли пароль?
@@ -67,7 +68,7 @@ const SignIn = () => {
         <Typography style={styles.signUpText} fontFamily="Urbanist">
           Еще нет аккаунта?
         </Typography>
-        <TouchableOpacity onPress={handleNavigateSignUp}>
+        <TouchableOpacity activeOpacity={0.7} onPress={handleNavigateSignUp}>
           <Typography style={styles.signUpButtonText} fontFamily="Urbanist">
             Зарегистрируйтесь
           </Typography>

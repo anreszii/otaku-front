@@ -34,6 +34,7 @@ $api.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
+    console.log(error.response);
     const originalRequest = error.config as AxiosRequestConfig & {
       _isRetry?: boolean;
     };

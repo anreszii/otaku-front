@@ -14,6 +14,17 @@ import {
 import useOngoingsStore from "shared/stores/ongoingsStore";
 import { Image } from "expo-image";
 import { Qualifier } from "shared/icons";
+import { FlashList } from "@shopify/flash-list";
+
+type OngoingItem = {
+  id: string;
+  screenshots: string[];
+  title: string;
+  material_data: {
+    next_episode_at?: string;
+    episodes_aired: number;
+  };
+};
 
 const Calendar = () => {
   const [currentWeekDays, setCurrentWeekDays] = useState<WeekDay[]>([]);
@@ -160,6 +171,43 @@ const Calendar = () => {
       .trim();
   };
 
+  const renderItem = ({ item: ongoing }: { item: OngoingItem }) => (
+    <View style={styles.ongoingWrapper}>
+      <View style={styles.ongoingQualifier}>
+        <Qualifier />
+        <Typography fontFamily="Urbanist" style={styles.ongoingTime}>
+          {formatTimeToLocal(ongoing.material_data.next_episode_at || "")}
+        </Typography>
+      </View>
+      <View style={styles.ongoing}>
+        <Image
+          source={{ uri: ongoing.screenshots[0] }}
+          style={styles.ongoingImage}
+        />
+        <View style={styles.ongoingInfo}>
+          <Typography fontFamily="Montserrat" style={styles.ongoingTitle}>
+            {cleanTitle(ongoing.title).length > 50
+              ? cleanTitle(ongoing.title).slice(0, 50) + "..."
+              : cleanTitle(ongoing.title)}
+          </Typography>
+          <Typography fontFamily="Urbanist" style={styles.ongoingTime}>
+            {ongoing.material_data.episodes_aired + 1} серия
+          </Typography>
+        </View>
+      </View>
+    </View>
+  );
+
+  const EmptyList = () => {
+    return (
+      <View style={styles.emptyListContainer}>
+        <Typography fontFamily="Montserrat" style={styles.emptyListTitle}>
+          Отсутствуют запланированные релизы в этот день
+        </Typography>
+      </View>
+    );
+  };
+
   return (
     <Layout noMargin scroll scrollRef={layoutRef} {...panResponder.panHandlers}>
       <View style={styles.container}>
@@ -177,6 +225,7 @@ const Calendar = () => {
                 { borderColor: day.focus ? "#fff" : "#4169E1" },
               ]}
               key={day.numberOfWeek}
+              activeOpacity={0.7}
               onPress={() => handleDayPress(day)}
             >
               <Typography fontFamily="Montserrat" style={styles.dayNumber}>
@@ -190,45 +239,17 @@ const Calendar = () => {
         </ScrollView>
         <View style={styles.content}>
           {currentWeekDays.map(
-            (day) =>
-              day.focus &&
-              day.ongoings.map((ongoing) => (
-                <View key={ongoing.id} style={styles.ongoingWrapper}>
-                  <View style={styles.ongoingQualifier}>
-                    <Qualifier />
-                    <Typography
-                      fontFamily="Urbanist"
-                      style={styles.ongoingTime}
-                    >
-                      {formatTimeToLocal(
-                        ongoing.material_data.next_episode_at!
-                      )}
-                    </Typography>
-                  </View>
-                  <View style={styles.ongoing}>
-                    <Image
-                      source={{ uri: ongoing.screenshots[0] }}
-                      style={styles.ongoingImage}
-                    />
-                    <View style={styles.ongoingInfo}>
-                      <Typography
-                        fontFamily="Montserrat"
-                        style={styles.ongoingTitle}
-                      >
-                        {cleanTitle(ongoing.title).length > 50
-                          ? cleanTitle(ongoing.title).slice(0, 50) + "..."
-                          : cleanTitle(ongoing.title)}
-                      </Typography>
-                      <Typography
-                        fontFamily="Urbanist"
-                        style={styles.ongoingTime}
-                      >
-                        {ongoing.material_data.episodes_aired + 1} серия
-                      </Typography>
-                    </View>
-                  </View>
-                </View>
-              ))
+            (day, index) =>
+              day.focus && (
+                <FlashList
+                  key={index}
+                  data={day.ongoings}
+                  renderItem={renderItem}
+                  estimatedItemSize={125}
+                  ListEmptyComponent={<EmptyList />}
+                  ItemSeparatorComponent={() => <View style={{ height: 15 }} />}
+                />
+              )
           )}
         </View>
       </View>
@@ -297,6 +318,14 @@ const styles = StyleSheet.create({
   ongoingTime: {
     fontSize: 16,
     fontWeight: "500",
+  },
+  emptyListContainer: {
+    marginTop: 100,
+  },
+  emptyListTitle: {
+    fontSize: 20,
+    fontWeight: "600",
+    textAlign: "center",
   },
 });
 

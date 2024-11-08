@@ -89,11 +89,12 @@ const App = () => {
                 <Intro setIsIntro={setIsIntro} />
               </View>
             )}
-            {isAuth ? (
+            {isAuth && (
               <AnimatedNavigationContainer>
                 <PrivateNavigation />
               </AnimatedNavigationContainer>
-            ) : (
+            )}
+            {!isAuth && (
               <AnimatedNavigationContainer>
                 <PublicNavigation />
               </AnimatedNavigationContainer>

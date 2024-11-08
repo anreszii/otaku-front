@@ -22,9 +22,10 @@ interface AuthStore {
   sendReset: (email: string) => Promise<any>;
   verifyResetCode: (data: IVerifyResetCodeData) => Promise<any>;
   resetPassword: (data: IResetPasswordData) => Promise<any>;
+  logout: () => Promise<void>
 }
 
-const useAuthStore = create<AuthStore>((set) => ({
+const useAuthStore = create<AuthStore>((set, get) => ({
   isAuth: storage.getBoolean("isAuth") || false,
   setIsAuth: (isAuth) => {
     storage.set("isAuth", isAuth);
@@ -92,6 +93,17 @@ const useAuthStore = create<AuthStore>((set) => ({
     } catch (e: any) {
       console.log(e);
       return e.response.data.message;
+    }
+  },
+
+  logout: async () => {
+    try {
+      await authApi.logout();
+      storage.delete("token");
+      storage.delete("user");
+      get().setIsAuth(false);
+    } catch (e) {
+      console.log(e);
     }
   },
 }));

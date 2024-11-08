@@ -18,6 +18,7 @@ const BackButton: React.FC<BackButtonProps> = ({ style, ...props }) => {
 
   return (
     <TouchableOpacity
+      activeOpacity={0.7}
       onPress={handleBack}
       style={[styles.back, ...(Array.isArray(style) ? style : [style])]}
       {...props}

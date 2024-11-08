@@ -1,15 +1,17 @@
 import React from "react";
 import { Layout } from "components";
 import { Button, Typography } from "ui";
-import { useUserStore } from "shared/stores";
+import { useAuthStore, useUserStore } from "shared/stores";
 import { Image } from "expo-image";
 import LinearGradient from "react-native-linear-gradient";
 import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
+import { ArrowRightIcon, LogoutIcon } from "shared/icons";
 
 const Profile = () => {
   const { user } = useUserStore();
+  const { logout } = useAuthStore();
 
   const { top } = useSafeAreaInsets();
   const navigation = useTypedNavigation();
@@ -61,6 +63,7 @@ const Profile = () => {
                 Друзья ({user?.friends.length})
               </Typography>
               <TouchableOpacity
+              activeOpacity={0.7}
                 style={styles.friendsAll}
                 onPress={() => {
                   navigation.navigate("Friends");
@@ -74,7 +77,7 @@ const Profile = () => {
             {(user?.friends.length || 0) > 0 && (
               <View style={styles.friendsList}>
                 {user?.friends.slice(0, 5).map((friend) => (
-                  <TouchableOpacity style={styles.friendsItem} key={friend._id}>
+                  <TouchableOpacity activeOpacity={0.7} style={styles.friendsItem} key={friend._id}>
                     <Image
                       source={friend.avatar}
                       style={styles.friendsItemAvatar}
@@ -152,6 +155,19 @@ const Profile = () => {
               </View>
             </View>
           </View>
+          <TouchableOpacity
+            style={styles.logout}
+            activeOpacity={0.7}
+            onPress={logout}
+          >
+            <View style={styles.logoutRow}>
+              <LogoutIcon />
+              <Typography fontFamily="Montserrat" style={styles.logoutTitle}>
+                Выход
+              </Typography>
+            </View>
+            <ArrowRightIcon />
+          </TouchableOpacity>
         </View>
       </Layout>
     </>
@@ -262,6 +278,21 @@ const styles = StyleSheet.create({
     color: "rgba(255, 255, 255, 0.5)",
     fontWeight: "500",
     marginTop: 5,
+  },
+  logout: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 20,
+  },
+  logoutRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  logoutTitle: {
+    fontSize: 16,
+    fontWeight: "600",
   },
 });
 

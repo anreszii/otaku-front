@@ -56,6 +56,7 @@ const Field = forwardRef<TextInput, FieldProps>(
             <TouchableOpacity
               style={styles.iconContainer}
               onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+              activeOpacity={0.7}
             >
               <Ionicons
                 name={isPasswordVisible ? "eye-off" : "eye"}
