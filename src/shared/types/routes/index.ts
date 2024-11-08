@@ -17,6 +17,7 @@ export type RootStackParamList = {
   Profile: undefined;
 
   Anime: { title: string };
+  Friends: undefined;
 };
 
 export interface IRoute {

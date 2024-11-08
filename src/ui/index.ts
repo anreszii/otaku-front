@@ -7,6 +7,7 @@ import Modal from "./Modal";
 import Loader from "./Loader";
 import PosterBackground from "./PosterBackground";
 import { Skeleton } from "./Skeleton";
+import { Select } from "./Select";
 
 export {
   Typography,
@@ -19,4 +20,5 @@ export {
   Loader,
   PosterBackground,
   Skeleton,
+  Select,
 };

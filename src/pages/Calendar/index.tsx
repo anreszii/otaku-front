@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import useOngoingsStore from "shared/stores/ongoingsStore";
 import { Image } from "expo-image";
+import { Qualifier } from "shared/icons";
 
 const Calendar = () => {
   const [currentWeekDays, setCurrentWeekDays] = useState<WeekDay[]>([]);
@@ -192,26 +193,9 @@ const Calendar = () => {
             (day) =>
               day.focus &&
               day.ongoings.map((ongoing) => (
-                <View key={ongoing.id} style={styles.ongoing}>
-                  <Image
-                    source={{ uri: ongoing.screenshots[0] }}
-                    style={styles.ongoingImage}
-                  />
-                  <View style={styles.ongoingInfo}>
-                    <Typography
-                      fontFamily="Montserrat"
-                      style={styles.ongoingTitle}
-                    >
-                      {cleanTitle(ongoing.title).length > 50
-                        ? cleanTitle(ongoing.title).slice(0, 50) + "..."
-                        : cleanTitle(ongoing.title)}
-                    </Typography>
-                    <Typography
-                      fontFamily="Urbanist"
-                      style={styles.ongoingTime}
-                    >
-                      {ongoing.material_data.episodes_aired + 1} серия
-                    </Typography>
+                <View key={ongoing.id} style={styles.ongoingWrapper}>
+                  <View style={styles.ongoingQualifier}>
+                    <Qualifier />
                     <Typography
                       fontFamily="Urbanist"
                       style={styles.ongoingTime}
@@ -220,6 +204,28 @@ const Calendar = () => {
                         ongoing.material_data.next_episode_at!
                       )}
                     </Typography>
+                  </View>
+                  <View style={styles.ongoing}>
+                    <Image
+                      source={{ uri: ongoing.screenshots[0] }}
+                      style={styles.ongoingImage}
+                    />
+                    <View style={styles.ongoingInfo}>
+                      <Typography
+                        fontFamily="Montserrat"
+                        style={styles.ongoingTitle}
+                      >
+                        {cleanTitle(ongoing.title).length > 50
+                          ? cleanTitle(ongoing.title).slice(0, 50) + "..."
+                          : cleanTitle(ongoing.title)}
+                      </Typography>
+                      <Typography
+                        fontFamily="Urbanist"
+                        style={styles.ongoingTime}
+                      >
+                        {ongoing.material_data.episodes_aired + 1} серия
+                      </Typography>
+                    </View>
                   </View>
                 </View>
               ))
@@ -264,6 +270,14 @@ const styles = StyleSheet.create({
     gap: 15,
     flex: 1,
   },
+  ongoingWrapper: {
+    gap: 10,
+  },
+  ongoingQualifier: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+  },
   ongoing: {
     flexDirection: "row",
     gap: 10,
@@ -283,7 +297,6 @@ const styles = StyleSheet.create({
   ongoingTime: {
     fontSize: 16,
     fontWeight: "500",
-    marginTop: 5,
   },
 });
 

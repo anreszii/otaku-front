@@ -1,5 +1,5 @@
 import $api from "shared/http";
-import { IInterests, IUser } from "shared/types";
+import { IInterests, ISearchUser, IUser } from "shared/types";
 
 class UserApi {
   getInterests = async () => {
@@ -12,6 +12,18 @@ class UserApi {
 
   getUser = async (userId: string) => {
     return $api.get<{ user: IUser }>(`/user/${userId}`);
+  };
+
+  searchUsers = async (query: string) => {
+    return $api.post<ISearchUser[]>(`/user/search`, { query });
+  };
+
+  addList = async (userId: string, animeTitle: string, status: string) => {
+    return $api.post(`/user/list/${userId}`, { animeTitle, status });
+  };
+
+  deleteList = async (userId: string, listId: string) => {
+    return $api.delete(`/user/list/${userId}?listId=${listId}`);
   };
 }
 

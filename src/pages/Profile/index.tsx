@@ -6,11 +6,13 @@ import { Image } from "expo-image";
 import LinearGradient from "react-native-linear-gradient";
 import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
 
 const Profile = () => {
   const { user } = useUserStore();
 
   const { top } = useSafeAreaInsets();
+  const navigation = useTypedNavigation();
 
   const formatTime = (time: number) => {
     const hours = Math.floor(time / 3600);
@@ -56,30 +58,37 @@ const Profile = () => {
           <View style={styles.friends}>
             <View style={styles.friendsHeader}>
               <Typography fontFamily="Urbanist" style={styles.friendsTitle}>
-                Друзья (30)
+                Друзья ({user?.friends.length})
               </Typography>
-              <TouchableOpacity style={styles.friendsAll}>
+              <TouchableOpacity
+                style={styles.friendsAll}
+                onPress={() => {
+                  navigation.navigate("Friends");
+                }}
+              >
                 <Typography fontFamily="Urbanist" style={styles.friendsAllText}>
                   Все
                 </Typography>
               </TouchableOpacity>
             </View>
-            <View style={styles.friendsList}>
-              {Array.from({ length: 5 }).map((_, index) => (
-                <TouchableOpacity style={styles.friendsItem} key={index}>
-                  <Image
-                    source={user?.avatar}
-                    style={styles.friendsItemAvatar}
-                  />
-                  <Typography
-                    fontFamily="Urbanist"
-                    style={styles.friendsItemUsername}
-                  >
-                    {user?.username}
-                  </Typography>
-                </TouchableOpacity>
-              ))}
-            </View>
+            {(user?.friends.length || 0) > 0 && (
+              <View style={styles.friendsList}>
+                {user?.friends.slice(0, 5).map((friend) => (
+                  <TouchableOpacity style={styles.friendsItem} key={friend._id}>
+                    <Image
+                      source={friend.avatar}
+                      style={styles.friendsItemAvatar}
+                    />
+                    <Typography
+                      fontFamily="Urbanist"
+                      style={styles.friendsItemUsername}
+                    >
+                      {friend.username}
+                    </Typography>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
           </View>
           <View style={styles.statistics}>
             <View style={styles.statisticsRow}>
@@ -108,7 +117,7 @@ const Profile = () => {
                   fontFamily="Urbanist"
                   style={styles.statisticsItemSubtitle}
                 >
-                  В планах
+                  В избранном
                 </Typography>
               </View>
             </View>

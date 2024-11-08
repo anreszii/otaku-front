@@ -9,7 +9,7 @@ import {
   IResetPasswordData,
   IVerifyResetCodeData,
 } from "./auth";
-import { IUser } from "./user";
+import { IUser, IAnimeList, IUserFriend, ISearchUser } from "./user";
 import { IAnime } from "./kodik";
 
 export {
@@ -25,4 +25,7 @@ export {
   IResetPasswordData,
   IVerifyResetCodeData,
   IAnime,
+  IAnimeList,
+  IUserFriend,
+  ISearchUser,
 };

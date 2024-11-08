@@ -1,12 +1,5 @@
-import React, {
-  useEffect,
-  useState,
-  useCallback,
-  useRef,
-  useMemo,
-} from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import { useRoute } from "@react-navigation/native";
-import { Layout } from "components";
 import {
   Dimensions,
   ScrollView,
@@ -14,8 +7,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { BackButton, Button, Skeleton, Typography } from "ui";
-import { useAnimeStore } from "shared/stores";
+import { BackButton, Button, Select, Skeleton, Typography } from "ui";
+import { useAnimeStore, useUserStore } from "shared/stores";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
 import Animated, {
@@ -23,25 +16,33 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-  withTiming,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BlurView } from "@react-native-community/blur";
 import MarqueeText from "react-native-marquee";
-import {
-  ArrowRightIcon,
-  PlayIcon,
-  SavedIcon,
-  ShareIcon,
-  StarIcon,
-} from "shared/icons";
+import { ArrowRightIcon, PlayIcon, ShareIcon, StarIcon } from "shared/icons";
+import useFavoriteStore from "shared/stores/favoriteStore";
+
+const statusOptions = [
+  { label: "Просмотрено", value: "watch", color: "#3cce7b" },
+  { label: "Смотрю", value: "viewed", color: "#ff9b3f" },
+  { label: "Запланировано", value: "planned", color: "#4169E1" },
+  { label: "Заброшено", value: "aside", color: "#FF3333" },
+];
 
 const Anime = () => {
   const { title } = useRoute().params as { title: string };
-  const { fetchAnime, currentAnime } = useAnimeStore();
+
   const [isLoading, setIsLoading] = useState(true);
-  const animatedIndex = useSharedValue(0);
+  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+
   const { top } = useSafeAreaInsets();
+
+  const { fetchAnime, currentAnime, setCurrentAnime } = useAnimeStore();
+  const { user } = useUserStore();
+  const { addList, removeList, checkInList } = useFavoriteStore();
+
+  const animatedIndex = useSharedValue(0);
 
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(
@@ -68,44 +69,88 @@ const Anime = () => {
 
   useEffect(() => {
     animatedIndex.value = 0;
+
+    return () => {
+      setCurrentAnime(undefined);
+    };
   }, []);
 
   useEffect(() => {
     setIsLoading(true);
     const fetchAnimeAsync = async () => {
       await fetchAnime(title);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 0);
     };
     fetchAnimeAsync();
   }, [title]);
 
+  useEffect(() => {
+    if (currentAnime) {
+      const animeList = checkInList(currentAnime.title);
+      if (animeList) {
+        setSelectedStatus(animeList.status);
+      }
+      setIsLoading(false);
+    }
+  }, [currentAnime]);
+
+  const handleStatusChange = async (value: string) => {
+    if (user && currentAnime) {
+      const animeList = checkInList(currentAnime.title);
+      if (typeof animeList !== "boolean" && animeList.status === value) {
+        await removeList(user.id, animeList._id);
+        setSelectedStatus(null);
+      } else {
+        await addList(user.id, currentAnime.title, value);
+        setSelectedStatus(value);
+      }
+    }
+  };
+
+  const cleanTitle = (title: string) => {
+    return title
+      .replace(
+        /\[(ТВ|TB)[-\s]?(\d+)?(?:,\s*[чЧ]асть\s*(\d+))?\]/g,
+        (match, _, season, part) => {
+          if (season && part) {
+            return `${season}, часть ${part}`;
+          } else if (season) {
+            return `${season}`;
+          } else if (part) {
+            return `часть ${part}`;
+          }
+          return "";
+        }
+      )
+      .trim();
+  };
+
   return (
     <View style={styles.container}>
-      <Animated.View
-        style={[
-          styles.header,
-          {
-            paddingTop: top > 0 ? top : 15,
-            paddingBottom: 15,
-          },
-          headerAnimatedStyle,
-        ]}
-      >
-        <BackButton style={styles.backButton} />
-        <View style={styles.headerTitleContainer}>
-          <MarqueeText
-            style={styles.headerTitle}
-            speed={0.5}
-            marqueeOnStart
-            loop
-            delay={4000}
-          >
-            {currentAnime?.title}
-          </MarqueeText>
-        </View>
-      </Animated.View>
+      {!isLoading && currentAnime && (
+        <Animated.View
+          style={[
+            styles.header,
+            {
+              paddingTop: top > 0 ? top : 15,
+              paddingBottom: 15,
+            },
+            headerAnimatedStyle,
+          ]}
+        >
+          <BackButton style={styles.backButton} />
+          <View style={styles.headerTitleContainer}>
+            <MarqueeText
+              style={styles.headerTitle}
+              speed={0.5}
+              marqueeOnStart
+              loop
+              delay={4000}
+            >
+              {cleanTitle(currentAnime?.title || "")}
+            </MarqueeText>
+          </View>
+        </Animated.View>
+      )}
       {!isLoading ? (
         <View style={styles.posterContainer}>
           <Image
@@ -141,17 +186,19 @@ const Anime = () => {
           >
             <View style={styles.titleContainer}>
               <Typography fontFamily="Urbanist" style={styles.title}>
-                {currentAnime?.title}
+                {cleanTitle(currentAnime.title)}
               </Typography>
-              <View style={styles.actions}>
-                <TouchableOpacity>
-                  <SavedIcon focus />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <ShareIcon />
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity>
+                <ShareIcon />
+              </TouchableOpacity>
             </View>
+            <Select
+              value={selectedStatus}
+              onChange={handleStatusChange}
+              options={statusOptions}
+              placeholder="Добавить в список"
+              style={styles.statusSelect}
+            />
             <View style={styles.infoContainer}>
               <TouchableOpacity style={styles.ratingItem}>
                 <StarIcon />
@@ -293,11 +340,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 20,
   },
-  actions: {
-    flexDirection: "row",
-    gap: 10,
-    alignItems: "center",
-  },
   infoContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -374,6 +416,31 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: "center",
     justifyContent: "center",
+  },
+  dropdown: {
+    backgroundColor: "#2E2F3A",
+    borderRadius: 8,
+    padding: 8,
+    width: 200,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  dropdownItem: {
+    padding: 12,
+    borderRadius: 4,
+  },
+  dropdownTitle: {
+    fontWeight: "500",
+    fontSize: 16,
+  },
+  statusSelect: {
+    marginBottom: 20,
   },
 });
 

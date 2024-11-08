@@ -19,6 +19,7 @@ import Animated, {
   SlideOutLeft,
 } from "react-native-reanimated";
 import useOngoingsStore from "shared/stores/ongoingsStore";
+import { PortalProvider } from "@gorhom/portal";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -79,26 +80,28 @@ const App = () => {
   }, [loaded, isAuth]);
 
   return (
-    <SafeAreaProvider>
-      <GestureHandlerRootView>
-        <NavigationContainer>
-          {isIntro && (
-            <View style={styles.intro}>
-              <Intro setIsIntro={setIsIntro} />
-            </View>
-          )}
-          {isAuth ? (
-            <AnimatedNavigationContainer>
-              <PrivateNavigation />
-            </AnimatedNavigationContainer>
-          ) : (
-            <AnimatedNavigationContainer>
-              <PublicNavigation />
-            </AnimatedNavigationContainer>
-          )}
-        </NavigationContainer>
-      </GestureHandlerRootView>
-    </SafeAreaProvider>
+    <PortalProvider>
+      <SafeAreaProvider>
+        <GestureHandlerRootView>
+          <NavigationContainer>
+            {isIntro && (
+              <View style={styles.intro}>
+                <Intro setIsIntro={setIsIntro} />
+              </View>
+            )}
+            {isAuth ? (
+              <AnimatedNavigationContainer>
+                <PrivateNavigation />
+              </AnimatedNavigationContainer>
+            ) : (
+              <AnimatedNavigationContainer>
+                <PublicNavigation />
+              </AnimatedNavigationContainer>
+            )}
+          </NavigationContainer>
+        </GestureHandlerRootView>
+      </SafeAreaProvider>
+    </PortalProvider>
   );
 };
 
