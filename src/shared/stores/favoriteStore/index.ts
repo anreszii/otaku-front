@@ -4,22 +4,23 @@ import { create } from "zustand";
 import useUserStore from "../userStore";
 
 interface IFavoriteStore {
+  isLoading: boolean;
+  setIsLoading: (state: boolean) => void;
   favorite: IAnimeList[];
   setFavorite: (favorite: IAnimeList[]) => Promise<void>;
-  addList: (
-    userId: string,
-    animeTitle: string,
-    status: string
-  ) => Promise<void>;
-  removeList: (userId: string, listId: string) => Promise<void>;
+  addList: (animeTitle: string, status: string) => Promise<void>;
+  removeList: (listId: string) => Promise<void>;
   checkInList: (animeTitle: string) => IAnimeList | false;
 }
 
 const useFavoriteStore = create<IFavoriteStore>((set, get) => ({
+  isLoading: false,
+  setIsLoading: (state: boolean) => set({ isLoading: state }),
   favorite: [],
   setFavorite: async (favorite) => {
+    get().setIsLoading(true);
     const tempFavorite = await Promise.all(
-      favorite.map(async (anime) => {
+      favorite.map(async (anime, index) => {
         const {
           data: { anime: animeData },
         } = await kodikApi.getAnime(anime.animeTitle);
@@ -28,15 +29,16 @@ const useFavoriteStore = create<IFavoriteStore>((set, get) => ({
     );
 
     set({ favorite: tempFavorite });
+    get().setIsLoading(false);
   },
 
-  addList: async (userId: string, animeTitle: string, status: string) => {
-    await userApi.addList(userId, animeTitle, status);
+  addList: async (animeTitle: string, status: string) => {
+    await userApi.addList(animeTitle, status);
     await useUserStore.getState().fetchUser();
   },
 
-  removeList: async (userId: string, listId: string) => {
-    await userApi.deleteList(userId, listId);
+  removeList: async (listId: string) => {
+    await userApi.deleteList(listId);
     await useUserStore.getState().fetchUser();
   },
 

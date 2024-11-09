@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import { BackButton, Button, Select, Skeleton, Typography } from "ui";
-import { useAnimeStore, useUserStore } from "shared/stores";
+import { useAnimeStore } from "shared/stores";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
 import Animated, {
@@ -39,7 +39,6 @@ const Anime = () => {
   const { top } = useSafeAreaInsets();
 
   const { fetchAnime, currentAnime, setCurrentAnime } = useAnimeStore();
-  const { user } = useUserStore();
   const { addList, removeList, checkInList } = useFavoriteStore();
 
   const animatedIndex = useSharedValue(0);
@@ -94,13 +93,13 @@ const Anime = () => {
   }, [currentAnime]);
 
   const handleStatusChange = async (value: string) => {
-    if (user && currentAnime) {
+    if (currentAnime) {
       const animeList = checkInList(currentAnime.title);
       if (typeof animeList !== "boolean" && animeList.status === value) {
-        await removeList(user.id, animeList._id);
+        await removeList(animeList._id);
         setSelectedStatus(null);
       } else {
-        await addList(user.id, currentAnime.title, value);
+        await addList(currentAnime.title, value);
         setSelectedStatus(value);
       }
     }
@@ -249,7 +248,10 @@ const Anime = () => {
                     >
                       {episode.number}
                     </Typography>
-                    <TouchableOpacity activeOpacity={0.7} style={styles.episodePlay}>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      style={styles.episodePlay}
+                    >
                       <PlayIcon />
                     </TouchableOpacity>
                   </View>

@@ -22,7 +22,7 @@ interface AuthStore {
   sendReset: (email: string) => Promise<any>;
   verifyResetCode: (data: IVerifyResetCodeData) => Promise<any>;
   resetPassword: (data: IResetPasswordData) => Promise<any>;
-  logout: () => Promise<void>
+  logout: () => Promise<void>;
 }
 
 const useAuthStore = create<AuthStore>((set, get) => ({
@@ -58,9 +58,7 @@ const useAuthStore = create<AuthStore>((set, get) => ({
         storage.set("user", JSON.stringify(registerData.user));
         storage.set("isAuth", true);
       } else if (step === 1) {
-        const user = storage.getString("user");
-        const userId = JSON.parse(user!).id;
-        await userApi.addInterests(userId, interests);
+        await userApi.addInterests(interests);
         set({ isAuth: true });
       }
     } catch (e: any) {

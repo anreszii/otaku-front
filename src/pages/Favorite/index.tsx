@@ -37,7 +37,7 @@ const SkeletonItem = () => (
 );
 
 const Favorite = () => {
-  const { favorite } = useFavoriteStore();
+  const { favorite, isLoading } = useFavoriteStore();
 
   const [selectedStatus, setSelectedStatus] = useState<string>("watch");
 
@@ -53,6 +53,15 @@ const Favorite = () => {
 
   const handlePress = (value: string, event: GestureResponderEvent) => {
     const option = favoriteOptions.find((opt) => opt.value === value);
+    const currentIndex = favoriteOptions.findIndex(
+      (opt) => opt.value === value
+    );
+
+    scrollViewRef.current?.scrollTo({
+      x: currentIndex * 120,
+      animated: true,
+    });
+
     backgroundColor.value = withTiming(option?.color || "#007AFF", {
       duration: 300,
       easing: Easing.bezier(0.25, 0.1, 0.25, 1),
@@ -218,7 +227,7 @@ const Favorite = () => {
     );
   };
 
-  if (!favorite.length) {
+  if (isLoading) {
     return (
       <Layout noMargin>
         <View style={styles.header}>{renderHeader()}</View>
@@ -235,10 +244,7 @@ const Favorite = () => {
 
   const EmptyList = () => (
     <View style={styles.emptyList}>
-      <Typography
-        style={{ fontSize: 20, fontWeight: "600" }}
-        fontFamily="Montserrat"
-      >
+      <Typography style={styles.emptyListTitle} fontFamily="Montserrat">
         Список пуст
       </Typography>
     </View>
@@ -248,18 +254,21 @@ const Favorite = () => {
     <Layout noMargin>
       <View style={styles.header}>{renderHeader()}</View>
       <View {...panResponder.panHandlers} style={styles.container}>
-        <FlashList
-          data={categorizedData}
-          renderItem={({ item }) => <FavoriteItem item={item} />}
-          ListEmptyComponent={() => <EmptyList />}
-          estimatedItemSize={250}
-          numColumns={2}
-          contentContainerStyle={{
-            paddingTop: 8,
-            paddingHorizontal: 8,
-            paddingBottom: Math.max(bottom + 55, 80),
-          }}
-        />
+        {!categorizedData.length ? (
+          <EmptyList />
+        ) : (
+          <FlashList
+            data={categorizedData}
+            renderItem={({ item }) => <FavoriteItem item={item} />}
+            estimatedItemSize={250}
+            numColumns={2}
+            contentContainerStyle={{
+              paddingTop: 8,
+              paddingHorizontal: 8,
+              paddingBottom: Math.max(bottom + 55, 80),
+            }}
+          />
+        )}
       </View>
     </Layout>
   );
@@ -276,7 +285,12 @@ const styles = StyleSheet.create({
   emptyList: {
     justifyContent: "center",
     alignItems: "center",
-    height: "100%",
+    flex: 1,
+    marginBottom: 100,
+  },
+  emptyListTitle: {
+    fontSize: 20,
+    fontWeight: "600",
   },
   header: {},
   headerContent: {},
@@ -334,6 +348,7 @@ const styles = StyleSheet.create({
   skeletonPoster: {
     width: "100%",
     height: "100%",
+    borderRadius: 10,
   },
 });
 

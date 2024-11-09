@@ -5,7 +5,9 @@ import { WeekDay } from "./types";
 import { addDays, format, getDate } from "date-fns";
 import { ru } from "date-fns/locale";
 import {
+  DevSettings,
   PanResponder,
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -88,6 +90,7 @@ const Calendar = () => {
     );
     const newDays = [...currentWeekDays.map((el) => ({ ...el, focus: false }))];
     newDays[index] = { ...newDays[index], focus: true };
+    scrollToDay(index);
     setCurrentWeekDays(newDays);
   };
 
@@ -288,7 +291,6 @@ const styles = StyleSheet.create({
   content: {
     marginHorizontal: 20,
     marginTop: 25,
-    gap: 15,
     flex: 1,
   },
   ongoingWrapper: {

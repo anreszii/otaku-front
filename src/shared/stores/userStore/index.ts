@@ -13,9 +13,11 @@ interface UserStore {
   setUser: (user: IUser | null) => void;
   fetchUser: () => Promise<void>;
   fetchSearchUsers: (query: string) => Promise<number>;
+  addFriend: (friendId: string) => Promise<void>;
+  deleteFriend: (friendId: string) => Promise<void>;
 }
 
-const useUserStore = create<UserStore>((set) => ({
+const useUserStore = create<UserStore>((set, get) => ({
   user: null,
   searchUsers: [],
   setSearchUsers: (users) => set({ searchUsers: users }),
@@ -35,6 +37,16 @@ const useUserStore = create<UserStore>((set) => ({
     const { data: users } = await userApi.searchUsers(query);
     set({ searchUsers: users });
     return users.length;
+  },
+
+  addFriend: async (friendId: string) => {
+    await userApi.addFriend(friendId);
+    await get().fetchUser();
+  },
+
+  deleteFriend: async (friendId: string) => {
+    await userApi.deleteFriend(friendId);
+    await get().fetchUser();
   },
 }));
 

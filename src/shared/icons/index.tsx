@@ -291,7 +291,7 @@ export const LogoutIcon: React.FC<SvgProps> = ({ ...props }) => {
 
 export const PlusIcon: React.FC<SvgProps> = ({ ...props }) => {
   return (
-    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none" {...props}>
+    <Svg width={22} height={22} viewBox="0 0 24 24" fill="none" {...props}>
       <Path
         d="M4 12h16m-8-8v16"
         stroke="#fff"
@@ -305,7 +305,7 @@ export const PlusIcon: React.FC<SvgProps> = ({ ...props }) => {
 
 export const CrossIcon: React.FC<SvgProps> = ({ ...props }) => {
   return (
-    <Svg width={24} height={24} viewBox="0 -0.5 25 25" fill="none" {...props}>
+    <Svg width={26} height={26} viewBox="0 -0.5 25 25" fill="none" {...props}>
       <Path
         d="M6.97 16.47a.75.75 0 101.06 1.06l-1.06-1.06zm6.06-3.94a.75.75 0 10-1.06-1.06l1.06 1.06zm-1.06-1.06a.75.75 0 101.06 1.06l-1.06-1.06zm6.06-3.94a.75.75 0 00-1.06-1.06l1.06 1.06zm-5 3.94a.75.75 0 10-1.06 1.06l1.06-1.06zm3.94 6.06a.75.75 0 101.06-1.06l-1.06 1.06zm-5-5a.75.75 0 101.06-1.06l-1.06 1.06zM8.03 6.47a.75.75 0 00-1.06 1.06l1.06-1.06zm0 11.06l5-5-1.06-1.06-5 5 1.06 1.06zm5-5l5-5-1.06-1.06-5 5 1.06 1.06zm-1.06 0l5 5 1.06-1.06-5-5-1.06 1.06zm1.06-1.06l-5-5-1.06 1.06 5 5 1.06-1.06z"
         fill="#fff"

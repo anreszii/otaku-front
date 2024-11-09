@@ -10,7 +10,7 @@ import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
 import { ArrowRightIcon, LogoutIcon } from "shared/icons";
 
 const Profile = () => {
-  const { user } = useUserStore();
+  const { user, fetchUser } = useUserStore();
   const { logout } = useAuthStore();
 
   const { top } = useSafeAreaInsets();
@@ -41,7 +41,7 @@ const Profile = () => {
           contentFit="cover"
         />
       </View>
-      <Layout noSafe noMargin scroll>
+      <Layout noMargin scroll>
         <View style={styles.container}>
           <View style={styles.header}>
             <Typography fontFamily="Urbanist" style={styles.username}>
@@ -63,7 +63,7 @@ const Profile = () => {
                 Друзья ({user?.friends.length})
               </Typography>
               <TouchableOpacity
-              activeOpacity={0.7}
+                activeOpacity={0.7}
                 style={styles.friendsAll}
                 onPress={() => {
                   navigation.navigate("Friends");
@@ -77,7 +77,51 @@ const Profile = () => {
             {(user?.friends.length || 0) > 0 && (
               <View style={styles.friendsList}>
                 {user?.friends.slice(0, 5).map((friend) => (
-                  <TouchableOpacity activeOpacity={0.7} style={styles.friendsItem} key={friend._id}>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.friendsItem}
+                    key={friend._id}
+                  >
+                    <Image
+                      source={friend.avatar}
+                      style={styles.friendsItemAvatar}
+                    />
+                    <Typography
+                      fontFamily="Urbanist"
+                      style={styles.friendsItemUsername}
+                    >
+                      {friend.username}
+                    </Typography>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
+          </View>
+          <View style={styles.friends}>
+            <View style={styles.friendsHeader}>
+              <Typography fontFamily="Urbanist" style={styles.friendsTitle}>
+                Подписчики ({user?.subscribers.length})
+              </Typography>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={styles.friendsAll}
+                onPress={() => {
+                  navigation.navigate("Subscribers");
+                }}
+              >
+                <Typography fontFamily="Urbanist" style={styles.friendsAllText}>
+                  Все
+                </Typography>
+              </TouchableOpacity>
+            </View>
+            {(user?.subscribers.length || 0) > 0 && (
+              <View style={styles.friendsList}>
+                {user?.subscribers.slice(0, 5).map((friend) => (
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.friendsItem}
+                    key={friend._id}
+                  >
                     <Image
                       source={friend.avatar}
                       style={styles.friendsItemAvatar}
