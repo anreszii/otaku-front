@@ -125,19 +125,19 @@ const Anime = () => {
 
   return (
     <View style={styles.container}>
+      <BackButton style={[styles.backButton, { top: top > 0 ? top : 20 }]} />
       {!isLoading && currentAnime && (
         <Animated.View
           style={[
             styles.header,
             {
               paddingTop: top > 0 ? top : 15,
-              paddingBottom: 15,
+              paddingBottom: 25,
             },
             headerAnimatedStyle,
           ]}
         >
-          <BackButton style={styles.backButton} />
-          <View style={styles.headerTitleContainer}>
+          <View style={[styles.headerTitleContainer, { marginTop: 5 }]}>
             <MarqueeText
               style={styles.headerTitle}
               speed={0.5}
@@ -285,8 +285,7 @@ const styles = StyleSheet.create({
   backButton: {
     position: "absolute",
     left: 20,
-    zIndex: 1,
-    transform: [{ translateY: 20 }],
+    zIndex: 1000,
   },
   headerTitleContainer: {
     width: "60%",
