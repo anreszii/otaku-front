@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 100,
     borderWidth: 2,
-    borderColor: "#4169E1",
+    borderColor: "#1A80E5",
     position: "absolute",
     alignSelf: "center",
   },
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
   friendsAllText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#4169E1",
+    color: "#1A80E5",
   },
   friendsList: {
     backgroundColor: "#2E2F3A",

@@ -225,7 +225,7 @@ const Calendar = () => {
             <TouchableOpacity
               style={[
                 styles.day,
-                { borderColor: day.focus ? "#fff" : "#4169E1" },
+                { borderColor: day.focus ? "#fff" : "#1A80E5" },
               ]}
               key={day.numberOfWeek}
               activeOpacity={0.7}
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
   day: {
     paddingVertical: 10,
     paddingHorizontal: 15,
-    backgroundColor: "#4169E1",
+    backgroundColor: "#1A80E5",
     borderRadius: 10,
     marginTop: 10,
     borderWidth: 1,

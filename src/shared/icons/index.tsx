@@ -40,7 +40,7 @@ export const CalendarIcon = ({ focus }: { focus?: boolean }) => {
     <Svg width={25} height={23} viewBox="0 0 21 22" fill="none">
       <Path
         d="M1.593 8.404h17.824M14.942 12.309h.01M10.505 12.309h.009M6.058 12.309h.01M14.942 16.195h.01M10.505 16.195h.009M6.058 16.195h.01M14.544 1v3.29M6.465 1v3.29"
-        stroke={focus ? "#4169E1" : "#fff"}
+        stroke={focus ? "#1A80E5" : "#fff"}
         strokeOpacity={focus ? 1 : 0.4}
         strokeWidth={1.5}
         strokeLinecap="round"
@@ -49,7 +49,7 @@ export const CalendarIcon = ({ focus }: { focus?: boolean }) => {
       <Path
         clipRule="evenodd"
         d="M14.738 2.58H6.271C3.334 2.58 1.5 4.216 1.5 7.223v9.05C1.5 19.327 3.334 21 6.271 21h8.458c2.946 0 4.771-1.646 4.771-4.653V7.223c.01-3.007-1.816-4.643-4.762-4.643z"
-        stroke={focus ? "#4169E1" : "#fff"}
+        stroke={focus ? "#1A80E5" : "#fff"}
         strokeOpacity={focus ? 1 : 0.4}
         strokeWidth={1.5}
         strokeLinecap="round"
@@ -64,7 +64,7 @@ export const FavoriteIcon = ({ focus }: { focus?: boolean }) => {
     <Svg width={25} height={23} viewBox="0 0 22 21" fill="none">
       <Path
         d="M11.1 1l3.09 6.26 6.91 1.01-5 4.87 1.18 6.88-6.18-3.25-6.18 3.25 1.18-6.88-5-4.87 6.91-1.01L11.1 1z"
-        stroke={focus ? "#4169E1" : "#fff"}
+        stroke={focus ? "#1A80E5" : "#fff"}
         strokeOpacity={focus ? 1 : 0.4}
         strokeWidth={1.5}
         strokeLinecap="round"
@@ -79,7 +79,7 @@ export const ProfileIcon = ({ focus }: { focus?: boolean }) => {
     <Svg width={25} height={23} viewBox="0 0 25 24" fill="none">
       <G
         opacity={focus ? 1 : 0.4}
-        stroke={focus ? "#4169E1" : "#fff"}
+        stroke={focus ? "#1A80E5" : "#fff"}
         strokeWidth={1.5}
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -101,7 +101,7 @@ export const RoomsIcon = ({ focus }: { focus?: boolean }) => {
         fillRule="evenodd"
         clipRule="evenodd"
         d="M12.6 13.025h.13l.29.001c2.217.016 7.283.26 7.283 4 0 3.716-4.89 3.958-7.248 3.974h-.874c-2.217-.016-7.284-.26-7.284-3.995 0-3.72 5.067-3.963 7.284-3.979h.42zm0 1.876c-2.728 0-5.98.366-5.98 2.104 0 1.7 3.058 2.096 5.731 2.119l.25.001c2.728 0 5.98-.364 5.98-2.099 0-1.756-3.252-2.125-5.98-2.125zm9.133-2.383c2.782.454 3.367 1.877 3.367 2.991 0 .68-.246 1.923-1.888 2.604a.807.807 0 01-.306.062c-.347 0-.674-.23-.805-.604-.17-.485.054-1.027.498-1.211.779-.323.779-.68.779-.85 0-.549-.64-.931-1.9-1.136-.47-.078-.795-.554-.725-1.068.07-.513.506-.855.98-.788zm-17.286.788c.07.514-.255.99-.724 1.068-1.261.205-1.9.587-1.9 1.135 0 .172 0 .527.779.85.444.185.668.727.498 1.212-.13.374-.458.604-.805.604a.808.808 0 01-.306-.062C.346 17.43.1 16.19.1 15.51c0-1.113.584-2.537 3.368-2.991.474-.065.908.275.98.788zM12.601 0c2.893 0 5.246 2.564 5.246 5.715 0 3.15-2.353 5.714-5.247 5.714h-.03c-1.401-.005-2.714-.603-3.697-1.683-.985-1.08-1.523-2.513-1.518-4.035C7.355 2.564 9.708 0 12.6 0zm0 1.876c-1.943 0-3.523 1.722-3.523 3.839-.004 1.025.357 1.985 1.017 2.709.66.724 1.54 1.125 2.477 1.13l.029.937v-.938c1.942 0 3.524-1.72 3.524-3.838 0-2.117-1.582-3.839-3.524-3.839zm7.106-.65c2.019.36 3.485 2.242 3.485 4.472-.005 2.245-1.544 4.17-3.582 4.482a.785.785 0 01-.12.01c-.422 0-.791-.34-.852-.809-.065-.514.262-.988.734-1.06 1.194-.182 2.095-1.31 2.098-2.626 0-1.304-.86-2.407-2.043-2.619-.469-.084-.787-.566-.71-1.078.078-.512.518-.854.99-.773zm-13.223.772c.077.512-.241.994-.71 1.078-1.184.212-2.043 1.315-2.043 2.622.003 1.313.904 2.442 2.097 2.624.472.071.8.545.734 1.06-.061.468-.43.807-.852.807a.784.784 0 01-.12-.009C3.552 9.87 2.014 7.943 2.01 5.7c0-2.232 1.465-4.113 3.484-4.475.483-.082.912.264.99.773z"
-        fill={focus ? "#4169E1" : "#fff"}
+        fill={focus ? "#1A80E5" : "#fff"}
         fillOpacity={focus ? 1 : 0.4}
       />
     </Svg>
@@ -126,7 +126,7 @@ export const LoaderIcon: React.FC<SvgProps> = ({ color, ...props }) => {
         fillRule="evenodd"
         clipRule="evenodd"
         d="M20 4C11.163 4 4 11.163 4 20a2 2 0 11-4 0C0 8.954 8.954 0 20 0s20 8.954 20 20a2 2 0 11-4 0c0-8.837-7.163-16-16-16z"
-        fill={color || "#4169E1"}
+        fill={color || "#1A80E5"}
       />
     </Svg>
   );
@@ -195,8 +195,8 @@ export const StarIcon: React.FC<SvgProps> = ({ ...props }) => {
           y2={9.9143}
           gradientUnits="userSpaceOnUse"
         >
-          <Stop stopColor="#4169E1" />
-          <Stop offset={1} stopColor="#4169E1" />
+          <Stop stopColor="#1A80E5" />
+          <Stop offset={1} stopColor="#1A80E5" />
         </LinearGradient>
         <LinearGradient
           id="paint1_linear_65_5091"
@@ -206,8 +206,8 @@ export const StarIcon: React.FC<SvgProps> = ({ ...props }) => {
           y2={14.3137}
           gradientUnits="userSpaceOnUse"
         >
-          <Stop stopColor="#4169E1" />
-          <Stop offset={1} stopColor="#4169E1" />
+          <Stop stopColor="#1A80E5" />
+          <Stop offset={1} stopColor="#1A80E5" />
         </LinearGradient>
       </Defs>
     </Svg>
@@ -233,8 +233,8 @@ export const ArrowRightIcon: React.FC<SvgProps> = ({ ...props }) => {
           y2={10.3431}
           gradientUnits="userSpaceOnUse"
         >
-          <Stop stopColor="#4169E1" />
-          <Stop offset={1} stopColor="#4169E1" />
+          <Stop stopColor="#1A80E5" />
+          <Stop offset={1} stopColor="#1A80E5" />
         </LinearGradient>
       </Defs>
     </Svg>
@@ -267,8 +267,8 @@ export const Qualifier: React.FC<SvgProps> = ({ ...props }) => {
           y2={-3.98724}
           gradientUnits="userSpaceOnUse"
         >
-          <Stop stopColor="#4169E1" />
-          <Stop offset={1} stopColor="#4169E1" />
+          <Stop stopColor="#1A80E5" />
+          <Stop offset={1} stopColor="#1A80E5" />
         </LinearGradient>
       </Defs>
     </Svg>
@@ -280,7 +280,7 @@ export const LogoutIcon: React.FC<SvgProps> = ({ ...props }) => {
     <Svg width={18} height={25} viewBox="0 0 26 24" fill="none" {...props}>
       <Path
         d="M24.423 12.14H10.375M21.008 8.739l3.416 3.402-3.416 3.402M18.086 6.901c-.385-4.176-1.948-5.693-8.166-5.693-8.285 0-8.285 2.695-8.285 10.792 0 8.096 0 10.791 8.285 10.791 6.218 0 7.781-1.516 8.166-5.693"
-        stroke="#4169E1"
+        stroke="#1A80E5"
         strokeWidth={1.5}
         strokeLinecap="round"
         strokeLinejoin="round"

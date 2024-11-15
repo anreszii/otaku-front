@@ -32,7 +32,7 @@ const Button: FC<ButtonProps> = ({
           style={[
             styles.containButton,
             style,
-            { backgroundColor: color ? color : "#4169E1" },
+            { backgroundColor: color ? color : "#1A80E5" },
             { height: height ? height : 52.5 },
           ]}
           activeOpacity={0.7}
@@ -81,7 +81,7 @@ const Button: FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   containButton: {
-    backgroundColor: "#4169E1",
+    backgroundColor: "#1A80E5",
     height: 52.5,
     width: "100%",
     borderRadius: 12,
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 3,
-    borderColor: "#4169E1",
+    borderColor: "#1A80E5",
   },
   gradientTextButton: {
     color: "#fff",

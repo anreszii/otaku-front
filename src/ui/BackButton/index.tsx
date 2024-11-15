@@ -30,7 +30,7 @@ const BackButton: React.FC<BackButtonProps> = ({ style, ...props }) => {
 
 const styles = StyleSheet.create({
   back: {
-    backgroundColor: "#4169E1",
+    backgroundColor: "#1A80E5",
     borderRadius: 100,
     width: 32,
     height: 31,

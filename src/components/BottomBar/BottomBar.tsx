@@ -30,7 +30,7 @@ export const BottomBar = (props: BottomTabBarProps) => {
             >
               {descriptor.route.name === "Home" ? (
                 <LinearGradient
-                  colors={["#4169E1", "#00008B"]}
+                  colors={["#1A80E5", "#00008B"]}
                   style={styles.tabIconHome}
                 >
                   {bottomBarData
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     color: "rgba(255, 255, 255, 0.5)",
   },
   tabTypographyFocused: {
-    color: "#4169E1",
+    color: "#1A80E5",
   },
   tabTypographyHome: {
     marginTop: 27.5,

@@ -212,6 +212,7 @@ const Home = () => {
             >
               {favorite.map((el) => (
                 <TouchableOpacity
+                  key={el._id}
                   activeOpacity={0.7}
                   style={styles.animeBlockItem}
                   onPress={() => handleNavigateAnime(el.animeData?.title || "")}

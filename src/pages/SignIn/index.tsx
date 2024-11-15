@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
   forgotPasswordText: {
-    color: "#4169E1",
+    color: "#1A80E5",
     fontWeight: "500",
     fontSize: 16,
   },
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   signUpButtonText: {
-    color: "#4169E1",
+    color: "#1A80E5",
     fontWeight: "500",
     fontSize: 16,
   },

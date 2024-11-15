@@ -26,7 +26,7 @@ import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
 const favoriteOptions = [
   { label: "Просмотрено", value: "watch", color: "#3cce7b" },
   { label: "Смотрю", value: "viewed", color: "#ff9b3f" },
-  { label: "Запланировано", value: "planned", color: "#4169E1" },
+  { label: "Запланировано", value: "planned", color: "#1A80E5" },
   { label: "Заброшено", value: "aside", color: "#FF3333" },
 ];
 

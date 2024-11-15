@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
   forgotPasswordText: {
-    color: "#4169E1",
+    color: "#1A80E5",
     fontWeight: "500",
     fontSize: 16,
   },
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   signInButtonText: {
-    color: "#4169E1",
+    color: "#1A80E5",
     fontWeight: "500",
     fontSize: 16,
   },
@@ -209,11 +209,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 100,
     borderWidth: 2,
-    borderColor: "#4169E1",
+    borderColor: "#1A80E5",
     marginTop: 15,
   },
   selectedInterest: {
-    backgroundColor: "#4169E1",
+    backgroundColor: "#1A80E5",
   },
   interestTitle: {
     fontSize: 18,

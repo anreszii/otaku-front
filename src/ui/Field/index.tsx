@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   inputFocused: {
-    borderColor: "#4169E1",
+    borderColor: "#1A80E5",
     backgroundColor: "rgba(65, 105, 225, 0.12)",
   },
   errorText: {

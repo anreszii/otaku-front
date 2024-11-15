@@ -23,8 +23,8 @@ export const OnboardingDots = (activeIndex: number, total: number) => {
           y2={dotHeight}
           gradientUnits="userSpaceOnUse"
         >
-          <Stop stopColor="#4169E1" />
-          <Stop offset={1} stopColor="#4169E1" />
+          <Stop stopColor="#1A80E5" />
+          <Stop offset={1} stopColor="#1A80E5" />
         </LinearGradient>
       </Defs>
       {activeIndex === index ? (
