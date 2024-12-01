@@ -17,6 +17,7 @@ import useOngoingsStore from "shared/stores/ongoingsStore";
 import { Image } from "expo-image";
 import { Qualifier } from "shared/icons";
 import { FlashList } from "@shopify/flash-list";
+import { cleanTitle } from "shared/helpers";
 
 type OngoingItem = {
   id: string;
@@ -156,24 +157,6 @@ const Calendar = () => {
     });
   };
 
-  const cleanTitle = (title: string) => {
-    return title
-      .replace(
-        /\[(ТВ|TB)[-\s]?(\d+)?(?:,\s*[чЧ]асть\s*(\d+))?\]/g,
-        (match, _, season, part) => {
-          if (season && part) {
-            return `${season}, часть ${part}`;
-          } else if (season) {
-            return `${season}`;
-          } else if (part) {
-            return `часть ${part}`;
-          }
-          return "";
-        }
-      )
-      .trim();
-  };
-
   const renderItem = ({ item: ongoing }: { item: OngoingItem }) => (
     <View style={styles.ongoingWrapper}>
       <View style={styles.ongoingQualifier}>
@@ -263,6 +246,7 @@ const Calendar = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingBottom: 40,
   },
   header: {
     flexGrow: 0,

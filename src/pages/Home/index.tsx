@@ -23,6 +23,7 @@ import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFavoriteStore } from "shared/stores";
+import { cleanTitle } from "shared/helpers";
 
 const Home = () => {
   const { ongoings } = useOngoingsStore();
@@ -34,7 +35,10 @@ const Home = () => {
   const navigation = useTypedNavigation();
 
   const snapPoints = useMemo(
-    () => ["40%", Dimensions.get("window").height - top - 15],
+    () => [
+      Dimensions.get("window").height * 0.3,
+      Dimensions.get("window").height - top - 15,
+    ],
     []
   );
 
@@ -61,24 +65,6 @@ const Home = () => {
       opacity,
     };
   }, []);
-
-  const cleanTitle = (title: string) => {
-    return title
-      .replace(
-        /\[(ТВ|TB)[-\s]?(\d+)?(?:,\s*[чЧ]асть\s*(\d+))?\]/g,
-        (match, _, season, part) => {
-          if (season && part) {
-            return `${season}, часть ${part}`;
-          } else if (season) {
-            return `${season}`;
-          } else if (part) {
-            return `часть ${part}`;
-          }
-          return "";
-        }
-      )
-      .trim();
-  };
 
   const renderItem = ({ item, index }: { item: IAnime; index: number }) => {
     return (
@@ -209,6 +195,7 @@ const Home = () => {
               horizontal
               style={styles.animeBlockContainer}
               contentContainerStyle={styles.animeBlockContent}
+              showsHorizontalScrollIndicator={false}
             >
               {favorite.map((el) => (
                 <TouchableOpacity

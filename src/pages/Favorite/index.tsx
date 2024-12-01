@@ -265,7 +265,7 @@ const Favorite = () => {
             contentContainerStyle={{
               paddingTop: 8,
               paddingHorizontal: 8,
-              paddingBottom: Math.max(bottom + 55, 80),
+              paddingBottom: 40,
             }}
           />
         )}
@@ -278,7 +278,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-
   headerWrapper: {
     height: 50,
   },
@@ -292,7 +291,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
   },
-  header: {},
+  header: {
+    paddingBottom: 15,
+  },
   headerContent: {},
   headerItems: {
     flexDirection: "row",

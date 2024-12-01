@@ -10,13 +10,10 @@ export const BottomBar = (props: BottomTabBarProps) => {
   const { bottom } = useSafeAreaInsets();
 
   return (
-    <View
-      style={[
-        styles.tabBarContainer,
-        { marginBottom: bottom > 0 ? bottom : 25 },
-      ]}
-    >
-      <View style={styles.tabBar}>
+    <View style={styles.tabBarContainer}>
+      <View
+        style={[styles.tabBar, { paddingBottom: bottom > 0 ? bottom : 25 }]}
+      >
         {descriptors.map(([descriptorName, descriptor], index) => {
           const isFocused = descriptor.navigation.isFocused();
 
@@ -55,8 +52,6 @@ export const BottomBar = (props: BottomTabBarProps) => {
 const styles = StyleSheet.create({
   tabBarContainer: {
     width: "100%",
-    position: "absolute",
-    bottom: 0,
   },
   tabBar: {
     flexDirection: "row",
@@ -64,10 +59,6 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     justifyContent: "space-between",
     backgroundColor: "#2E2F3A",
-    marginHorizontal: 15,
-    borderRadius: 15,
-    borderWidth: 2,
-    borderColor: "rgba(204, 204, 204, 0.3)",
   },
   tab: {
     alignItems: "center",

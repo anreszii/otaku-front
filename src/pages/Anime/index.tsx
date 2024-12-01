@@ -22,6 +22,7 @@ import { BlurView } from "@react-native-community/blur";
 import MarqueeText from "react-native-marquee";
 import { ArrowRightIcon, PlayIcon, ShareIcon, StarIcon } from "shared/icons";
 import useFavoriteStore from "shared/stores/favoriteStore";
+import { cleanTitle } from "shared/helpers";
 
 const statusOptions = [
   { label: "Просмотрено", value: "watch", color: "#3cce7b" },
@@ -103,24 +104,6 @@ const Anime = () => {
         setSelectedStatus(value);
       }
     }
-  };
-
-  const cleanTitle = (title: string) => {
-    return title
-      .replace(
-        /\[(ТВ|TB)[-\s]?(\d+)?(?:,\s*[чЧ]асть\s*(\d+))?\]/g,
-        (match, _, season, part) => {
-          if (season && part) {
-            return `${season}, часть ${part}`;
-          } else if (season) {
-            return `${season}`;
-          } else if (part) {
-            return `часть ${part}`;
-          }
-          return "";
-        }
-      )
-      .trim();
   };
 
   return (

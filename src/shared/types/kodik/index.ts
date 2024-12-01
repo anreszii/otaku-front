@@ -77,3 +77,16 @@ export interface IAnime {
   material_data: IMaterialData;
   screenshots: string[];
 }
+
+interface IAnimeUrlLinks {
+  Src: string;
+  Type: string;
+}
+
+export interface IAnimeUrlResponse {
+  links: {
+    "360": IAnimeUrlLinks;
+    "480": IAnimeUrlLinks;
+    "720": IAnimeUrlLinks;
+  };
+}
