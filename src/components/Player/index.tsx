@@ -1,10 +1,11 @@
-import { View, Text, PanResponder, StyleSheet, Animated } from "react-native";
+import { View, Text, PanResponder, StyleSheet } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { useAnimeStore } from "shared/stores";
-import Modal from "ui/Modal";
 import BackButton from "ui/BackButton";
 import { Video } from "expo-av";
 import Loader from "ui/Loader";
+import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
+import Modal from "react-native-modal";
 
 interface PlayerModalProps {
   visible: boolean;
@@ -21,36 +22,36 @@ const Player: React.FC<PlayerModalProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const { fetchAnimeUrl } = useAnimeStore();
   const [isMinimized, setIsMinimized] = useState(false);
-  const animatedWidth = useRef(new Animated.Value(1)).current;
+  const animatedWidth = useSharedValue(1);
 
   useEffect(() => {
     const fetchVideoUrl = async () => {
       const response = await fetchAnimeUrl(episodeLink);
-      setVideoUrl(response.links["720"].Src);
+      const formatLink = (link: string) => {
+        if (link.includes("https:")) {
+          return link;
+        } else {
+          return `https:${link}`;
+        }
+      };
+
+      setVideoUrl(formatLink(response.links["720"].Src));
       setIsLoading(false);
     };
 
-    if (visible) {
+    if (visible && episodeLink) {
       fetchVideoUrl();
     }
   }, [visible, episodeLink]);
 
   const minimizeModal = () => {
     setIsMinimized(true);
-    Animated.timing(animatedWidth, {
-      toValue: 0.4, // 40% ширины
-      duration: 300,
-      useNativeDriver: false,
-    }).start();
+    animatedWidth.value = withTiming(0.4, { duration: 300 });
   };
 
   const maximizeModal = () => {
     setIsMinimized(false);
-    Animated.timing(animatedWidth, {
-      toValue: 1, // 100% ширины
-      duration: 300,
-      useNativeDriver: false,
-    }).start();
+    animatedWidth.value = withTiming(1, { duration: 300 });
   };
 
   const panResponder = PanResponder.create({
@@ -73,11 +74,16 @@ const Player: React.FC<PlayerModalProps> = ({
     <Modal
       isVisible={visible}
       animationIn="slideInUp"
-      animationOut="slideInDown"
+      animationOut="slideOutDown"
     >
-      <Animated.View style={styles.container} {...panResponder.panHandlers}>
+      <Animated.View
+        style={[styles.container, { width: `${animatedWidth.value * 100}%` }]}
+        {...panResponder.panHandlers}
+      >
         {isLoading ? (
-          <Loader />
+          <View style={styles.loaderContainer}>
+            <Loader />
+          </View>
         ) : (
           <Video
             source={{ uri: videoUrl }}
@@ -101,6 +107,12 @@ const styles = StyleSheet.create({
   video: {
     width: "100%",
     height: "100%",
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 100,
   },
 });
 

@@ -23,6 +23,7 @@ import MarqueeText from "react-native-marquee";
 import { ArrowRightIcon, PlayIcon, ShareIcon, StarIcon } from "shared/icons";
 import useFavoriteStore from "shared/stores/favoriteStore";
 import { cleanTitle } from "shared/helpers";
+import { Player } from "components";
 
 const statusOptions = [
   { label: "Просмотрено", value: "watch", color: "#3cce7b" },
@@ -36,6 +37,8 @@ const Anime = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+  const [isVisiblePlayer, setIsVisiblePlayer] = useState(false);
+  const [episodeLink, setEpisodeLink] = useState("");
 
   const { top } = useSafeAreaInsets();
 
@@ -106,145 +109,161 @@ const Anime = () => {
     }
   };
 
+  const startWatch = () => {
+    setEpisodeLink(currentAnime?.seasons[0].link!);
+    setIsVisiblePlayer(true);
+  };
+
   return (
-    <View style={styles.container}>
-      <BackButton style={[styles.backButton, { top: top > 0 ? top : 20 }]} />
-      {!isLoading && currentAnime && (
-        <Animated.View
-          style={[
-            styles.header,
-            {
-              paddingTop: top > 0 ? top : 15,
-              paddingBottom: 25,
-            },
-            headerAnimatedStyle,
-          ]}
-        >
-          <View style={[styles.headerTitleContainer, { marginTop: 5 }]}>
-            <MarqueeText
-              style={styles.headerTitle}
-              speed={0.5}
-              marqueeOnStart
-              loop
-              delay={4000}
-            >
-              {cleanTitle(currentAnime?.title || "")}
-            </MarqueeText>
-          </View>
-        </Animated.View>
-      )}
-      {!isLoading ? (
-        <View style={styles.posterContainer}>
-          <Image
-            source={{ uri: currentAnime?.material_data.poster_url }}
-            style={styles.posterBlur}
-            contentFit="cover"
-          />
-          <BlurView style={styles.posterBlur} blurType="dark" blurAmount={10} />
-          <Image
-            source={{ uri: currentAnime?.material_data.poster_url }}
-            style={styles.posterMain}
-            contentFit="contain"
-          />
-        </View>
-      ) : (
-        <Skeleton style={styles.poster} />
-      )}
-      <BottomSheet
-        ref={bottomSheetRef}
-        snapPoints={snapPoints}
-        animatedIndex={animatedIndex}
-        enablePanDownToClose={false}
-        enableOverDrag={false}
-        enableDynamicSizing={false}
-        index={0}
-        backgroundStyle={styles.bottomSheetBackground}
-        animateOnMount={false}
-        handleComponent={null}
-      >
+    <>
+      <View style={styles.container}>
+        <BackButton style={[styles.backButton, { top: top > 0 ? top : 20 }]} />
         {!isLoading && currentAnime && (
-          <BottomSheetScrollView
-            contentContainerStyle={styles.contentContainer}
+          <Animated.View
+            style={[
+              styles.header,
+              {
+                paddingTop: top > 0 ? top : 15,
+                paddingBottom: 25,
+              },
+              headerAnimatedStyle,
+            ]}
           >
-            <View style={styles.titleContainer}>
-              <Typography fontFamily="Urbanist" style={styles.title}>
-                {cleanTitle(currentAnime.title)}
-              </Typography>
-              <TouchableOpacity activeOpacity={0.7}>
-                <ShareIcon />
-              </TouchableOpacity>
-            </View>
-            <Select
-              value={selectedStatus}
-              onChange={handleStatusChange}
-              options={statusOptions}
-              placeholder="Добавить в список"
-              style={styles.statusSelect}
-            />
-            <View style={styles.infoContainer}>
-              <TouchableOpacity activeOpacity={0.7} style={styles.ratingItem}>
-                <StarIcon />
-                <Typography fontFamily="Urbanist" style={styles.infoText}>
-                  {currentAnime?.material_data.shikimori_rating}
-                </Typography>
-                <ArrowRightIcon />
-              </TouchableOpacity>
-              <Typography fontFamily="Urbanist" style={styles.yearText}>
-                {currentAnime.year}
-              </Typography>
-              <Typography fontFamily="Urbanist" style={styles.durationText}>
-                ~{currentAnime.material_data.duration} мин
-              </Typography>
-              <Typography fontFamily="Urbanist" style={styles.countryText}>
-                {currentAnime.material_data.countries?.[0]}
-              </Typography>
-            </View>
-            <Button variant="contain" title="Смотреть" />
-            <Typography style={styles.genres}>
-              Жанры: {currentAnime.material_data.anime_genres?.join(", ")}
-            </Typography>
-            <Typography style={styles.description}>
-              {currentAnime.material_data.description}
-            </Typography>
-            <View style={styles.episodesContainer}>
-              <Typography style={styles.episodeTitle}>Серии</Typography>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.episodesContent}
+            <View style={[styles.headerTitleContainer, { marginTop: 5 }]}>
+              <MarqueeText
+                style={styles.headerTitle}
+                speed={0.5}
+                marqueeOnStart
+                loop
+                delay={4000}
               >
-                {currentAnime.seasons.map((episode) => (
-                  <View key={episode.number}>
-                    <Image
-                      source={{ uri: episode.screenshots[0] }}
-                      style={styles.episodeImage}
-                      contentFit="cover"
-                    />
-                    <BlurView
-                      style={styles.episodeBlur}
-                      blurType="dark"
-                      blurAmount={2}
-                    />
-                    <Typography
-                      fontFamily="Urbanist"
-                      style={styles.episodeNumber}
-                    >
-                      {episode.number}
-                    </Typography>
-                    <TouchableOpacity
-                      activeOpacity={0.7}
-                      style={styles.episodePlay}
-                    >
-                      <PlayIcon />
-                    </TouchableOpacity>
-                  </View>
-                ))}
-              </ScrollView>
+                {cleanTitle(currentAnime?.title || "")}
+              </MarqueeText>
             </View>
-          </BottomSheetScrollView>
+          </Animated.View>
         )}
-      </BottomSheet>
-    </View>
+        {!isLoading ? (
+          <View style={styles.posterContainer}>
+            <Image
+              source={{ uri: currentAnime?.material_data.poster_url }}
+              style={styles.posterBlur}
+              contentFit="cover"
+            />
+            <BlurView
+              style={styles.posterBlur}
+              blurType="dark"
+              blurAmount={10}
+            />
+            <Image
+              source={{ uri: currentAnime?.material_data.poster_url }}
+              style={styles.posterMain}
+              contentFit="contain"
+            />
+          </View>
+        ) : (
+          <Skeleton style={styles.poster} />
+        )}
+        <BottomSheet
+          ref={bottomSheetRef}
+          snapPoints={snapPoints}
+          animatedIndex={animatedIndex}
+          enablePanDownToClose={false}
+          enableOverDrag={false}
+          enableDynamicSizing={false}
+          index={0}
+          backgroundStyle={styles.bottomSheetBackground}
+          animateOnMount={false}
+          handleComponent={null}
+        >
+          {!isLoading && currentAnime && (
+            <BottomSheetScrollView
+              contentContainerStyle={styles.contentContainer}
+            >
+              <View style={styles.titleContainer}>
+                <Typography fontFamily="Urbanist" style={styles.title}>
+                  {cleanTitle(currentAnime.title)}
+                </Typography>
+                <TouchableOpacity activeOpacity={0.7}>
+                  <ShareIcon />
+                </TouchableOpacity>
+              </View>
+              <Select
+                value={selectedStatus}
+                onChange={handleStatusChange}
+                options={statusOptions}
+                placeholder="Добавить в список"
+                style={styles.statusSelect}
+              />
+              <View style={styles.infoContainer}>
+                <TouchableOpacity activeOpacity={0.7} style={styles.ratingItem}>
+                  <StarIcon />
+                  <Typography fontFamily="Urbanist" style={styles.infoText}>
+                    {currentAnime?.material_data.shikimori_rating}
+                  </Typography>
+                  <ArrowRightIcon />
+                </TouchableOpacity>
+                <Typography fontFamily="Urbanist" style={styles.yearText}>
+                  {currentAnime.year}
+                </Typography>
+                <Typography fontFamily="Urbanist" style={styles.durationText}>
+                  ~{currentAnime.material_data.duration} мин
+                </Typography>
+                <Typography fontFamily="Urbanist" style={styles.countryText}>
+                  {currentAnime.material_data.countries?.[0]}
+                </Typography>
+              </View>
+              <Button variant="contain" title="Смотреть" onPress={startWatch} />
+              <Typography style={styles.genres}>
+                Жанры: {currentAnime.material_data.anime_genres?.join(", ")}
+              </Typography>
+              <Typography style={styles.description}>
+                {currentAnime.material_data.description}
+              </Typography>
+              <View style={styles.episodesContainer}>
+                <Typography style={styles.episodeTitle}>Серии</Typography>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.episodesContent}
+                >
+                  {currentAnime.seasons.map((episode) => (
+                    <View key={episode.number}>
+                      <Image
+                        source={{ uri: episode.screenshots[0] }}
+                        style={styles.episodeImage}
+                        contentFit="cover"
+                      />
+                      <BlurView
+                        style={styles.episodeBlur}
+                        blurType="dark"
+                        blurAmount={2}
+                      />
+                      <Typography
+                        fontFamily="Urbanist"
+                        style={styles.episodeNumber}
+                      >
+                        {episode.number}
+                      </Typography>
+                      <TouchableOpacity
+                        activeOpacity={0.7}
+                        style={styles.episodePlay}
+                      >
+                        <PlayIcon />
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </ScrollView>
+              </View>
+            </BottomSheetScrollView>
+          )}
+        </BottomSheet>
+      </View>
+      <Player
+        visible={isVisiblePlayer}
+        onClose={() => setIsVisiblePlayer(false)}
+        episodeLink={episodeLink}
+      />
+    </>
   );
 };
 
