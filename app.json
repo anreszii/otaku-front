@@ -26,9 +26,10 @@
     },
     "plugins": [
       [
-        "expo-av",
+        "expo-video",
         {
-          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
+          "supportsBackgroundPlayback": true,
+          "supportsPictureInPicture": true
         }
       ],
       [

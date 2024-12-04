@@ -4031,10 +4031,10 @@ expo-modules-core@1.12.26:
   dependencies:
     invariant "^2.2.4"
 
-expo-screen-orientation@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/expo-screen-orientation/-/expo-screen-orientation-8.0.0.tgz#28ff6f5269bbe07ff4bba9acdb89b3bd4041d927"
-  integrity sha512-1pKmx8pDk8zO8lFJVbVQao1Qj26qG/W93+xZp0Cxvzd3n/v7SGDLDJ1V/zBxlxxu58AczEzsGEI2ScZVon2Xow==
+expo-screen-orientation@~7.0.0:
+  version "7.0.5"
+  resolved "https://registry.yarnpkg.com/expo-screen-orientation/-/expo-screen-orientation-7.0.5.tgz#0a517982151c6519fa4b10ce27047de39c1f92cf"
+  integrity sha512-1j0MzVzYpjKQo4BWowQ3ZYwC3OnddX/8k06C8VYTAxMyd8ou1k+rG4tm+GIV2n2RSzc3g7cfPlQwSYr3/SGmbg==
 
 expo-splash-screen@~0.27.5:
   version "0.27.6"
@@ -4055,6 +4055,11 @@ expo-system-ui@~3.0.7:
   dependencies:
     "@react-native/normalize-colors" "0.74.85"
     debug "^4.3.2"
+
+expo-video@~2.0.1:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/expo-video/-/expo-video-2.0.2.tgz#e89ba060002f3a832f3486298439ea376f923c48"
+  integrity sha512-xHZvOL+F+SCflRZCJKSPOjQAgJ5MA7muO4SXSY3vr0TvAx3Q8zRH2mUOwASq/4/h+JxIc4zrd3oVttM1ewc6rQ==
 
 expo-web-browser@~13.0.3:
   version "13.0.3"

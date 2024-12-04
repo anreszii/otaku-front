@@ -1,9 +1,11 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useAnimeStore } from "shared/stores";
 import { useRoute } from "@react-navigation/native";
-import { Video } from "expo-av";
 import * as ScreenOrientation from "expo-screen-orientation";
+import { useVideoPlayer, VideoView } from "expo-video";
+import { PlayIcon } from "shared/icons";
+import {useEvent} from "expo"
 
 const Player = () => {
   const { fetchAnimeUrl } = useAnimeStore();
@@ -12,6 +14,15 @@ const Player = () => {
 
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const player = useVideoPlayer(videoUrl, (player) => {
+    player.loop = false;
+    player.play();
+  });
+
+  const { isPlaying } = useEvent(player, "playingChange", {
+    isPlaying: player.playing,
+  });
 
   useEffect(() => {
     const fetchVideoUrl = async () => {
@@ -37,11 +48,12 @@ const Player = () => {
 
   return (
     <View style={styles.container}>
-      <Video
-        source={{ uri: videoUrl || "" }}
-        style={styles.video}
-        useNativeControls
-      />
+      <VideoView style={styles.video} player={player} />
+      <View style={styles.controlsContainer}>
+        <TouchableOpacity activeOpacity={0.7}>
+          <PlayIcon />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -50,10 +62,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black",
+    alignItems: "center",
+    justifyContent: "center",
   },
   video: {
     width: "100%",
     height: "100%",
+  },
+  controlsContainer: {
+    padding: 10,
   },
 });
 
