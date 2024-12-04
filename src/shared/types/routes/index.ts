@@ -20,6 +20,7 @@ export type RootStackParamList = {
   Friends: undefined;
   Subscribers: undefined;
   Search: undefined;
+  Player: { episodeLink: string };
 };
 
 export interface IRoute {

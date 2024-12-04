@@ -5,6 +5,7 @@ import Anime from "pages/Anime";
 import Friends from "pages/Friends";
 import Subscribers from "pages/Subscribers";
 import Search from "pages/Search";
+import Player from "pages/Player";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -16,6 +17,7 @@ export const PrivateNavigation = () => {
       <Stack.Screen name="Friends" component={Friends} />
       <Stack.Screen name="Subscribers" component={Subscribers} />
       <Stack.Screen name="Search" component={Search} />
+      <Stack.Screen name="Player" component={Player} />
     </Stack.Navigator>
   );
 };

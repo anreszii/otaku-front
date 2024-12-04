@@ -23,7 +23,7 @@ import MarqueeText from "react-native-marquee";
 import { ArrowRightIcon, PlayIcon, ShareIcon, StarIcon } from "shared/icons";
 import useFavoriteStore from "shared/stores/favoriteStore";
 import { cleanTitle } from "shared/helpers";
-import { Player } from "components";
+import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
 
 const statusOptions = [
   { label: "Просмотрено", value: "watch", color: "#3cce7b" },
@@ -41,6 +41,7 @@ const Anime = () => {
   const [episodeLink, setEpisodeLink] = useState("");
 
   const { top } = useSafeAreaInsets();
+  const navigation = useTypedNavigation();
 
   const { fetchAnime, currentAnime, setCurrentAnime } = useAnimeStore();
   const { addList, removeList, checkInList } = useFavoriteStore();
@@ -110,8 +111,9 @@ const Anime = () => {
   };
 
   const startWatch = () => {
-    setEpisodeLink(currentAnime?.seasons[0].link!);
-    setIsVisiblePlayer(true);
+    navigation.navigate("Player", {
+      episodeLink: currentAnime?.seasons[0].link!,
+    });
   };
 
   return (
@@ -258,11 +260,6 @@ const Anime = () => {
           )}
         </BottomSheet>
       </View>
-      <Player
-        visible={isVisiblePlayer}
-        onClose={() => setIsVisiblePlayer(false)}
-        episodeLink={episodeLink}
-      />
     </>
   );
 };
