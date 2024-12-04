@@ -8,10 +8,12 @@ import React, {
 import { useFocusEffect, useRoute } from "@react-navigation/native";
 import {
   Dimensions,
+  Platform,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
+  Share as Sharing,
 } from "react-native";
 import { BackButton, Button, Select, Skeleton, Typography } from "ui";
 import { useAnimeStore } from "shared/stores";
@@ -44,14 +46,12 @@ const Anime = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
-  const [isVisiblePlayer, setIsVisiblePlayer] = useState(false);
-  const [episodeLink, setEpisodeLink] = useState("");
 
   const { top } = useSafeAreaInsets();
   const navigation = useTypedNavigation();
 
   const { fetchAnime, currentAnime, setCurrentAnime } = useAnimeStore();
-  const { addList, removeList, checkInList } = useFavoriteStore();
+  const { addList, removeList, checkInList, favorite } = useFavoriteStore();
 
   const animatedIndex = useSharedValue(0);
 
@@ -101,14 +101,14 @@ const Anime = () => {
   }, [title]);
 
   useEffect(() => {
-    if (currentAnime) {
+    if (currentAnime && favorite.length > 0) {
       const animeList = checkInList(currentAnime.title);
       if (animeList) {
         setSelectedStatus(animeList.status);
       }
       setIsLoading(false);
     }
-  }, [currentAnime]);
+  }, [currentAnime, favorite]);
 
   const handleStatusChange = async (value: string) => {
     if (currentAnime) {
@@ -127,6 +127,17 @@ const Anime = () => {
     navigation.navigate("Player", {
       episodeLink: currentAnime?.seasons[0].link!,
     });
+  };
+
+  const handleShare = async () => {
+    const url = `otaku://127.0.0.1/anime?title=${encodeURIComponent(title)}`;
+
+    const shareOptions = {
+      title: `Посмотри аниме: ${title}`,
+      message: url,
+    };
+
+    await Sharing.share(shareOptions);
   };
 
   return (
@@ -198,7 +209,7 @@ const Anime = () => {
                 <Typography fontFamily="Urbanist" style={styles.title}>
                   {cleanTitle(currentAnime.title)}
                 </Typography>
-                <TouchableOpacity activeOpacity={0.7}>
+                <TouchableOpacity activeOpacity={0.7} onPress={handleShare}>
                   <ShareIcon />
                 </TouchableOpacity>
               </View>

@@ -67,6 +67,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - ExpoSharing (12.0.1):
+    - ExpoModulesCore
   - ExpoSystemUI (3.0.7):
     - ExpoModulesCore
   - ExpoVideo (1.2.7):
@@ -1464,6 +1466,7 @@ DEPENDENCIES:
   - ExpoKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
   - ExpoScreenOrientation (from `../node_modules/expo-screen-orientation/ios`)
+  - ExpoSharing (from `../node_modules/expo-sharing/ios`)
   - ExpoSystemUI (from `../node_modules/expo-system-ui/ios`)
   - ExpoVideo (from `../node_modules/expo-video/ios`)
   - ExpoWebBrowser (from `../node_modules/expo-web-browser/ios`)
@@ -1573,6 +1576,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-modules-core"
   ExpoScreenOrientation:
     :path: "../node_modules/expo-screen-orientation/ios"
+  ExpoSharing:
+    :path: "../node_modules/expo-sharing/ios"
   ExpoSystemUI:
     :path: "../node_modules/expo-system-ui/ios"
   ExpoVideo:
@@ -1724,6 +1729,7 @@ SPEC CHECKSUMS:
   ExpoKeepAwake: 3b8815d9dd1d419ee474df004021c69fdd316d08
   ExpoModulesCore: 831ece8311a489418746925820bbffdda587d6f4
   ExpoScreenOrientation: 5d6a977177dc2f904cc072b51a0d37d0983c0d6a
+  ExpoSharing: 8db05dd85081219f75989a3db2c92fe5e9741033
   ExpoSystemUI: d4f065a016cae6721b324eb659cdee4d4cf0cb26
   ExpoVideo: 9bf68ae981f3cb64b4fd2fc9f5a5337e55716b5b
   ExpoWebBrowser: 7595ccac6938eb65b076385fd23d035db9ecdc8e

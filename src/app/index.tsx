@@ -20,6 +20,9 @@ import Animated, {
 } from "react-native-reanimated";
 import useOngoingsStore from "shared/stores/ongoingsStore";
 import { PortalProvider } from "@gorhom/portal";
+import * as Linking from "expo-linking";
+import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
+import { DeepLinkProvider } from "shared/providers/DeepLinking/DeepLinkingProvider";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -46,6 +49,17 @@ const AnimatedNavigationContainer: React.FC<React.PropsWithChildren> = ({
     {children}
   </Animated.View>
 );
+
+const linking = {
+  prefixes: ["otaku://"],
+  config: {
+    screens: {
+      Tabs: "tabs",
+      Anime: "anime/:title",
+      Player: "player/:episodeLink",
+    },
+  },
+};
 
 const App = () => {
   const [loaded] = useFonts({
@@ -83,22 +97,24 @@ const App = () => {
     <PortalProvider>
       <SafeAreaProvider>
         <GestureHandlerRootView>
-          <NavigationContainer>
-            {isIntro && (
-              <View style={styles.intro}>
-                <Intro setIsIntro={setIsIntro} />
-              </View>
-            )}
-            {isAuth && (
-              <AnimatedNavigationContainer>
-                <PrivateNavigation />
-              </AnimatedNavigationContainer>
-            )}
-            {!isAuth && (
-              <AnimatedNavigationContainer>
-                <PublicNavigation />
-              </AnimatedNavigationContainer>
-            )}
+          <NavigationContainer linking={linking}>
+            <DeepLinkProvider>
+              {isIntro && (
+                <View style={styles.intro}>
+                  <Intro setIsIntro={setIsIntro} />
+                </View>
+              )}
+              {isAuth && (
+                <AnimatedNavigationContainer>
+                  <PrivateNavigation />
+                </AnimatedNavigationContainer>
+              )}
+              {!isAuth && (
+                <AnimatedNavigationContainer>
+                  <PublicNavigation />
+                </AnimatedNavigationContainer>
+              )}
+            </DeepLinkProvider>
           </NavigationContainer>
         </GestureHandlerRootView>
       </SafeAreaProvider>

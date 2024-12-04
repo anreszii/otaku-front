@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/otakuLogo.png",
-    "scheme": "myapp",
+    "scheme": "otaku",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/otakuLogo.png",

@@ -27,7 +27,7 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>myapp</string>
+          <string>otaku</string>
           <string>com.foru.otaku</string>
         </array>
       </dict>

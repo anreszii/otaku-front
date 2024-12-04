@@ -10,7 +10,7 @@ import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
 import { ArrowRightIcon, LogoutIcon } from "shared/icons";
 
 const Profile = () => {
-  const { user, fetchUser } = useUserStore();
+  const { user } = useUserStore();
   const { logout } = useAuthStore();
 
   const { top } = useSafeAreaInsets();
