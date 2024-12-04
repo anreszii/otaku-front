@@ -1,5 +1,11 @@
-import React, { useEffect, useState, useRef, useMemo } from "react";
-import { useRoute } from "@react-navigation/native";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
 import {
   Dimensions,
   ScrollView,
@@ -24,6 +30,7 @@ import { ArrowRightIcon, PlayIcon, ShareIcon, StarIcon } from "shared/icons";
 import useFavoriteStore from "shared/stores/favoriteStore";
 import { cleanTitle } from "shared/helpers";
 import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
+import * as ScreenOrientation from "expo-screen-orientation";
 
 const statusOptions = [
   { label: "Просмотрено", value: "watch", color: "#3cce7b" },
@@ -70,6 +77,12 @@ const Anime = () => {
       }),
     };
   });
+
+  useFocusEffect(
+    useCallback(() => {
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.DEFAULT);
+    }, [])
+  );
 
   useEffect(() => {
     animatedIndex.value = 0;
