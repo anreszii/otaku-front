@@ -12,17 +12,12 @@ import "shared/utils/ignoreWarnings";
 import "react-native-reanimated";
 import { Asset } from "expo-asset";
 import { useAuthStore, useInterestsStore, useUserStore } from "shared/stores";
-import Animated, {
-  FadeInLeft,
-  FadeInRight,
-  SlideInRight,
-  SlideOutLeft,
-} from "react-native-reanimated";
+import Animated, { FadeInRight, SlideOutLeft } from "react-native-reanimated";
 import useOngoingsStore from "shared/stores/ongoingsStore";
 import { PortalProvider } from "@gorhom/portal";
-import * as Linking from "expo-linking";
-import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
+
 import { DeepLinkProvider } from "shared/providers/DeepLinking/DeepLinkingProvider";
+import * as ScreenOrientation from "expo-screen-orientation";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -75,7 +70,11 @@ const App = () => {
   const { fetchOngoings } = useOngoingsStore();
 
   const loadInitialResources = async () => {
-    const commonTasks = [Asset.loadAsync(ASSETS), fetchInterests()];
+    const commonTasks = [
+      Asset.loadAsync(ASSETS),
+      fetchInterests(),
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.DEFAULT),
+    ];
 
     const authTasks = isAuth ? [fetchOngoings(), fetchUser()] : [];
 

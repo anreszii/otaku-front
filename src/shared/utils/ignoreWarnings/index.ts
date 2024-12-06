@@ -21,6 +21,7 @@ if (__DEV__) {
     "Warning: Failed prop type: RNImageVideoGridViewer",
     "An internal error occurred",
     "Flush triggered but queue",
+    "Error: Seeking interrupted",
   ];
 
   const warn = console.warn;

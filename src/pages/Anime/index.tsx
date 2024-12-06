@@ -123,9 +123,9 @@ const Anime = () => {
     }
   };
 
-  const startWatch = () => {
+  const startWatch = (link: string) => {
     navigation.navigate("Player", {
-      episodeLink: currentAnime?.seasons[0].link!,
+      episodeLink: link,
     });
   };
 
@@ -234,11 +234,18 @@ const Anime = () => {
                 <Typography fontFamily="Urbanist" style={styles.durationText}>
                   ~{currentAnime.material_data.duration} мин
                 </Typography>
+                <Typography fontFamily="Urbanist" style={styles.ageRating}>
+                  {currentAnime.material_data.minimal_age}+
+                </Typography>
                 <Typography fontFamily="Urbanist" style={styles.countryText}>
                   {currentAnime.material_data.countries?.[0]}
                 </Typography>
               </View>
-              <Button variant="contain" title="Смотреть" onPress={startWatch} />
+              <Button
+                variant="contain"
+                title="Смотреть"
+                onPress={() => startWatch(currentAnime.seasons[0].link!)}
+              />
               <Typography style={styles.genres}>
                 Жанры: {currentAnime.material_data.anime_genres?.join(", ")}
               </Typography>
@@ -273,6 +280,7 @@ const Anime = () => {
                       <TouchableOpacity
                         activeOpacity={0.7}
                         style={styles.episodePlay}
+                        onPress={() => startWatch(episode.link)}
                       >
                         <PlayIcon />
                       </TouchableOpacity>
@@ -386,6 +394,11 @@ const styles = StyleSheet.create({
   durationText: {
     fontWeight: "500",
     fontSize: 16,
+  },
+  ageRating: {
+    fontWeight: "500",
+    fontSize: 16,
+    color: "#FF9B3F",
   },
   countryText: {
     fontWeight: "500",

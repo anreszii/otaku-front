@@ -313,3 +313,29 @@ export const CrossIcon: React.FC<SvgProps> = ({ ...props }) => {
     </Svg>
   );
 };
+
+export const PlayFillIcon: React.FC<SvgProps> = ({ ...props }) => {
+  return (
+    <Svg width={48} height={48} viewBox="0 0 24 24" fill="none" {...props}>
+      <Path
+        d="M21.409 9.353a2.998 2.998 0 010 5.294L8.597 21.614C6.534 22.736 4 21.276 4 18.968V5.033c0-2.31 2.534-3.769 4.597-2.648l12.812 6.968z"
+        fill="#FFF"
+      />
+    </Svg>
+  );
+};
+
+export const PauseIcon: React.FC<SvgProps> = ({ ...props }) => {
+  return (
+    <Svg width={48} height={48} viewBox="-1 0 8 8" {...props}>
+      <Path
+        d="M172 3605a1 1 0 00-1 1v6a1 1 0 002 0v-6a1 1 0 00-1-1m5 1v6a1 1 0 01-2 0v-6a1 1 0 012 0"
+        transform="translate(-227 -3765) translate(56 160)"
+        fill="#FFF"
+        stroke="none"
+        strokeWidth={1}
+        fillRule="evenodd"
+      />
+    </Svg>
+  );
+};
