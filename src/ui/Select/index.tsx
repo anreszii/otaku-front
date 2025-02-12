@@ -95,7 +95,7 @@ export const Select = ({
         ref={selectRef}
         style={[styles.select, style]}
         onPress={handleOpen}
-        activeOpacity={0.7}
+        activeOpacity={0}
       >
         <Typography
           style={[
@@ -112,38 +112,38 @@ export const Select = ({
           <TouchableOpacity
             style={StyleSheet.absoluteFill}
             onPress={handleClose}
-            activeOpacity={0.7}
+            activeOpacity={1}
           >
             <Animated.View
               style={[StyleSheet.absoluteFill, styles.overlay, overlayStyle]}
             />
-            <Animated.View
-              style={[
-                styles.dropdown,
-                {
-                  top: dropdownPosition.top,
-                  left: dropdownPosition.left,
-                  width: dropdownPosition.width,
-                },
-                dropdownStyle,
-              ]}
-            >
-              {options.map((option) => (
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  key={option.value}
-                  style={styles.option}
-                  onPress={() => handleSelect(option.value)}
-                >
-                  <Typography
-                    style={[styles.optionText, { color: option.color }]}
-                  >
-                    {option.label}
-                  </Typography>
-                </TouchableOpacity>
-              ))}
-            </Animated.View>
           </TouchableOpacity>
+          <Animated.View
+            style={[
+              styles.dropdown,
+              {
+                top: dropdownPosition.top,
+                left: dropdownPosition.left,
+                width: dropdownPosition.width,
+              },
+              dropdownStyle,
+            ]}
+          >
+            {options.map((option) => (
+              <TouchableOpacity
+                activeOpacity={0.7}
+                key={option.value}
+                style={styles.option}
+                onPress={() => handleSelect(option.value)}
+              >
+                <Typography
+                  style={[styles.optionText, { color: option.color }]}
+                >
+                  {option.label}
+                </Typography>
+              </TouchableOpacity>
+            ))}
+          </Animated.View>
         </Portal>
       )}
     </>

@@ -1,4 +1,10 @@
-import { View, StyleSheet, TouchableOpacity, SafeAreaView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  SafeAreaView,
+  Dimensions,
+} from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { useAnimeStore } from "shared/stores";
 import { useRoute } from "@react-navigation/native";
@@ -8,7 +14,7 @@ import { PauseIcon, PlayFillIcon, PlayIcon } from "shared/icons";
 import { BackButton, Loader, Typography } from "ui";
 import { cleanTitle } from "shared/helpers";
 import MarqueeText from "react-native-marquee";
-import Slider from "@react-native-community/slider";
+import Slider from "@ptomasroos/react-native-multi-slider";
 import Animated, {
   withTiming,
   useAnimatedStyle,
@@ -43,7 +49,6 @@ const Player = () => {
       };
 
       setVideoUrl(formatLink(response.links["720"].Src));
-      setIsLoading(false);
     };
 
     setIsLoading(true);
@@ -66,6 +71,7 @@ const Player = () => {
     await videoRef.current?.playAsync();
     if (status.isLoaded && status.durationMillis) {
       setDuration(status.durationMillis);
+      setIsLoading(false);
     }
   };
 
@@ -75,9 +81,9 @@ const Player = () => {
     }
   };
 
-  const handleSeek = async (value: number) => {
+  const handleSeek = async (values: number[]) => {
     if (videoRef.current) {
-      await videoRef.current.setPositionAsync(value);
+      await videoRef.current.setPositionAsync(values[0]);
     }
   };
 
@@ -93,15 +99,16 @@ const Player = () => {
   };
 
   const handleShowControls = () => {
-    setShowControls((prev) => !prev);
+    const showControlsValue = !showControls;
+    setShowControls(showControlsValue);
 
     if (controlsTimeoutRef.current) {
       clearTimeout(controlsTimeoutRef.current);
     }
 
-    opacity.value = withTiming(showControls ? 0 : 1, { duration: 300 });
+    opacity.value = withTiming(showControlsValue ? 1 : 0, { duration: 300 });
 
-    if (!showControls) {
+    if (showControlsValue) {
       resetControlsTimer();
     }
   };
@@ -160,7 +167,7 @@ const Player = () => {
               >
                 {cleanTitle(currentAnime?.title || "")}
               </MarqueeText>
-              <View />
+              <View style={styles.headerPlaceholderIcon} />
             </View>
             <View style={styles.centerContainer}>
               <TouchableOpacity activeOpacity={0.7} onPress={togglePlay}>
@@ -178,16 +185,16 @@ const Player = () => {
                 {formatTime(videoTime)} / {formatTime(duration)}
               </Typography>
               <Slider
-                style={styles.slider}
-                minimumValue={0}
-                maximumValue={duration}
-                value={videoTime}
-                onValueChange={handleSeek}
-                onSlidingStart={handleSlidingStart}
-                onSlidingComplete={handleSlidingComplete}
-                minimumTrackTintColor="#1A80E5"
-                maximumTrackTintColor="#808080"
-                thumbTintColor="#1A80E5"
+                containerStyle={styles.slider}
+                values={[videoTime]}
+                min={0}
+                max={duration ? duration : 1}
+                sliderLength={Dimensions.get("window").width - 40}
+                onValuesChange={handleSeek}
+                onValuesChangeStart={handleSlidingStart}
+                onValuesChangeFinish={handleSlidingComplete}
+                selectedStyle={styles.sliderSelected}
+                markerStyle={styles.sliderMarker}
               />
             </View>
           </SafeAreaView>
@@ -220,6 +227,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
     marginTop: 20,
     marginHorizontal: 20,
   },
@@ -228,6 +236,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontFamily: "Montserrat",
     color: "#fff",
+    width: "60%",
+  },
+  headerPlaceholderIcon: {
+    width: 32,
+    height: 31,
   },
   centerContainer: {
     alignItems: "center",
@@ -239,6 +252,15 @@ const styles = StyleSheet.create({
   slider: {
     height: 40,
     borderRadius: 100,
+  },
+  sliderSelected: {
+    backgroundColor: "#1A80E5",
+  },
+  sliderMarker: {
+    backgroundColor: "#1A80E5",
+    borderWidth: 0,
+    width: 16,
+    height: 16,
   },
   time: {
     fontWeight: "500",
