@@ -107,6 +107,13 @@ const Favorite = () => {
     return favorite.filter((item) => item.status === selectedStatus);
   }, [favorite, selectedStatus]);
 
+  const favoriteOptionsWithData = useMemo(() => {
+    return favoriteOptions.map((option) => ({
+      ...option,
+      data: favorite.filter((item) => item.status === option.value),
+    }));
+  }, [favorite]);
+
   const renderHeader = () => (
     <View style={styles.headerWrapper}>
       <ScrollView
@@ -117,7 +124,7 @@ const Favorite = () => {
       >
         <View style={styles.headerItems}>
           <Animated.View style={[styles.animatedBorder, animatedStyle]} />
-          {favoriteOptions.map((option, index) => {
+          {favoriteOptionsWithData.map((option, index) => {
             const textStyle = useAnimatedStyle(() => ({
               color: textColors[option.value].value,
             }));
@@ -146,7 +153,7 @@ const Favorite = () => {
                 onPress={(event) => handlePress(option.value, event)}
               >
                 <Animated.Text style={[styles.headerText, textStyle]}>
-                  {option.label}
+                  {option.label} ({option.data.length})
                 </Animated.Text>
               </Pressable>
             );
