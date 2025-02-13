@@ -22,60 +22,60 @@ const Profile = () => {
   };
 
   return (
-    <>
-      <View style={styles.background}>
-        <Image
-          source={user?.background}
-          style={styles.backgroundImage}
-          contentFit="cover"
-        />
-        <LinearGradient
-          colors={["transparent", "#0B1218"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          style={styles.backgroundGradient}
-        />
-        <Image
-          source={user?.avatar}
-          style={[styles.avatar, { top: top }]}
-          contentFit="cover"
-        />
-      </View>
-      <Layout noMargin scroll>
-        <View style={styles.container}>
-          <View style={styles.header}>
-            <Typography fontFamily="Urbanist" style={styles.username}>
-              {user?.username}
+    <Layout noMargin scroll noSafe>
+      <View style={styles.container}>
+        <View style={[styles.header]}>
+          <Image
+            source={user?.background}
+            style={styles.backgroundImage}
+            contentFit="cover"
+          />
+          <LinearGradient
+            colors={["transparent", "#0B1218"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={styles.backgroundGradient}
+          />
+          <Image
+            source={user?.avatar}
+            style={styles.avatar}
+            contentFit="cover"
+          />
+        </View>
+        <View style={styles.infoContainer}>
+          <Typography fontFamily="Urbanist" style={styles.username}>
+            {user?.username}
+          </Typography>
+          <Typography fontFamily="Urbanist" style={styles.timeWatch}>
+            {formatTime(user?.totalWatch || 0)}
+          </Typography>
+          <Button
+            title="Редактировать"
+            variant="contain"
+            color="#2E2F3A"
+            style={styles.buttonEdit}
+          />
+        </View>
+        <View style={styles.friends}>
+          <View style={styles.friendsHeader}>
+            <Typography fontFamily="Urbanist" style={styles.friendsTitle}>
+              Друзья ({user?.friends.length || 0})
             </Typography>
-            <Typography fontFamily="Urbanist" style={styles.timeWatch}>
-              {formatTime(user?.totalWatch || 0)}
-            </Typography>
-            <Button
-              title="Редактировать"
-              variant="contain"
-              color="#0B1218"
-              style={styles.buttonEdit}
-            />
-          </View>
-          <View style={styles.friends}>
-            <View style={styles.friendsHeader}>
-              <Typography fontFamily="Urbanist" style={styles.friendsTitle}>
-                Друзья ({user?.friends.length})
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.friendsAll}
+              onPress={() => {
+                navigation.navigate("Friends");
+              }}
+            >
+              <Typography fontFamily="Urbanist" style={styles.friendsAllText}>
+                Все
               </Typography>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={styles.friendsAll}
-                onPress={() => {
-                  navigation.navigate("Friends");
-                }}
-              >
-                <Typography fontFamily="Urbanist" style={styles.friendsAllText}>
-                  Все
-                </Typography>
-              </TouchableOpacity>
-            </View>
-            {(user?.friends.length || 0) > 0 && (
-              <View style={styles.friendsList}>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.friendsList}>
+            {(user?.friends.length || 0) > 0 ? (
+              <>
                 {user?.friends.slice(0, 5).map((friend) => (
                   <TouchableOpacity
                     activeOpacity={0.7}
@@ -94,28 +94,36 @@ const Profile = () => {
                     </Typography>
                   </TouchableOpacity>
                 ))}
+              </>
+            ) : (
+              <View style={styles.friendsEmptyContainer}>
+                <Typography fontFamily="Urbanist" style={styles.friendsEmpty}>
+                  У вас нет друзей
+                </Typography>
               </View>
             )}
           </View>
-          <View style={styles.friends}>
-            <View style={styles.friendsHeader}>
-              <Typography fontFamily="Urbanist" style={styles.friendsTitle}>
-                Подписчики ({user?.subscribers.length})
+        </View>
+        <View style={styles.friends}>
+          <View style={styles.friendsHeader}>
+            <Typography fontFamily="Urbanist" style={styles.friendsTitle}>
+              Подписчики ({user?.subscribers.length})
+            </Typography>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.friendsAll}
+              onPress={() => {
+                navigation.navigate("Subscribers");
+              }}
+            >
+              <Typography fontFamily="Urbanist" style={styles.friendsAllText}>
+                Все
               </Typography>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                style={styles.friendsAll}
-                onPress={() => {
-                  navigation.navigate("Subscribers");
-                }}
-              >
-                <Typography fontFamily="Urbanist" style={styles.friendsAllText}>
-                  Все
-                </Typography>
-              </TouchableOpacity>
-            </View>
-            {(user?.subscribers.length || 0) > 0 && (
-              <View style={styles.friendsList}>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.friendsList}>
+            {(user?.subscribers.length || 0) > 0 ? (
+              <>
                 {user?.subscribers.slice(0, 5).map((friend) => (
                   <TouchableOpacity
                     activeOpacity={0.7}
@@ -134,87 +142,93 @@ const Profile = () => {
                     </Typography>
                   </TouchableOpacity>
                 ))}
+              </>
+            ) : (
+              <View style={styles.friendsEmptyContainer}>
+                <Typography fontFamily="Urbanist" style={styles.friendsEmpty}>
+                  У вас нет подписчиков
+                </Typography>
               </View>
             )}
           </View>
-          <View style={styles.statistics}>
-            <View style={styles.statisticsRow}>
-              <View style={styles.statisticsItem}>
-                <Typography
-                  fontFamily="Urbanist"
-                  style={styles.statisticsItemTitle}
-                >
-                  {user?.viewed.length}
-                </Typography>
-                <Typography
-                  fontFamily="Urbanist"
-                  style={styles.statisticsItemSubtitle}
-                >
-                  Просмотрено аниме
-                </Typography>
-              </View>
-              <View style={styles.statisticsItem}>
-                <Typography
-                  fontFamily="Urbanist"
-                  style={styles.statisticsItemTitle}
-                >
-                  {user?.animeList.length}
-                </Typography>
-                <Typography
-                  fontFamily="Urbanist"
-                  style={styles.statisticsItemSubtitle}
-                >
-                  В избранном
-                </Typography>
-              </View>
-            </View>
-            <View style={[styles.statisticsRow, { marginTop: 10 }]}>
-              <View style={styles.statisticsItem}>
-                <Typography
-                  fontFamily="Urbanist"
-                  style={styles.statisticsItemTitle}
-                >
-                  {0}
-                </Typography>
-                <Typography
-                  fontFamily="Urbanist"
-                  style={styles.statisticsItemSubtitle}
-                >
-                  Просмотрено серий
-                </Typography>
-              </View>
-              <View style={styles.statisticsItem}>
-                <Typography
-                  fontFamily="Urbanist"
-                  style={styles.statisticsItemTitle}
-                >
-                  {0}
-                </Typography>
-                <Typography
-                  fontFamily="Urbanist"
-                  style={styles.statisticsItemSubtitle}
-                >
-                  Обзоров
-                </Typography>
-              </View>
-            </View>
-          </View>
-          <TouchableOpacity
-            style={styles.logout}
-            activeOpacity={0.7}
-            onPress={logout}
-          >
-            <View style={styles.logoutRow}>
-              <LogoutIcon />
-              <Typography fontFamily="Montserrat" style={styles.logoutTitle}>
-                Выход
+        </View>
+        <View style={styles.statistics}>
+          <View style={styles.statisticsRow}>
+            <View style={styles.statisticsItem}>
+              <Typography
+                fontFamily="Urbanist"
+                style={styles.statisticsItemTitle}
+              >
+                {user?.viewed.length}
+              </Typography>
+              <Typography
+                fontFamily="Urbanist"
+                style={styles.statisticsItemSubtitle}
+              >
+                Просмотрено аниме
               </Typography>
             </View>
-            <ArrowRightIcon />
-          </TouchableOpacity>
+            <View style={styles.statisticsItem}>
+              <Typography
+                fontFamily="Urbanist"
+                style={styles.statisticsItemTitle}
+              >
+                {user?.animeList.length}
+              </Typography>
+              <Typography
+                fontFamily="Urbanist"
+                style={styles.statisticsItemSubtitle}
+              >
+                В избранном
+              </Typography>
+            </View>
+          </View>
+          <View style={[styles.statisticsRow, { marginTop: 10 }]}>
+            <View style={styles.statisticsItem}>
+              <Typography
+                fontFamily="Urbanist"
+                style={styles.statisticsItemTitle}
+              >
+                {0}
+              </Typography>
+              <Typography
+                fontFamily="Urbanist"
+                style={styles.statisticsItemSubtitle}
+              >
+                Просмотрено серий
+              </Typography>
+            </View>
+            <View style={styles.statisticsItem}>
+              <Typography
+                fontFamily="Urbanist"
+                style={styles.statisticsItemTitle}
+              >
+                {0}
+              </Typography>
+              <Typography
+                fontFamily="Urbanist"
+                style={styles.statisticsItemSubtitle}
+              >
+                Обзоров
+              </Typography>
+            </View>
+          </View>
         </View>
-      </Layout>
-    </>
+        <TouchableOpacity
+          style={styles.logout}
+          activeOpacity={0.7}
+          onPress={logout}
+        >
+          <View style={styles.logoutRow}>
+            <LogoutIcon />
+            <Typography fontFamily="Montserrat" style={styles.logoutTitle}>
+              Выход
+            </Typography>
+          </View>
+          <ArrowRightIcon />
+        </TouchableOpacity>
+      </View>
+    </Layout>
   );
 };
 
@@ -226,20 +240,21 @@ const styles = StyleSheet.create({
   backgroundImage: {
     width: "100%",
     height: 185,
-    position: "absolute",
   },
   backgroundGradient: {
     width: "100%",
     height: 185,
+    position: "absolute",
   },
   avatar: {
     width: 100,
     height: 100,
     borderRadius: 100,
-    borderWidth: 2,
-    borderColor: "#1A80E5",
+    borderWidth: 4,
+    borderColor: "#0B1218",
     position: "absolute",
     alignSelf: "center",
+    bottom: -25
   },
   container: {
     flex: 1,
@@ -247,25 +262,25 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   header: {
-    marginTop: 20,
-    backgroundColor: "#2E2F3A",
-    padding: 20,
-    borderRadius: 10,
+    marginHorizontal: -25,
   },
   username: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: "bold",
   },
   timeWatch: {
     fontSize: 16,
     fontWeight: "bold",
-    marginTop: 10,
+    marginTop: 5,
   },
   buttonEdit: {
     marginTop: 20,
   },
+  infoContainer: {
+    marginTop: 10,
+  },
   friends: {
-    marginTop: 25,
+    marginTop: 20,
   },
   friendsTitle: {
     fontSize: 16,
@@ -289,6 +304,17 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: "row",
     justifyContent: "space-between",
+    minHeight: 80,
+  },
+  friendsEmptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  friendsEmpty: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "rgba(255, 255, 255, 0.5)",
   },
   friendsItem: {
     alignItems: "center",

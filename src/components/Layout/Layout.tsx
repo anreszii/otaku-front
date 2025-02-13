@@ -51,6 +51,8 @@ const Layout: React.FC<React.PropsWithChildren<LayoutProps>> = ({
             ref={scrollRef}
             contentContainerStyle={styles.content}
             showsVerticalScrollIndicator={false}
+            bounces={false}
+            overScrollMode="never"
           >
             <TouchableWithoutFeedback
               onPress={Keyboard.dismiss}
