@@ -5,9 +5,7 @@ import { WeekDay } from "./types";
 import { addDays, format, getDate } from "date-fns";
 import { ru } from "date-fns/locale";
 import {
-  DevSettings,
   PanResponder,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   TouchableOpacity,

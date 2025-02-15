@@ -5,7 +5,6 @@ import { useAuthStore, useUserStore } from "shared/stores";
 import { Image } from "expo-image";
 import LinearGradient from "react-native-linear-gradient";
 import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
 import { ArrowRightIcon, LogoutIcon } from "shared/icons";
 
@@ -13,7 +12,6 @@ const Profile = () => {
   const { user } = useUserStore();
   const { logout } = useAuthStore();
 
-  const { top } = useSafeAreaInsets();
   const navigation = useTypedNavigation();
 
   const formatTime = (time: number) => {

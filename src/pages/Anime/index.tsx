@@ -8,7 +8,6 @@ import React, {
 import { useFocusEffect, useRoute } from "@react-navigation/native";
 import {
   Dimensions,
-  Platform,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -28,11 +27,12 @@ import Animated, {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BlurView } from "@react-native-community/blur";
 import MarqueeText from "react-native-marquee";
-import { ArrowRightIcon, PlayIcon, ShareIcon, StarIcon } from "shared/icons";
+import { PlayIcon, StarIcon } from "shared/icons";
 import useFavoriteStore from "shared/stores/favoriteStore";
 import { cleanTitle } from "shared/helpers";
 import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
 import * as ScreenOrientation from "expo-screen-orientation";
+import { Ionicons } from "@expo/vector-icons";
 
 const statusOptions = [
   { label: "Просмотрено", value: "watch", color: "#3cce7b" },
@@ -210,7 +210,7 @@ const Anime = () => {
                   {cleanTitle(currentAnime.title)}
                 </Typography>
                 <TouchableOpacity activeOpacity={0.7} onPress={handleShare}>
-                  <ShareIcon />
+                  <Ionicons name="share-outline" size={24} color="#fff" />
                 </TouchableOpacity>
               </View>
               <Select
@@ -226,7 +226,7 @@ const Anime = () => {
                   <Typography fontFamily="Urbanist" style={styles.infoText}>
                     {currentAnime?.material_data.shikimori_rating}
                   </Typography>
-                  <ArrowRightIcon />
+                  <Ionicons name="chevron-forward-outline" size={16} color="#1A80E5" />
                 </TouchableOpacity>
                 <Typography fontFamily="Urbanist" style={styles.yearText}>
                   {currentAnime.year}

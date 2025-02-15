@@ -4,8 +4,8 @@ import {
   TouchableOpacityProps,
 } from "react-native";
 import React from "react";
-import { BackIcon } from "shared/icons";
 import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
+import { Ionicons } from "@expo/vector-icons";
 
 interface BackButtonProps extends TouchableOpacityProps {}
 
@@ -23,19 +23,19 @@ const BackButton: React.FC<BackButtonProps> = ({ style, ...props }) => {
       style={[styles.back, ...(Array.isArray(style) ? style : [style])]}
       {...props}
     >
-      <BackIcon />
+      <Ionicons name="chevron-back-outline" size={24} color="#fff" />
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   back: {
-    backgroundColor: "#1A80E5",
     borderRadius: 100,
     width: 32,
     height: 31,
     alignItems: "center",
     justifyContent: "center",
+    overflow: "hidden",
   },
 });
 
