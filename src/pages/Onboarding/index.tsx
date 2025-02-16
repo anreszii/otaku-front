@@ -6,7 +6,7 @@ import { OnboardingData, OnboardingDots } from "./components";
 import { instructions } from "./data";
 import { InstructionItem } from "./types";
 import useStorage from "shared/hooks/useStorage";
-import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
+import { useTypedNavigation } from "shared/hooks";
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";
 
 interface RenderItemProps {

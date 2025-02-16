@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import * as Linking from "expo-linking";
-import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
+import { useTypedNavigation } from "shared/hooks/navigation";
 
 interface DeepLinkContextType {
   initialLink: string | null;

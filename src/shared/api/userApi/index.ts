@@ -1,7 +1,11 @@
 import $api from "shared/http";
-import { IInterests, ISearchUser, IUser } from "shared/types";
+import { IAnime, IAnimeList, IInterests, ISearchUser, IUser } from "shared/types";
 
 class UserApi {
+  getList = async () => {
+    return $api.get<{ list: IAnimeList[] }>("/user/list");
+  };
+
   getInterests = async () => {
     return $api.get<IInterests[]>("/user/interests");
   };
@@ -18,8 +22,8 @@ class UserApi {
     return $api.post<ISearchUser[]>(`/user/search`, { query });
   };
 
-  addList = async (animeTitle: string, status: string) => {
-    return $api.post(`/user/list`, { animeTitle, status });
+  addList = async (animeTitle: string, status: string, posterUrl: string) => {
+    return $api.post(`/user/list`, { animeTitle, status, posterUrl });
   };
 
   deleteList = async (listId: string) => {

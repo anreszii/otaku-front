@@ -4,7 +4,7 @@ import {
   TouchableOpacityProps,
 } from "react-native";
 import React from "react";
-import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
+import { useTypedNavigation } from "shared/hooks/navigation";
 import { Ionicons } from "@expo/vector-icons";
 
 interface BackButtonProps extends TouchableOpacityProps {}

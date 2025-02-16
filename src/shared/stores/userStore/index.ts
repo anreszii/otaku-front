@@ -30,7 +30,6 @@ const useUserStore = create<UserStore>((set, get) => ({
 
     const { data: userData } = await userApi.getUser(user.id);
     set({ user: userData.user });
-    useFavoriteStore.getState().setFavorite(userData.user.animeList);
   },
 
   fetchSearchUsers: async (query: string) => {

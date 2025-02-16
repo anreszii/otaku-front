@@ -20,8 +20,7 @@ import Animated, {
   Easing,
   useSharedValue,
 } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
+import { useTypedNavigation } from "shared/hooks";
 
 const favoriteOptions = [
   { label: "Просмотрено", value: "watch", color: "#3cce7b" },
@@ -48,7 +47,6 @@ const Favorite = () => {
   const scrollViewRef = useRef<ScrollView>(null);
   const itemRefs = useRef<View[]>([]);
 
-  const { bottom } = useSafeAreaInsets();
   const navigation = useTypedNavigation();
 
   const handlePress = (value: string, event: GestureResponderEvent) => {
@@ -222,11 +220,11 @@ const Favorite = () => {
         activeOpacity={0.7}
         style={styles.favoriteContainer}
         onPress={() =>
-          navigation.navigate("Anime", { title: item.animeData?.title! })
+          navigation.navigate("Anime", { title: item.animeTitle })
         }
       >
         <Image
-          source={{ uri: item.animeData?.material_data.poster_url }}
+          source={{ uri: item.posterUrl }}
           style={styles.poster}
           contentFit="cover"
         />

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Layout } from "components";
 import { useAuthStore } from "shared/stores";
-import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
+import { useTypedNavigation } from "shared/hooks";
 import { EmailStep, CodeStep, PasswordStep } from "./components";
 
 const Forgot = () => {

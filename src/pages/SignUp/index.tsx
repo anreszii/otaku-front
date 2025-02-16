@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Layout } from "components";
 import { Button, Field, Typography, BackButton, Loader, Modal } from "ui";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
+import { useTypedNavigation } from "shared/hooks";
 import useInterestsStore from "shared/stores/interestsStore";
 import { IInterests } from "shared/types";
 import Animated, { SlideInRight, SlideOutLeft } from "react-native-reanimated";

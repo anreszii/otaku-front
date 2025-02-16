@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Layout } from "components";
 import { Button, Typography } from "ui";
 import useOngoingsStore from "shared/stores/ongoingsStore";
 import { IAnime } from "shared/types";
@@ -19,7 +18,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import LinearGradient from "react-native-linear-gradient";
-import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
+import { useTypedNavigation } from "shared/hooks";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFavoriteStore } from "shared/stores";
@@ -202,11 +201,11 @@ const Home = () => {
                   key={el._id}
                   activeOpacity={0.7}
                   style={styles.animeBlockItem}
-                  onPress={() => handleNavigateAnime(el.animeData?.title || "")}
+                  onPress={() => handleNavigateAnime(el.animeTitle)}
                 >
                   <Image
                     source={{
-                      uri: el.animeData?.material_data.poster_url || "",
+                      uri: el.posterUrl,
                     }}
                     style={styles.animeBlockItemPoster}
                   />

@@ -3,7 +3,7 @@ import { MMKV } from "react-native-mmkv";
 
 const storage = new MMKV();
 
-const useStorage = <T>(key: string, initialValue: T) => {
+export const useStorage = <T>(key: string, initialValue: T) => {
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
       const item = storage.getString(key);
@@ -36,5 +36,3 @@ const useStorage = <T>(key: string, initialValue: T) => {
 
   return { storedValue, setValue, removeValue } as const;
 };
-
-export default useStorage;

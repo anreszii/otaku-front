@@ -1,7 +1,7 @@
 import { View, StyleSheet } from "react-native";
 import React from "react";
 import { Button, Typography, PosterBackground } from "ui";
-import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
+import { useTypedNavigation } from "shared/hooks";
 
 const Welcome = () => {
   const { navigate } = useTypedNavigation();

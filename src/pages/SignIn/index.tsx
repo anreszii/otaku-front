@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Field, Typography, BackButton } from "ui";
 import { Layout } from "components";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
+import { useTypedNavigation } from "shared/hooks";
 import useAuthStore from "shared/stores/authStore";
 import DeviceInfo from "react-native-device-info";
 

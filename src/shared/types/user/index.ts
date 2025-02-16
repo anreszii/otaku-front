@@ -20,8 +20,8 @@ export interface IUser {
   friends: IUserFriend[];
   subscriptions: IUserFriend[];
   subscribers: IUserFriend[];
-  totalWatch: number;
   animeList: IAnimeList[];
+  totalWatch: number;
   createdAt: number;
 }
 
@@ -37,5 +37,5 @@ export interface IAnimeList {
   _id: string;
   animeTitle: string;
   status: string;
-  animeData?: IAnime;
+  posterUrl: string;
 }

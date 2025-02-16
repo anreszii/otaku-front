@@ -11,7 +11,7 @@ import { StyleSheet, View } from "react-native";
 import "shared/utils/ignoreWarnings";
 import "react-native-reanimated";
 import { Asset } from "expo-asset";
-import { useAuthStore, useInterestsStore, useUserStore } from "shared/stores";
+import { useAuthStore, useFavoriteStore, useInterestsStore, useUserStore } from "shared/stores";
 import Animated, { FadeInRight, SlideOutLeft } from "react-native-reanimated";
 import useOngoingsStore from "shared/stores/ongoingsStore";
 import { PortalProvider } from "@gorhom/portal";
@@ -62,12 +62,13 @@ const App = () => {
     Urbanist: require("../../assets/fonts/Urbanist.ttf"),
   });
 
-  const [isIntro, setIsIntro] = useState(true);
+  const [isIntro, setIsIntro] = useState(false);
 
   const { fetchInterests } = useInterestsStore();
   const { isAuth } = useAuthStore();
   const { fetchUser } = useUserStore();
   const { fetchOngoings } = useOngoingsStore();
+  const { fetchFavorites } = useFavoriteStore();
 
   const loadInitialResources = async () => {
     const commonTasks = [
@@ -76,10 +77,13 @@ const App = () => {
       ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.DEFAULT),
     ];
 
-    const authTasks = isAuth ? [fetchOngoings(), fetchUser()] : [];
+    const authTasks = isAuth
+      ? [fetchOngoings(), fetchUser(), fetchFavorites()]
+      : [];
 
     try {
       await Promise.all([...commonTasks, ...authTasks]);
+      setIsIntro(true);
       await SplashScreen.hideAsync();
     } catch (error) {
       console.log(error);

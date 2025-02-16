@@ -30,7 +30,7 @@ import MarqueeText from "react-native-marquee";
 import { PlayIcon, StarIcon } from "shared/icons";
 import useFavoriteStore from "shared/stores/favoriteStore";
 import { cleanTitle } from "shared/helpers";
-import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
+import { useTypedNavigation } from "shared/hooks";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -106,8 +106,8 @@ const Anime = () => {
       if (animeList) {
         setSelectedStatus(animeList.status);
       }
-      setIsLoading(false);
     }
+    setIsLoading(false);
   }, [currentAnime, favorite]);
 
   const handleStatusChange = async (value: string) => {
@@ -117,7 +117,7 @@ const Anime = () => {
         await removeList(animeList._id);
         setSelectedStatus(null);
       } else {
-        await addList(currentAnime.title, value);
+        await addList(currentAnime.title, value, currentAnime.material_data.poster_url);
         setSelectedStatus(value);
       }
     }

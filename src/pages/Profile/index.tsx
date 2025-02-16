@@ -1,16 +1,17 @@
 import React from "react";
 import { Layout } from "components";
 import { Button, Typography } from "ui";
-import { useAuthStore, useUserStore } from "shared/stores";
+import { useAuthStore, useFavoriteStore, useUserStore } from "shared/stores";
 import { Image } from "expo-image";
 import LinearGradient from "react-native-linear-gradient";
 import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
-import { useTypedNavigation } from "shared/hooks/useTypedNavigation";
+import { useTypedNavigation } from "shared/hooks";
 import { ArrowRightIcon, LogoutIcon } from "shared/icons";
 
 const Profile = () => {
   const { user } = useUserStore();
   const { logout } = useAuthStore();
+  const { favorite } = useFavoriteStore();
 
   const navigation = useTypedNavigation();
 
@@ -171,7 +172,7 @@ const Profile = () => {
                 fontFamily="Urbanist"
                 style={styles.statisticsItemTitle}
               >
-                {user?.animeList.length}
+                {favorite.length}
               </Typography>
               <Typography
                 fontFamily="Urbanist"
